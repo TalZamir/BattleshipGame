@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="BattleShipGame" type="BattleShipGameType"/>
+    <xs:complexType name="shipTypeType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="category"/>
+            <xs:element type="xs:string" name="amount"/>
+            <xs:element name="length">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="3"/>
+                        <xs:enumeration value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="score">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="10"/>
+                        <xs:enumeration value="5"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="boardType">
+        <xs:sequence>
+            <xs:element type="shipType" name="ship" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="positionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="x" use="optional"/>
+                <xs:attribute type="xs:string" name="y" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="boardsType">
+        <xs:sequence>
+            <xs:element type="boardType" name="board" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="shipType">
+        <xs:sequence>
+            <xs:element name="shipTypeId">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="shipTypeA"/>
+                        <xs:enumeration value="shipTypeB"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element type="positionType" name="position"/>
+            <xs:element name="direction">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="ROW"/>
+                        <xs:enumeration value="COLUMN"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="BattleShipGameType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="GameType"/>
+            <xs:element type="xs:string" name="boardSize"/>
+            <xs:element type="shipTypesType" name="shipTypes"/>
+            <xs:element type="boardsType" name="boards"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="shipTypesType">
+        <xs:sequence>
+            <xs:element type="shipTypeType" name="shipType" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
