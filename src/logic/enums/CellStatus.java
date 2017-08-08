@@ -1,6 +1,6 @@
 package logic.enums;
 
-public enum CellSdtatus {
+public enum CellStatus {
 
     HIT("$"),
     MISS("#"),
@@ -9,7 +9,7 @@ public enum CellSdtatus {
 
     private String sign;
 
-    CellSdtatus(String sign) {
+    CellStatus(String sign) {
         this.sign = sign;
     }
 

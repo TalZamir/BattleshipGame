@@ -11,7 +11,9 @@ public class Board {
         board = new Battleship[boardSize][boardSize];
     }
 
-    public void print
+    public void print() {
+
+    }
 
     // **************************************************** //
     // Returns the status of a cell in the board
