@@ -1,4 +1,4 @@
-package Logic.Interfaces;
+package logic.interfaces;
 
 public interface IUser {
 }

@@ -1,4 +1,5 @@
-package Logic;
+package logic;
 
 public class Battleship {
+
 }

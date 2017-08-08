@@ -1,7 +1,7 @@
-package UI;
+package ui;
 
-import Logic.GameManager;
 import com.google.gson.Gson;
+import logic.TheGame;
 import module.BattleShipGameType;
 
 import javax.xml.bind.JAXBContext;
@@ -12,7 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.StringReader;
 import java.util.Scanner;
 
-public class BattleshipApp {
+public final class BattleshipApp {
+
+    private BattleshipApp() {
+    }
 
     public static void main(String[] args) {
 
@@ -25,13 +28,11 @@ public class BattleshipApp {
             StringReader reader = new StringReader(content);
             BattleShipGameType bs = (BattleShipGameType) unmarshaller.unmarshal(reader);
             System.out.println(bs.getBoardSize());
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
+        } catch (JAXBException | FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        GameManager gameManager = new GameManager();
+        TheGame gameManager = new TheGame();
         printMenu();
     }
 

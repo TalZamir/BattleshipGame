@@ -1,7 +1,7 @@
-package Logic.Interfaces;
+package logic.interfaces;
 
-import Logic.Battleship;
-import Logic.Enums.GameType;
+import logic.Battleship;
+import logic.enums.GameType;
 
 import java.util.List;
 
