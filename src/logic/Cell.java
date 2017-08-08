@@ -22,7 +22,7 @@ public class Cell {
         this.shipId = shipId;
 
         //TODO: use Tal's enum
-        cellStatus = CellStatus.INITIAL;
+        cellStatus = CellStatus.REGULAR;
     }
 
 
