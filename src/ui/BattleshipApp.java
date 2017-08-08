@@ -1,8 +1,5 @@
 package ui;
 
-import logic.Board;
-import logic.TheGame;
-
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 
@@ -16,9 +13,6 @@ public final class BattleshipApp {
 
     public static void main(String[] args) throws JAXBException, FileNotFoundException {
 
-        TheGame gameManager = new TheGame();
-        Board board = new Board(12);
-        printBoard(board.getAllieMode());
     }
 
     // **************************************************** //
@@ -29,6 +23,9 @@ public final class BattleshipApp {
         System.out.println("1. Load XML File");
     }
 
+    // **************************************************** //
+    // Prints game boards
+    // **************************************************** //
     private static void printBoard(char[][] board) {
         // Columns row
         printRowIndex(SEPARATOR);

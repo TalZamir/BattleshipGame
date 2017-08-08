@@ -3,15 +3,25 @@ package logic;
 import logic.enums.CellStatus;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Board {
 
     CellStatus[][] board;
-    LinkedList<Battleship> battleships;
+    List<Battleship> battleships;
 
-    public Board(int boardSize) {
-        board = new CellStatus[boardSize][boardSize];
+    public Board(int boardSize, List<Battleship> battleships) {
+        this.board = new CellStatus[boardSize][boardSize];
+        this.battleships = battleships;
+        buildBoard();
+    }
+
+    // **************************************************** //
+    // Builds the game board
+    // **************************************************** //
+    private void buildBoard() {
         initBoard();
+
     }
 
     // **************************************************** //
@@ -72,7 +82,7 @@ public class Board {
 
     }
 
-    public LinkedList<Battleship> getBattleships() {
+    public List<Battleship> getBattleships() {
         return battleships;
     }
 

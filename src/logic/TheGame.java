@@ -41,7 +41,8 @@ public class TheGame {
     private void setBoards(int boardSize, BoardsType boards) {
         //        List<Board> boards = new ArrayList<>();
 
-        new Board(boardSize);
+        // TODO: Pass a Battleshiplist
+        new Board(boardSize, null);
     }
 
     private void setPlayers() {
