@@ -1,18 +1,8 @@
 package logic.interfaces;
 
-import logic.Battleship;
-import logic.enums.GameType;
-
-import java.util.List;
+import module.BattleShipGameType;
 
 public interface IGameSerializer {
 
-    GameType getGameType();
-
-    int getBoardSize();
-
-    List<Battleship> getBattleships();
-
-    int getMines();
-
+    BattleShipGameType getBattleShipGameType();
 }
