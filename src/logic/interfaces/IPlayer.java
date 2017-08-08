@@ -1,6 +1,6 @@
 package logic.interfaces;
 
-public interface IUser {
+public interface IPlayer {
 
     int getUserId();
 }

@@ -2,7 +2,7 @@ package logic.interfaces;
 
 import module.BattleShipGameType;
 
-public interface IGameSerializer {
+public interface ISerializer {
 
     BattleShipGameType getBattleShipGameType();
 }

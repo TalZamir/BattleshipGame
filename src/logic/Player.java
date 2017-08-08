@@ -1,9 +1,8 @@
 package logic;
 
-import logic.interfaces.IUser;
+import logic.interfaces.IPlayer;
 
-
-public class Player implements IUser {
+public class Player implements IPlayer {
 
     //TODO
     @Override
