@@ -1,17 +1,27 @@
 package logic;
 
+import logic.enums.CellStatus;
+
 import java.util.LinkedList;
 
 public class Board {
 
-    Battleship[][] board;
+    CellStatus[][] board;
     LinkedList<Battleship> battleships;
 
     public Board(int boardSize) {
-        board = new Battleship[boardSize][boardSize];
+        board = new CellStatus[boardSize][boardSize];
     }
 
-    public void print() {
+    private void initBoard() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                board[i][j] = CellStatus.INITIAL;
+            }
+        }
+    }
+
+    public void printAsAllie() {
 
     }
 

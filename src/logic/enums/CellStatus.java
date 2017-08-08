@@ -2,18 +2,18 @@ package logic.enums;
 
 public enum CellStatus {
 
-    HIT("$"),
-    MISS("#"),
-    SHIP("@"),
-    INITIAL("*");
+    HIT('$'),
+    MISS('#'),
+    SHIP('@'),
+    INITIAL('*');
 
-    private String sign;
+    private char sign;
 
-    CellStatus(String sign) {
+    CellStatus(char sign) {
         this.sign = sign;
     }
 
-    public String sign() {
+    public char sign() {
         return sign;
     }
 }
