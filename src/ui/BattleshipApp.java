@@ -1,5 +1,8 @@
 package ui;
 
+import logic.TheGame;
+import logic.exceptions.XmlContentException;
+
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 
@@ -12,6 +15,13 @@ public final class BattleshipApp {
     private static final int SEPARATOR = 0;
 
     public static void main(String[] args) throws JAXBException, FileNotFoundException {
+        System.out.println("bla");
+        try {
+            TheGame theGame = new TheGame();
+        }
+        catch (XmlContentException exception) {
+            exception.printStackTrace();
+        }
 
     }
 
