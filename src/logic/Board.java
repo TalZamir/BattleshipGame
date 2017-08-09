@@ -1,6 +1,8 @@
 package logic;
 
 import logic.enums.CellStatus;
+import logic.enums.ExceptionsMeassage;
+import logic.exceptions.XmlContentException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +12,7 @@ public class Board {
     CellStatus[][] board;
     List<Battleship> battleships;
 
-    public Board(int boardSize, List<Battleship> battleships) {
+    public Board(int boardSize, List<Battleship> battleships) throws XmlContentException {
         this.board = new CellStatus[boardSize + 1][boardSize + 1];
         this.battleships = battleships;
         buildBoard();
@@ -19,32 +21,47 @@ public class Board {
     // **************************************************** //
     // Builds the game board
     // **************************************************** //
-    private void buildBoard() {
+    private void buildBoard() throws XmlContentException {
         initBoard();
-        /*
-        for(Battleship currentBattleship : battleships) {
+
+        for (Battleship currentBattleship : battleships) {
             Coordinate position = currentBattleship.getPosition();
+            if (!checkCoordinate(position)) {
+                throw new XmlContentException(ExceptionsMeassage.IllegalPosition);
+            }
             board[position.getRow()][position.getColumn()] = CellStatus.SHIP;
         }
 
     }
 
-    private void checkCell(Coordinate cell) {
+    // **************************************************** //
+    // Check if the position of the coordinate is valid
+    // **************************************************** //
+    private boolean checkCoordinate(Coordinate coordinate) {
         boolean result = true;
-        int row = cell.getRow();
-        int col = cell.getColumn();
+        int row = coordinate.getRow();
+        int col = coordinate.getColumn();
 
-        if(board[row][col] != CellStatus.REGULAR) {
+        if (row >= board.length || col >= board.length || row < 1 || col < 1 || board[row][col] != CellStatus.REGULAR) {
+            result = false;
+        } else if (row - 1 != 0 && board[row - 1][col] != CellStatus.REGULAR) {
+            result = false;
+        } else if (row + 1 < board.length && board[row + 1][col] != CellStatus.REGULAR) {
+            result = false;
+        } else if (col - 1 != 0 && board[row][col - 1] != CellStatus.REGULAR) {
+            result = false;
+        } else if (col + 1 < board.length && board[row][col + 1] != CellStatus.REGULAR) {
+            result = false;
+        } else if (row - 1 != 0 && col - 1 != 0 && board[row - 1][col - 1] != CellStatus.REGULAR) {
+            result = false;
+        } else if (row + 1 < board.length && col + 1 < board.length && board[row + 1][col + 1] != CellStatus.REGULAR) {
+            result = false;
+        } else if (row - 1 != 0 && col + 1 < board.length && board[row - 1][col + 1] != CellStatus.REGULAR) {
+            result = false;
+        } else if (row + 1 < board.length && col - 1 != 0 && board[row + 1][col - 1] != CellStatus.REGULAR) {
             result = false;
         }
-        else if(row - 1 != 0 && board[row - 1][col] != CellStatus.REGULAR) {
-            result = false;
-        }
-        else if(row + 1 != 0 && board[row + 1][col] != CellStatus.REGULAR) {
-            result = false;
-        }
-
-*/
+        return result;
     }
 
     // **************************************************** //
