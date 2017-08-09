@@ -18,8 +18,7 @@ public final class BattleshipApp {
         try {
             TheGame theGame = new TheGame();
             printBoard(theGame.getCurrentPlayerShipBoard());
-        }
-        catch (XmlContentException exception) {
+        } catch (XmlContentException exception) {
             exception.printStackTrace();
         }
 
@@ -40,19 +39,17 @@ public final class BattleshipApp {
         // Columns row
         printRowIndex(SEPARATOR);
         char letter = 'A';
-        for (int i = 0; i < board.length; i++, letter++) {
+        for (int i = 1; i < board.length; i++, letter++) {
             printWithSpace(letter);
         }
         System.out.print(System.getProperty("line.separator"));
         // Actual board
-        int rowIndex = 1;
-        for (char[] row : board) {
-            printRowIndex(rowIndex);
-            for (char sign : row) {
-                printWithSpace(sign);
+        for (int row = 1; row < board.length; row++) {
+            printRowIndex(row);
+            for (int col = 1; col < board.length; col++) {
+                printWithSpace(board[row][col]);
             }
             System.out.print(System.getProperty("line.separator"));
-            rowIndex++;
         }
     }
 
