@@ -28,6 +28,22 @@ public class Board {
 
     }
 
+    private void checkCell(Coordinate cell) {
+        boolean result = true;
+        int row = cell.getRow();
+        int col = cell.getColumn();
+
+        if(board[row][col] != CellStatus.REGULAR) {
+            result = false;
+        }
+        else if(row - 1 != 0 && board[row - 1][col] != CellStatus.REGULAR) {
+            result = false;
+        }
+        else if(row + 1 != 0 && board[row - 1][col] != CellStatus.REGULAR)
+
+
+    }
+
     // **************************************************** //
     // Initialize game board
     // **************************************************** //
