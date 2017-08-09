@@ -6,8 +6,8 @@ public enum CellStatus {
     MISS('#'),
     SHIP('@'),
     REGULAR('*'),
-    MINE('M'),
-    TEMP('T');
+    MINE('+'),
+    TEMP('&');
 
     private char sign;
 

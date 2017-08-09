@@ -34,6 +34,7 @@ public class Board {
                 board[position.getRow()][position.getColumn()] = CellStatus.TEMP;
                 incrementCoordinate(position, currentBattleship.getDirection());
             }
+            changeTempSigns();
         }
     }
 
@@ -83,6 +84,19 @@ public class Board {
     // **************************************************** //
     private boolean signCompare(CellStatus sign) {
         return (sign == CellStatus.REGULAR || sign == CellStatus.TEMP);
+    }
+
+    // **************************************************** //
+    // Change TEMP signs to SHIP signs
+    // **************************************************** //
+    private void changeTempSigns() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] == CellStatus.TEMP) {
+                    board[i][j] = CellStatus.SHIP;
+                }
+            }
+        }
     }
 
     // **************************************************** //
