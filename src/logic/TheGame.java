@@ -26,7 +26,7 @@ public class TheGame {
 
     public TheGame() throws XmlContentException {
         players = new Player[2];
-        turns = 1;
+        turns = 0;
         ISerializer serializer = new XmlSerializer();
         BattleShipGameType battleShipGameType = serializer.getBattleShipGameType();
 
@@ -41,7 +41,6 @@ public class TheGame {
 
     //TODO now we are creating only human users. Need to add computer user.
     private void initGameComponents(BattleShipGameType battleShipGameType) throws XmlContentException {
-//        setPlayers();
         BattleshipBuilder battleshipBuilder = new BattleshipBuilder(battleShipGameType.getShipTypes().getShipType());
         setBoards(Integer.parseInt(battleShipGameType.getBoardSize()), battleShipGameType.getBoards().getBoard(), battleshipBuilder);
 
@@ -55,7 +54,8 @@ public class TheGame {
         for(BoardType boardType : boards) {
             List<Battleship> battleships = battleshipBuilder.buildUserBattleships(boardType.getShip()); // Builds player battleships
             Board board = new Board(boardSize, battleships); // Builds player board
-            players[playIndex].setBoard(board); // Sets player board
+            Player player = new Player(board); // Sets player board
+            players[playIndex] = player; // Inserts player to players array
         }
     }
 
