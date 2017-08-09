@@ -21,6 +21,10 @@ public class Board {
     // **************************************************** //
     private void buildBoard() {
         initBoard();
+        for(Battleship currentBattleship : battleships) {
+            Coordinate position = currentBattleship.getPosition();
+            board[position.getRow()][position.getColumn()] = CellStatus.SHIP;
+        }
 
     }
 
