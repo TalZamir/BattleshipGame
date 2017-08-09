@@ -1,5 +1,6 @@
 package logic;
 
+import logic.enums.BattleshipType;
 import logic.enums.CellStatus;
 import logic.enums.ExceptionsMeassage;
 import logic.exceptions.XmlContentException;
@@ -26,12 +27,25 @@ public class Board {
 
         for (Battleship currentBattleship : battleships) {
             Coordinate position = currentBattleship.getPosition();
-            if (!checkCoordinate(position)) {
-                throw new XmlContentException(ExceptionsMeassage.IllegalPosition);
+            for (int i = 0; i < currentBattleship.getLength(); i++) {
+                if (!checkCoordinate(position)) {
+                    throw new XmlContentException(ExceptionsMeassage.IllegalPosition);
+                }
+                board[position.getRow()][position.getColumn()] = CellStatus.TEMP;
+                incrementCoordinate(position, currentBattleship.getDirection());
             }
-            board[position.getRow()][position.getColumn()] = CellStatus.SHIP;
         }
+    }
 
+    // **************************************************** //
+    // Get the next battleship cell position by its type
+    // **************************************************** //
+    private void incrementCoordinate(Coordinate coordinate, String shipType) {
+        if (shipType.toLowerCase().equals(BattleshipType.VERTICAL.shipType())) {
+            coordinate.setColumn(coordinate.getColumn() + 1);
+        } else {
+            coordinate.setRow(coordinate.getRow() + 1);
+        }
     }
 
     // **************************************************** //
@@ -42,26 +56,33 @@ public class Board {
         int row = coordinate.getRow();
         int col = coordinate.getColumn();
 
-        if (row >= board.length || col >= board.length || row < 1 || col < 1 || board[row][col] != CellStatus.REGULAR) {
+        if (row >= board.length || col >= board.length || row < 1 || col < 1 || !signCompare(board[row][col])) {
             result = false;
-        } else if (row - 1 != 0 && board[row - 1][col] != CellStatus.REGULAR) {
+        } else if (row - 1 != 0 && !signCompare(board[row - 1][col])) {
             result = false;
-        } else if (row + 1 < board.length && board[row + 1][col] != CellStatus.REGULAR) {
+        } else if (row + 1 < board.length && !signCompare(board[row + 1][col])) {
             result = false;
-        } else if (col - 1 != 0 && board[row][col - 1] != CellStatus.REGULAR) {
+        } else if (col - 1 != 0 && !signCompare(board[row][col - 1])) {
             result = false;
-        } else if (col + 1 < board.length && board[row][col + 1] != CellStatus.REGULAR) {
+        } else if (col + 1 < board.length && !signCompare(board[row][col + 1])) {
             result = false;
-        } else if (row - 1 != 0 && col - 1 != 0 && board[row - 1][col - 1] != CellStatus.REGULAR) {
+        } else if (row - 1 != 0 && col - 1 != 0 && !signCompare(board[row - 1][col - 1])) {
             result = false;
-        } else if (row + 1 < board.length && col + 1 < board.length && board[row + 1][col + 1] != CellStatus.REGULAR) {
+        } else if (row + 1 < board.length && col + 1 < board.length && !signCompare(board[row + 1][col + 1])) {
             result = false;
-        } else if (row - 1 != 0 && col + 1 < board.length && board[row - 1][col + 1] != CellStatus.REGULAR) {
+        } else if (row - 1 != 0 && col + 1 < board.length && !signCompare(board[row - 1][col + 1])) {
             result = false;
-        } else if (row + 1 < board.length && col - 1 != 0 && board[row + 1][col - 1] != CellStatus.REGULAR) {
+        } else if (row + 1 < board.length && col - 1 != 0 && !signCompare(board[row + 1][col - 1])) {
             result = false;
         }
         return result;
+    }
+
+    // **************************************************** //
+    // Sign compare
+    // **************************************************** //
+    private boolean signCompare(CellStatus sign) {
+        return (sign == CellStatus.REGULAR || sign == CellStatus.TEMP);
     }
 
     // **************************************************** //
