@@ -15,9 +15,9 @@ public final class BattleshipApp {
     private static final int SEPARATOR = 0;
 
     public static void main(String[] args) throws JAXBException, FileNotFoundException {
-        System.out.println("bla");
         try {
             TheGame theGame = new TheGame();
+            printBoard(theGame.getCurrentPlayerShipBoard());
         }
         catch (XmlContentException exception) {
             exception.printStackTrace();
