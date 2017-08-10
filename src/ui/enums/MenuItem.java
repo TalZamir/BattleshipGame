@@ -7,15 +7,16 @@ public enum MenuItem {
     STATUS(3),
     PLAY_MOVE(4),
     STATISTICS(5),
-    QUIT(6);
+    QUIT(6),
+    UNINITIALIZED(0);
 
     private int item;
 
-    MenuItem(int message) {
-        this.item = message;
+    MenuItem(int item) {
+        this.item = item;
     }
 
-    public int item() {
+    public int value() {
         return item;
     }
 }

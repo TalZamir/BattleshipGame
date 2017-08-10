@@ -33,9 +33,8 @@ public class UIPrinter {
     public void printBoard(char[][] board) {
         // Columns row
         printRowIndex(SEPARATOR);
-        char letter = 'A';
-        for (int i = 1; i < board.length; i++, letter++) {
-            printWithSpace(letter);
+        for (int i = 1; i < board.length; i++) {
+            printWithSpace(i);
         }
         System.out.print(System.getProperty("line.separator"));
         // Actual board
