@@ -18,15 +18,19 @@ import java.util.List;
 
 public class TheGame {
 
-    private final GameType gameType;
+    private GameType gameType;
     private Player[] players;
     private int turns;
+    private boolean isActive;
 
 
-
-    public TheGame() throws XmlContentException {
+    public TheGame() {
+        isActive = true;
         players = new Player[2];
         turns = 0;
+    }
+
+    public void init() throws XmlContentException {
         ISerializer serializer = new XmlSerializer();
         BattleShipGameType battleShipGameType = serializer.getBattleShipGameType();
 
@@ -51,7 +55,7 @@ public class TheGame {
     // **************************************************** //
     private void setBoards(int boardSize, List<BoardType> boards, BattleshipBuilder battleshipBuilder) throws XmlContentException {
         int playIndex = 0;
-        for(BoardType boardType : boards) {
+        for (BoardType boardType : boards) {
             List<Battleship> battleships = battleshipBuilder.buildUserBattleships(boardType.getShip()); // Builds player battleships
             Board board = new Board(boardSize, battleships); // Builds player board
             Player player = new Player(board); // Sets player board
@@ -65,5 +69,14 @@ public class TheGame {
     public char[][] getCurrentPlayerShipBoard() {
         int currentPlayerIndex = turns % 2;
         return players[currentPlayerIndex].getBoard().getAllieMode();
+    }
+
+    // **************************************************** //
+    // Indicates if the game still active or not
+    // **************************************************** //
+    public boolean isActive() {
+        boolean res = isActive;
+        isActive = !isActive;
+        return res;
     }
 }

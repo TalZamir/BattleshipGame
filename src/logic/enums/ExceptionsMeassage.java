@@ -5,10 +5,10 @@ package logic.enums;
  */
 public enum ExceptionsMeassage {
 
-    DuplicateShipId("Duplicate battleship IDs"),
-    UnknownShipId("The given battleship's ID is unknown"),
-    ShipMissmatch("The number of the filled battleships doesn't match to the total amount"),
-    IllegalPosition("The battleships' positions are illegal");
+    DuplicateShipId("The battleship ID name must be unique!"),
+    UnknownShipId("One or more of battleships' ID's is unknown!"),
+    ShipMissmatch("The amount of the placed battleships doesn't match to the definition!"),
+    IllegalPosition("The battleships' positions are illegal! Please check your boards.");
 
     private String message;
 

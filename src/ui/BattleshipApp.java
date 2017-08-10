@@ -5,73 +5,59 @@ import logic.exceptions.XmlContentException;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
 
 public final class BattleshipApp {
 
     private BattleshipApp() {
     }
 
-    private static final String SPACE = "   ";
-    private static final int SEPARATOR = 0;
+    private static final String INVALID_INPUT = "Invalid input! Please try again";
+    private static TheGame theGame;
+    private static UIPrinter uiPrinter;
 
     public static void main(String[] args) throws JAXBException, FileNotFoundException {
-        try {
-            TheGame theGame = new TheGame();
-            printBoard(theGame.getCurrentPlayerShipBoard());
-        } catch (XmlContentException exception) {
-            exception.printStackTrace();
-        }
-
-    }
-
-    // **************************************************** //
-    // Prints main menu
-    // **************************************************** //
-    private static void printMenu() {
-        System.out.println("************* MAIN MENU *************");
-        System.out.println("1. Load XML File");
-    }
-
-    // **************************************************** //
-    // Prints game boards
-    // **************************************************** //
-    private static void printBoard(char[][] board) {
-        // Columns row
-        printRowIndex(SEPARATOR);
-        char letter = 'A';
-        for (int i = 1; i < board.length; i++, letter++) {
-            printWithSpace(letter);
-        }
-        System.out.print(System.getProperty("line.separator"));
-        // Actual board
-        for (int row = 1; row < board.length; row++) {
-            printRowIndex(row);
-            for (int col = 1; col < board.length; col++) {
-                printWithSpace(board[row][col]);
+        uiPrinter = new UIPrinter();
+        theGame = new TheGame();
+        while (theGame.isActive()) {
+            try {
+                theGame.init();
+                uiPrinter.printMenu();
+                readUserInput();
+                uiPrinter.printBoard(theGame.getCurrentPlayerShipBoard());
+            } catch (XmlContentException exception) {
+                System.out.println("GAME ERROR: " + exception.getMessage());
             }
-            System.out.print(System.getProperty("line.separator"));
         }
     }
 
     // **************************************************** //
-    // Prints sign with space
+    // Performs game iteration
     // **************************************************** //
-    private static void printWithSpace(Object sign) {
-        System.out.print(sign + SPACE);
+    private static void doIteration() {
+
     }
 
     // **************************************************** //
-    // Prints row index with proper alignment
+    // Reads input from user
     // **************************************************** //
-    private static void printRowIndex(int row) {
-        String space = SPACE;
-        if (row < 10) {
-            space += " ";
+    private static int readUserInput() {
+        int input = 0;
+        boolean isValid = false;
+        while (!isValid) {
+            try {
+                Scanner reader = new Scanner(System.in);  // Reading from System.in
+                input = reader.nextInt();
+                if (input >= uiPrinter.getMenuStart() && input <= uiPrinter.getMenuEnd()) {
+                    isValid = true;
+                } else {
+                    System.out.println(INVALID_INPUT);
+                }
+            } catch (Exception exception) {
+                System.out.println(INVALID_INPUT);
+            }
         }
-        if (row != SEPARATOR) {
-            System.out.print(row + space);
-        } else {
-            System.out.print('-' + space);
-        }
+        return input;
     }
 }
