@@ -27,7 +27,7 @@ public class BattleshipBuilder {
         battleshipsMap = new HashMap<>();
         for(ShipTypeType battleship : shipTypes) {
             if(battleshipsMap.containsKey(battleship.getId())) {
-                throw new XmlContentException(ExceptionsMeassage.DuplicateShipId);
+                throw new XmlContentException(ExceptionsMeassage.DUPLICATE_SHIP_ID);
             }
             else {
                 battleshipsMap.put(battleship.getId(), battleship);
@@ -42,12 +42,12 @@ public class BattleshipBuilder {
         List<Battleship> battleships = new ArrayList<>();
         for(ShipType ship : ships) {
             if(!battleshipsMap.containsKey(ship.getShipTypeId())) {
-                throw new XmlContentException(ExceptionsMeassage.UnknownShipId); // battleship ID doesn't exist
+                throw new XmlContentException(ExceptionsMeassage.UNKNOWN_SHIP_ID); // battleship ID doesn't exist
             }
             battleships.add(new Battleship(battleshipsMap.get(ship.getShipTypeId()), ship));
         }
         if(!checkAmount(battleships)) {
-            throw new XmlContentException(ExceptionsMeassage.ShipMissmatch); // battleship ID doesn't exist
+            throw new XmlContentException(ExceptionsMeassage.SHIP_MISSMATCH); // battleship ID doesn't exist
         }
         return battleships;
     }

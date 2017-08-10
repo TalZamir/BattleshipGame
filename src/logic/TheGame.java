@@ -22,21 +22,24 @@ public class TheGame {
     private Player[] players;
     private int turns;
     private boolean isActive;
+    private boolean isFileLoaded;
+    private boolean isGameOn;
+    private BattleShipGameType xmlContent;
 
 
     public TheGame() {
         isActive = true;
+        isFileLoaded = false;
+        isGameOn = false;
         players = new Player[2];
         turns = 0;
     }
 
     public void init() throws XmlContentException {
-        ISerializer serializer = new XmlSerializer();
-        BattleShipGameType battleShipGameType = serializer.getBattleShipGameType();
+        isGameOn = true;
+        initGameComponents();
 
-        initGameComponents(battleShipGameType);
-
-        if (battleShipGameType.getGameType().equals(GameType.BASIC.getGameTypeValue())) {
+        if (xmlContent.getGameType().equals(GameType.BASIC.getGameTypeValue())) {
             gameType = GameType.BASIC;
         } else {
             gameType = GameType.ADVANCE;
@@ -44,10 +47,24 @@ public class TheGame {
     }
 
     //TODO now we are creating only human users. Need to add computer user.
-    private void initGameComponents(BattleShipGameType battleShipGameType) throws XmlContentException {
-        BattleshipBuilder battleshipBuilder = new BattleshipBuilder(battleShipGameType.getShipTypes().getShipType());
-        setBoards(Integer.parseInt(battleShipGameType.getBoardSize()), battleShipGameType.getBoards().getBoard(), battleshipBuilder);
+    private void initGameComponents() throws XmlContentException {
+        BattleshipBuilder battleshipBuilder = new BattleshipBuilder(xmlContent.getShipTypes().getShipType());
+        setBoards(Integer.parseInt(xmlContent.getBoardSize()), xmlContent.getBoards().getBoard(), battleshipBuilder);
 
+    }
+
+    // **************************************************** //
+    // Loads a XML file
+    // **************************************************** //
+    public void loadFile(String path) throws XmlContentException {
+        try {
+            ISerializer serializer = new XmlSerializer(path);
+            xmlContent = serializer.getBattleShipGameType();
+            isFileLoaded = true;
+        } catch (Exception exception) {
+            isFileLoaded = false; // if the last file was fine and the current one is not
+            throw new XmlContentException(ExceptionsMeassage.INVALID_XML); // XML reading error
+        }
     }
 
     // **************************************************** //
@@ -72,11 +89,23 @@ public class TheGame {
     }
 
     // **************************************************** //
-    // Indicates if the game still active or not
+    // Indicates if the user still wants to play
     // **************************************************** //
     public boolean isActive() {
-        boolean res = isActive;
-        isActive = !isActive;
-        return res;
+        return isActive;
+    }
+
+    // **************************************************** //
+    // Indicates if a game is on
+    // **************************************************** //
+    public boolean isGameOn() {
+        return isGameOn;
+    }
+
+    // **************************************************** //
+    // Indicates if a game is on
+    // **************************************************** //
+    public boolean isFileLoaded() {
+        return isFileLoaded;
     }
 }

@@ -29,7 +29,7 @@ public class Board {
             Coordinate position = currentBattleship.getPosition();
             for (int i = 0; i < currentBattleship.getLength(); i++) {
                 if (!checkCoordinate(position)) {
-                    throw new XmlContentException(ExceptionsMeassage.IllegalPosition);
+                    throw new XmlContentException(ExceptionsMeassage.ILLEGAL_POSITION);
                 }
                 board[position.getRow()][position.getColumn()] = CellStatus.TEMP;
                 incrementCoordinate(position, currentBattleship.getDirection());

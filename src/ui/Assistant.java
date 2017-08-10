@@ -5,7 +5,7 @@ import java.util.Scanner;
 /**
  * Created by xozh4v on 8/10/2017.
  */
-public class UIPrinter {
+public class Assistant {
 
     private final String SPACE = "   ";
     private final int SEPARATOR = 0;

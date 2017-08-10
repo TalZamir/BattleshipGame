@@ -8,21 +8,22 @@ import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class UIApp {
+public class UiApp {
 
     private final String INVALID_INPUT = "Invalid input! Please try again";
     private TheGame theGame;
-    private UIPrinter uiPrinter;
+    private Assistant assistant;
 
+    // **************************************************** //
+    // Starts Battleship Game UI
+    // **************************************************** //
     public void start() throws JAXBException, FileNotFoundException {
-        uiPrinter = new UIPrinter();
+        assistant = new Assistant();
         theGame = new TheGame();
         while (theGame.isActive()) {
             try {
-                theGame.init();
-                uiPrinter.printMenu();
+                assistant.printMenu();
                 doIteration();
-                uiPrinter.printBoard(theGame.getCurrentPlayerShipBoard());
             } catch (XmlContentException exception) {
                 System.out.println("GAME ERROR: " + exception.getMessage());
             }
@@ -32,13 +33,13 @@ public class UIApp {
     // **************************************************** //
     // Performs game iteration
     // **************************************************** //
-    private void doIteration() {
+    private void doIteration() throws XmlContentException {
         switch (readUserInput()) {
             case LOAD_XML:
-                System.out.println("Loading...");
+                menuLoadXml();
                 break;
             case START_GAME:
-                System.out.println("Starting...");
+                menuStartGame();
                 break;
             case STATUS:
                 System.out.println("Look! a Status...");
@@ -55,15 +56,44 @@ public class UIApp {
     }
 
     // **************************************************** //
+    // Menu item: Load XML file
+    // **************************************************** //
+    private void menuLoadXml() throws XmlContentException {
+        if(theGame.isGameOn()) {
+            System.out.println("You can't load a XML file while a game is already running.");
+        } else {
+            Scanner reader = new Scanner(System.in);
+            theGame.loadFile(reader.nextLine());
+        }
+    }
+
+    // **************************************************** //
+    // Menu item: Start game
+    // **************************************************** //
+    private void menuStartGame() throws XmlContentException {
+        if (!theGame.isFileLoaded()) {
+            // No XML file
+            System.out.println("You must load a XML file in order to start a game.");
+        } else if (theGame.isGameOn()) {
+            // The game is already started
+            System.out.println("A game is already running.");
+        } else {
+            // XML loaded and game is not began yet
+            theGame.init();
+            assistant.printBoard(theGame.getCurrentPlayerShipBoard());
+        }
+    }
+
+    // **************************************************** //
     // Reads input from user
     // **************************************************** //
     private MenuItem readUserInput() {
         MenuItem input = MenuItem.UNINITIALIZED;
         while (input == MenuItem.UNINITIALIZED) {
             try {
-                Scanner reader = new Scanner(System.in);  // Reading from System.in
+                Scanner reader = new Scanner(System.in);
                 int userInput = reader.nextInt();
-                if (userInput >= uiPrinter.getMenuStart() && userInput <= uiPrinter.getMenuEnd()) {
+                if (userInput >= assistant.getMenuStart() && userInput <= assistant.getMenuEnd()) {
                     input = MenuItem.values()[userInput - 1];
                 } else {
                     System.out.println(INVALID_INPUT);
