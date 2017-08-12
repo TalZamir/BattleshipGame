@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class UiApp {
 
-    private final String INVALID_INPUT = "Invalid input! Please try again";
+    private static final String INVALID_INPUT = "Invalid input! Please try again";
     private TheGame theGame;
     private Assistant assistant;
 

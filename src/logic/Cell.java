@@ -12,7 +12,6 @@ public class Cell {
         this.point = point;
         this.shipId = shipId;
 
-        //TODO: use Tal's enum
         cellStatus = CellStatus.REGULAR;
     }
 

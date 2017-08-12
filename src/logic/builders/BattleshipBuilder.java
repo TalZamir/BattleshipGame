@@ -3,7 +3,6 @@ package logic.builders;
 import logic.Battleship;
 import logic.enums.ExceptionsMeassage;
 import logic.exceptions.XmlContentException;
-import module.BoardType;
 import module.ShipType;
 import module.ShipTypeType;
 
@@ -60,7 +59,7 @@ public class BattleshipBuilder {
         int counter = 0;
         for(ShipTypeType primitiveShip : battleshipsCollection) {
             for(Battleship currentShip : battleships) {
-                if(primitiveShip.getId() == currentShip.getId()) {
+                if (primitiveShip.getId().equals(currentShip.getId())) {
                     counter++;
                 }
             }

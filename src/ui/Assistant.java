@@ -1,16 +1,14 @@
 package ui;
 
-import java.util.Scanner;
-
 /**
  * Created by xozh4v on 8/10/2017.
  */
 public class Assistant {
 
-    private final String SPACE = "   ";
-    private final int SEPARATOR = 0;
-    private final int MENU_START = 1;
-    private final int MENU_END = 6;
+    private static final String SPACE = "   ";
+    private static final int SEPARATOR = 0;
+    private static final int MENU_START = 1;
+    private static final int MENU_END = 6;
 
 
     // **************************************************** //

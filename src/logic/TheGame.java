@@ -4,16 +4,11 @@ import logic.builders.BattleshipBuilder;
 import logic.enums.ExceptionsMeassage;
 import logic.enums.GameType;
 import logic.exceptions.XmlContentException;
-import logic.interfaces.IPlayer;
 import logic.interfaces.ISerializer;
 import logic.serializers.XmlSerializer;
 import module.BattleShipGameType;
 import module.BoardType;
-import module.BoardsType;
-import module.ShipTypeType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class TheGame {
@@ -25,7 +20,6 @@ public class TheGame {
     private boolean isFileLoaded;
     private boolean isGameOn;
     private BattleShipGameType xmlContent;
-
 
     public TheGame() {
         isActive = true;
@@ -46,13 +40,6 @@ public class TheGame {
         }
     }
 
-    //TODO now we are creating only human users. Need to add computer user.
-    private void initGameComponents() throws XmlContentException {
-        BattleshipBuilder battleshipBuilder = new BattleshipBuilder(xmlContent.getShipTypes().getShipType());
-        setBoards(Integer.parseInt(xmlContent.getBoardSize()), xmlContent.getBoards().getBoard(), battleshipBuilder);
-
-    }
-
     // **************************************************** //
     // Loads a XML file
     // **************************************************** //
@@ -64,19 +51,6 @@ public class TheGame {
         } catch (Exception exception) {
             isFileLoaded = false; // if the last file was fine and the current one is not
             throw new XmlContentException(ExceptionsMeassage.INVALID_XML); // XML reading error
-        }
-    }
-
-    // **************************************************** //
-    // Defines players' boards
-    // **************************************************** //
-    private void setBoards(int boardSize, List<BoardType> boards, BattleshipBuilder battleshipBuilder) throws XmlContentException {
-        int playIndex = 0;
-        for (BoardType boardType : boards) {
-            List<Battleship> battleships = battleshipBuilder.buildUserBattleships(boardType.getShip()); // Builds player battleships
-            Board board = new Board(boardSize, battleships); // Builds player board
-            Player player = new Player(board); // Sets player board
-            players[playIndex] = player; // Inserts player to players array
         }
     }
 
@@ -107,5 +81,24 @@ public class TheGame {
     // **************************************************** //
     public boolean isFileLoaded() {
         return isFileLoaded;
+    }
+
+    //TODO now we are creating only human users. Need to add computer user.
+    private void initGameComponents() throws XmlContentException {
+        BattleshipBuilder battleshipBuilder = new BattleshipBuilder(xmlContent.getShipTypes().getShipType());
+        setBoards(Integer.parseInt(xmlContent.getBoardSize()), xmlContent.getBoards().getBoard(), battleshipBuilder);
+    }
+
+    // **************************************************** //
+    // Defines players' boards
+    // **************************************************** //
+    private void setBoards(int boardSize, List<BoardType> boards, BattleshipBuilder battleshipBuilder) throws XmlContentException {
+        int playIndex = 0;
+        for (BoardType boardType : boards) {
+            List<Battleship> battleships = battleshipBuilder.buildUserBattleships(boardType.getShip()); // Builds player battleships
+            Board board = new Board(boardSize, battleships); // Builds player board
+            Player player = new Player(board); // Sets player board
+            players[playIndex] = player; // Inserts player to players array
+        }
     }
 }
