@@ -4,9 +4,11 @@ import logic.interfaces.IPlayer;
 
 public class Player implements IPlayer {
 
-    private Board board;
+    private final Board board;
+    private final String name;
 
-    public Player(Board board) {
+    public Player(String name, Board board) {
+        this.name = name;
         this.board = board;
     }
 
@@ -20,7 +22,8 @@ public class Player implements IPlayer {
         return board;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    @Override
+    public String getName() {
+        return name;
     }
 }

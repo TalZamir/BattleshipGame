@@ -24,6 +24,7 @@ public class UiApp {
             try {
                 assistant.printMenu();
                 doIteration();
+                assistant.printPlayerName(theGame.getCurrentPlayerName());
             } catch (XmlContentException exception) {
                 System.out.println("GAME ERROR: " + exception.getMessage());
             }
@@ -33,6 +34,7 @@ public class UiApp {
     // **************************************************** //
     // Performs game iteration
     // **************************************************** //
+    //TODO: TAL - I think it should appears once. doIteration should be menuStartGame method.
     private void doIteration() throws XmlContentException {
         switch (readUserInput()) {
             case LOAD_XML:

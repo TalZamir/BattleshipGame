@@ -20,6 +20,7 @@ public class TheGame {
     private boolean isFileLoaded;
     private boolean isGameOn;
     private BattleShipGameType xmlContent;
+    private String currentPlayerName;
 
     public TheGame() {
         isActive = true;
@@ -33,7 +34,7 @@ public class TheGame {
         isGameOn = true;
         initGameComponents();
 
-        if (xmlContent.getGameType().equals(GameType.BASIC.getGameTypeValue())) {
+        if (xmlContent.getGameType().equalsIgnoreCase(GameType.BASIC.getGameTypeValue())) {
             gameType = GameType.BASIC;
         } else {
             gameType = GameType.ADVANCE;
@@ -59,6 +60,7 @@ public class TheGame {
     // **************************************************** //
     public char[][] getCurrentPlayerShipBoard() {
         int currentPlayerIndex = turns % 2;
+        currentPlayerName = players[currentPlayerIndex].getName();
         return players[currentPlayerIndex].getBoard().getAllieMode();
     }
 
@@ -83,6 +85,10 @@ public class TheGame {
         return isFileLoaded;
     }
 
+    public String getCurrentPlayerName() {
+        return currentPlayerName;
+    }
+
     //TODO now we are creating only human users. Need to add computer user.
     private void initGameComponents() throws XmlContentException {
         BattleshipBuilder battleshipBuilder = new BattleshipBuilder(xmlContent.getShipTypes().getShipType());
@@ -93,12 +99,13 @@ public class TheGame {
     // Defines players' boards
     // **************************************************** //
     private void setBoards(int boardSize, List<BoardType> boards, BattleshipBuilder battleshipBuilder) throws XmlContentException {
-        int playIndex = 0;
+        int playerIndex = 0;
         for (BoardType boardType : boards) {
             List<Battleship> battleships = battleshipBuilder.buildUserBattleships(boardType.getShip()); // Builds player battleships
             Board board = new Board(boardSize, battleships); // Builds player board
-            Player player = new Player(board); // Sets player board
-            players[playIndex] = player; // Inserts player to players array
+            Player player = new Player(String.format("Player%d", playerIndex + 1), board); // Sets player board
+            players[playerIndex] = player; // Inserts player to players array
+            playerIndex++;
         }
     }
 }

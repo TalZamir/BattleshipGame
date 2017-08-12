@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BattleshipBuilder {
 
-    private HashMap<String, ShipTypeType> battleshipsMap;
+    private Map<String, ShipTypeType> battleshipsMap;
 
     public BattleshipBuilder(List<ShipTypeType> shipTypes) throws XmlContentException {
         init(shipTypes);
@@ -22,6 +23,7 @@ public class BattleshipBuilder {
     // **************************************************** //
     // Initiates builder battleships map
     // **************************************************** //
+    //TODO: TAL - I think one ship can appears more then once.
     public void init(List<ShipTypeType> shipTypes) throws XmlContentException {
         battleshipsMap = new HashMap<>();
         for(ShipTypeType battleship : shipTypes) {

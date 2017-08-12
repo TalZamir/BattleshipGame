@@ -74,4 +74,8 @@ public class Assistant {
     public int getMenuEnd() {
         return MENU_END;
     }
+
+    public void printPlayerName(String currentPlayerName) {
+        System.out.println(currentPlayerName);
+    }
 }

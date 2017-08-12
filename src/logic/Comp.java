@@ -9,4 +9,9 @@ public class Comp implements IPlayer {
     public int getUserId() {
         return 0;
     }
+
+    @Override
+    public String getName() {
+        return null;
+    }
 }
