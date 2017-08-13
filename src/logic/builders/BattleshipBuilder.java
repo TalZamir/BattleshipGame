@@ -1,13 +1,13 @@
 package logic.builders;
 
 import logic.Battleship;
-import logic.enums.ExceptionsMeassage;
+import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
 import module.ShipType;
 import module.ShipTypeType;
+import ui.verifiers.XmlFileVerifier;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +23,12 @@ public class BattleshipBuilder {
     // **************************************************** //
     // Initiates builder battleships map
     // **************************************************** //
-    //TODO: TAL - I think one ship can appears more then once.
     public void init(List<ShipTypeType> shipTypes) throws XmlContentException {
         battleshipsMap = new HashMap<>();
-        for(ShipTypeType battleship : shipTypes) {
-            if(battleshipsMap.containsKey(battleship.getId())) {
-                throw new XmlContentException(ExceptionsMeassage.DUPLICATE_SHIP_ID);
-            }
-            else {
+        for (ShipTypeType battleship : shipTypes) {
+            if (battleshipsMap.containsKey(battleship.getId())) {
+                throw new XmlContentException(ErrorMessages.DUPLICATE_SHIP_ID);
+            } else {
                 battleshipsMap.put(battleship.getId(), battleship);
             }
         }
@@ -41,35 +39,15 @@ public class BattleshipBuilder {
     // **************************************************** //
     public List<Battleship> buildUserBattleships(List<ShipType> ships) throws XmlContentException {
         List<Battleship> battleships = new ArrayList<>();
-        for(ShipType ship : ships) {
-            if(!battleshipsMap.containsKey(ship.getShipTypeId())) {
-                throw new XmlContentException(ExceptionsMeassage.UNKNOWN_SHIP_ID); // battleship ID doesn't exist
+        for (ShipType ship : ships) {
+            if (!battleshipsMap.containsKey(ship.getShipTypeId())) {
+                throw new XmlContentException(ErrorMessages.UNKNOWN_SHIP_ID); // battleship ID doesn't exist
             }
             battleships.add(new Battleship(battleshipsMap.get(ship.getShipTypeId()), ship));
         }
-        if(!checkAmount(battleships)) {
-            throw new XmlContentException(ExceptionsMeassage.SHIP_MISSMATCH); // battleship ID doesn't exist
+        if (!XmlFileVerifier.isBattleshipAmountOk(battleships, battleshipsMap)) {
+            throw new XmlContentException(ErrorMessages.SHIP_MISSMATCH); // battleship ID doesn't exist
         }
         return battleships;
-    }
-
-    // **************************************************** //
-    // Battleships amount check
-    // **************************************************** //
-    public boolean checkAmount(List<Battleship> battleships) {
-        Collection<ShipTypeType> battleshipsCollection = battleshipsMap.values();
-        int counter = 0;
-        for(ShipTypeType primitiveShip : battleshipsCollection) {
-            for(Battleship currentShip : battleships) {
-                if (primitiveShip.getId().equals(currentShip.getId())) {
-                    counter++;
-                }
-            }
-            if(counter != Integer.parseInt(primitiveShip.getAmount())) {
-                return false;
-            }
-            counter = 0;
-        }
-        return true;
     }
 }

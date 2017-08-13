@@ -2,7 +2,7 @@ package logic;
 
 import logic.enums.BattleshipType;
 import logic.enums.CellStatus;
-import logic.enums.ExceptionsMeassage;
+import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
 
 import java.util.LinkedList;
@@ -29,7 +29,7 @@ public class Board {
             Coordinate position = currentBattleship.getPosition();
             for (int i = 0; i < currentBattleship.getLength(); i++) {
                 if (!checkCoordinate(position)) {
-                    throw new XmlContentException(ExceptionsMeassage.ILLEGAL_POSITION);
+                    throw new XmlContentException(ErrorMessages.ILLEGAL_POSITION);
                 }
                 board[position.getRow()][position.getColumn()] = CellStatus.TEMP;
                 incrementCoordinate(position, currentBattleship.getDirection());

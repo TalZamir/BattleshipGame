@@ -1,13 +1,15 @@
 package logic;
 
 import logic.builders.BattleshipBuilder;
-import logic.enums.ExceptionsMeassage;
+import logic.enums.ErrorMessages;
 import logic.enums.GameType;
 import logic.exceptions.XmlContentException;
 import logic.interfaces.ISerializer;
 import logic.serializers.XmlSerializer;
 import module.BattleShipGameType;
 import module.BoardType;
+import ui.verifiers.ErrorCollector;
+import ui.verifiers.XmlFileVerifier;
 
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class TheGame {
         isGameOn = false;
         players = new Player[2];
         turns = 0;
+        this.xmlContent = xmlContent;
     }
 
     public void init() throws XmlContentException {
@@ -44,15 +47,26 @@ public class TheGame {
     // **************************************************** //
     // Loads a XML file
     // **************************************************** //
-    public void loadFile(String path) throws XmlContentException {
-        try {
-            ISerializer serializer = new XmlSerializer(path);
-            xmlContent = serializer.getBattleShipGameType();
-            isFileLoaded = true;
-        } catch (Exception exception) {
-            isFileLoaded = false; // if the last file was fine and the current one is not
-            throw new XmlContentException(ExceptionsMeassage.INVALID_XML); // XML reading error
+    public boolean loadFile(String path, ErrorCollector errorCollector) throws XmlContentException {
+        if (!isGameOn) {
+            try {
+                ISerializer serializer = new XmlSerializer(path);
+                xmlContent = serializer.getBattleShipGameType();
+                if (XmlFileVerifier.isFileContentOK(xmlContent, errorCollector)) {
+                    isFileLoaded = true;
+                } else {
+                    isFileLoaded = false;
+                    return false;
+                }
+            } catch (Exception exception) {
+                isFileLoaded = false; // if the last file was fine and the current one is not
+                throw new XmlContentException(ErrorMessages.INVALID_XML); // XML reading error
+            }
+        } else {
+            return false;
         }
+
+        return true;
     }
 
     // **************************************************** //

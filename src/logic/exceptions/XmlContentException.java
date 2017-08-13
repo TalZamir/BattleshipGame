@@ -1,13 +1,13 @@
 package logic.exceptions;
 
-import logic.enums.ExceptionsMeassage;
+import logic.enums.ErrorMessages;
 
 /**
  * Created by xozh4v on 8/9/2017.
  */
 public class XmlContentException extends Exception {
 
-    public XmlContentException(ExceptionsMeassage message) {
+    public XmlContentException(ErrorMessages message) {
         super(message.message());
     }
 }

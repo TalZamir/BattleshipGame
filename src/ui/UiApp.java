@@ -3,6 +3,8 @@ package ui;
 import logic.TheGame;
 import logic.exceptions.XmlContentException;
 import ui.enums.MenuItem;
+import ui.verifiers.ErrorCollector;
+import ui.verifiers.XmlFileVerifier;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
@@ -61,17 +63,19 @@ public class UiApp {
     // Menu item: Load XML file
     // **************************************************** //
     private void menuLoadXml() throws XmlContentException {
-        if(theGame.isGameOn()) {
-            System.out.println("You can't load a XML file while a game is already running.");
-        } else {
-            Scanner reader = new Scanner(System.in);
-            theGame.loadFile(reader.nextLine());
+        ErrorCollector errorCollector = new ErrorCollector();
+        Scanner reader = new Scanner(System.in);
+        String filePath = reader.nextLine();
+
+        if (!XmlFileVerifier.isFileOk(filePath, errorCollector) || !theGame.loadFile(filePath, errorCollector)) {
+            errorCollector.getMessages().forEach(System.out::println);
         }
     }
 
     // **************************************************** //
     // Menu item: Start game
     // **************************************************** //
+
     private void menuStartGame() throws XmlContentException {
         if (!theGame.isFileLoaded()) {
             // No XML file
