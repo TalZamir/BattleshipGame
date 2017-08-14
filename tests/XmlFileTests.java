@@ -137,26 +137,17 @@ public class XmlFileTests {
         ShipType shipType1 = new ShipType();
         ShipType shipType2 = new ShipType();
 
-        shipTypeType.setAmount("2");
-        shipTypeType.setId("1");
-        shipTypeType.setLength("1");
-        shipTypeType.setScore("1");
-        shipTypeType.setCategory("1");
+        setShipTypeType(shipTypeType, "2", "1", "1", "1", "1");
 
         PositionType positionType1 = new PositionType();
         PositionType positionType2 = new PositionType();
 
-        positionType1.setX("1");
-        positionType1.setY("1");
+        setPosition(positionType1, "1", "1");
+        setPosition(positionType2, "3", "3");
 
-        positionType2.setX("3");
-        positionType2.setY("3");
+        setShipType(shipType1, "1", positionType1);
 
-        shipType1.setShipTypeId("1");
-        shipType1.setPosition(positionType1);
-
-        shipType2.setShipTypeId("1");
-        shipType2.setPosition(positionType2);
+        setShipType(shipType2, "1", positionType2);
 
         battleships.add(new Battleship(shipTypeType, shipType1));
         battleships.add(new Battleship(shipTypeType, shipType2));
@@ -166,5 +157,54 @@ public class XmlFileTests {
         actual = XmlFileVerifier.isBattleshipAmountOk(battleships, map);
 
         assertEquals(true, actual);
+    }
+
+    @Test
+    public void verifyBattleshipAmountIsNotOk() {
+        boolean actual;
+        List<Battleship> battleships = new ArrayList<>();
+        Map<String, ShipTypeType> map = new HashMap<>();
+
+        ShipTypeType shipTypeType = new ShipTypeType();
+        ShipType shipType1 = new ShipType();
+
+        setShipTypeType(shipTypeType, "2", "1", "1", "1", "1");
+
+        PositionType positionType1 = new PositionType();
+
+        setPosition(positionType1, "1", "1");
+
+        setShipType(shipType1, "1", positionType1);
+
+        battleships.add(new Battleship(shipTypeType, shipType1));
+
+        map.put("1", shipTypeType);
+
+        actual = XmlFileVerifier.isBattleshipAmountOk(battleships, map);
+
+        assertEquals(false, actual);
+    }
+
+    private void setShipType(ShipType shipType1, String id, PositionType positionType1) {
+        shipType1.setShipTypeId(id);
+        shipType1.setPosition(positionType1);
+    }
+
+    private void setShipTypeType(ShipTypeType shipTypeType,
+                                 String amount,
+                                 String id,
+                                 String length,
+                                 String score,
+                                 String category) {
+        shipTypeType.setAmount(amount);
+        shipTypeType.setId(id);
+        shipTypeType.setLength(length);
+        shipTypeType.setScore(score);
+        shipTypeType.setCategory(category);
+    }
+
+    private void setPosition(PositionType positionType1, String x, String y) {
+        positionType1.setX(x);
+        positionType1.setY(y);
     }
 }
