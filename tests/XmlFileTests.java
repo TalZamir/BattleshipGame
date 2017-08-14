@@ -128,16 +128,20 @@ public class XmlFileTests {
     }
 
     @Test
-    public void verifyButtleshipAmountIsNotOk() {
+    public void verifyBattleshipAmountIsOk() {
         boolean actual;
         List<Battleship> battleships = new ArrayList<>();
         Map<String, ShipTypeType> map = new HashMap<>();
 
         ShipTypeType shipTypeType = new ShipTypeType();
-        ShipType shipType = new ShipType();
+        ShipType shipType1 = new ShipType();
+        ShipType shipType2 = new ShipType();
 
         shipTypeType.setAmount("2");
         shipTypeType.setId("1");
+        shipTypeType.setLength("1");
+        shipTypeType.setScore("1");
+        shipTypeType.setCategory("1");
 
         PositionType positionType1 = new PositionType();
         PositionType positionType2 = new PositionType();
@@ -148,13 +152,14 @@ public class XmlFileTests {
         positionType2.setX("3");
         positionType2.setY("3");
 
-        shipType.setShipTypeId("1");
-        shipType.setPosition(positionType1);
+        shipType1.setShipTypeId("1");
+        shipType1.setPosition(positionType1);
 
-        shipType.setShipTypeId("1");
-        shipType.setPosition(positionType2);
+        shipType2.setShipTypeId("1");
+        shipType2.setPosition(positionType2);
 
-        battleships.add(new Battleship(shipTypeType, shipType));
+        battleships.add(new Battleship(shipTypeType, shipType1));
+        battleships.add(new Battleship(shipTypeType, shipType2));
 
         map.put("1", shipTypeType);
 
