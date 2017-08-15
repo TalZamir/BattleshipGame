@@ -58,26 +58,31 @@ public class Board {
     }
 
     CellStatus playMove(int row, int col) {
-
+        CellStatus result;
         switch (board[row][col].getCellStatus()) {
             case REGULAR:
                 board[row][col].setCellStatus(CellStatus.MISS);
-                return REGULAR;
+                result = REGULAR;
+                break;
             case SHIP:
                 updateShipHit(board[row][col].getShipId());
                 board[row][col].setCellStatus(CellStatus.HIT);
-                return CellStatus.SHIP;
+                result = CellStatus.SHIP;
+                break;
             case MISS:
-                return CellStatus.MISS;
+                result = CellStatus.MISS;
+                break;
             case HIT:
-                return CellStatus.HIT;
+                result = CellStatus.HIT;
+                break;
             case MINE:
-                return CellStatus.MINE;
-            case TEMP:
-            case WIN:
+                result = CellStatus.MINE;
+                break;
             default:
-                return board[row][col].getCellStatus();
+                result = board[row][col].getCellStatus();
+                break;
         }
+        return result;
     }
 
     //TODO: I think if there are more then one ship with the same id this method won't work
