@@ -25,7 +25,7 @@ public class Board {
     // Returns the board without MISS cells
     // **************************************************** //
     public char[][] getAllieMode() {
-        return getModifiedBoard(CellStatus.MISS);
+        return getModifiedBoard(CellStatus.SHOW_ALL);
     }
 
     // **************************************************** //
@@ -195,7 +195,7 @@ public class Board {
     }
 
     // **************************************************** //
-    // Returns the board without MISS cells
+    // Returns the board without the given status cells
     // **************************************************** //
     private char[][] getModifiedBoard(CellStatus statusToIgnore) {
         char[][] allieBoard = new char[board.length][board.length];

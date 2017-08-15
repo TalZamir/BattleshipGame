@@ -8,7 +8,8 @@ public enum CellStatus {
     REGULAR('*'),
     MINE('+'),
     TEMP('&'),
-    WIN('W');
+    WIN('W'),
+    SHOW_ALL('^');
 
     private char sign;
 
