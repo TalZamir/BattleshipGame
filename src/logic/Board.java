@@ -20,6 +20,42 @@ public class Board {
     }
 
     // **************************************************** //
+    // Returns the board without MISS cells
+    // **************************************************** //
+    public char[][] getAllieMode() {
+        return getModifiedBoard(CellStatus.MISS);
+    }
+
+    // **************************************************** //
+    // Returns the board without SHIP cells
+    // **************************************************** //
+    public char[][] getAdversaryMode() {
+        return getModifiedBoard(CellStatus.SHIP);
+    }
+
+    // **************************************************** //
+    // Returns the status of a cell in the board
+    // **************************************************** //
+    public void getCellStatus(Coordinate point) {
+
+    }
+
+    // **************************************************** //
+    // Attacks a cell on the board
+    // **************************************************** //
+    public void attackCell(Coordinate point) {
+
+    }
+
+    public List<Battleship> getBattleships() {
+        return battleships;
+    }
+
+    public void setBattleships(LinkedList<Battleship> battleships) {
+        this.battleships = battleships;
+    }
+
+    // **************************************************** //
     // Builds the game board
     // **************************************************** //
     private void buildBoard() throws XmlContentException {
@@ -83,7 +119,7 @@ public class Board {
     // Sign compare
     // **************************************************** //
     private boolean signCompare(CellStatus sign) {
-        return (sign == CellStatus.REGULAR || sign == CellStatus.TEMP);
+        return sign == CellStatus.REGULAR || sign == CellStatus.TEMP;
     }
 
     // **************************************************** //
@@ -113,20 +149,6 @@ public class Board {
     // **************************************************** //
     // Returns the board without MISS cells
     // **************************************************** //
-    public char[][] getAllieMode() {
-        return getModifiedBoard(CellStatus.MISS);
-    }
-
-    // **************************************************** //
-    // Returns the board without SHIP cells
-    // **************************************************** //
-    public char[][] getAdversaryMode() {
-        return getModifiedBoard(CellStatus.SHIP);
-    }
-
-    // **************************************************** //
-    // Returns the board without MISS cells
-    // **************************************************** //
     private char[][] getModifiedBoard(CellStatus statusToIgnore) {
         char[][] allieBoard = new char[board.length][board.length];
         char currentStatus;
@@ -141,27 +163,5 @@ public class Board {
             }
         }
         return allieBoard;
-    }
-
-    // **************************************************** //
-    // Returns the status of a cell in the board
-    // **************************************************** //
-    public void getCellStatus(Coordinate point) {
-
-    }
-
-    // **************************************************** //
-    // Attacks a cell on the board
-    // **************************************************** //
-    public void attackCell(Coordinate point) {
-
-    }
-
-    public List<Battleship> getBattleships() {
-        return battleships;
-    }
-
-    public void setBattleships(LinkedList<Battleship> battleships) {
-        this.battleships = battleships;
     }
 }

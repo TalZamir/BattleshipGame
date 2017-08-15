@@ -7,6 +7,7 @@ import module.ShipType;
 import module.ShipTypeType;
 import org.junit.jupiter.api.Test;
 import ui.verifiers.ErrorCollector;
+import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
 
 import javax.xml.bind.JAXBException;
@@ -24,24 +25,25 @@ public class XmlFileTests {
 
     private static final String RELATIVE_PATH = "module/battleshipx.xml";
     private final ErrorCollector errorCollector = new ErrorCollector();
+    private final IInputVerifier inputVerifier = new XmlFileVerifier();
 
     @Test
     public void loadEmptyFile() {
-        boolean actual = XmlFileVerifier.isFileOk("", errorCollector);
+        boolean actual = inputVerifier.isFileOk("", errorCollector);
 
         assertEquals(false, actual);
     }
 
     @Test
     public void verifyFileIsNotXml() {
-        boolean actual = XmlFileVerifier.isFileOk("bla.bla", errorCollector);
+        boolean actual = inputVerifier.isFileOk("bla.bla", errorCollector);
 
         assertEquals(false, actual);
     }
 
     @Test
     public void verifyFileIsXml() {
-        boolean actual = XmlFileVerifier.isFileOk("bla.xml", errorCollector);
+        boolean actual = inputVerifier.isFileOk("bla.xml", errorCollector);
 
         assertEquals(true, actual);
     }
@@ -51,22 +53,22 @@ public class XmlFileTests {
         BattleShipGameType xmlContent = new BattleShipGameType();
 
         xmlContent.setBoardSize("5");
-        boolean actual = XmlFileVerifier.isFileContentOK(xmlContent, errorCollector);
+        boolean actual = inputVerifier.isContentOK(xmlContent, errorCollector);
 
         assertEquals(true, actual);
 
         xmlContent.setBoardSize("20");
-        actual = XmlFileVerifier.isFileContentOK(xmlContent, errorCollector);
+        actual = inputVerifier.isContentOK(xmlContent, errorCollector);
 
         assertEquals(true, actual);
 
         xmlContent.setBoardSize("4");
-        actual = XmlFileVerifier.isFileContentOK(xmlContent, errorCollector);
+        actual = inputVerifier.isContentOK(xmlContent, errorCollector);
 
         assertEquals(false, actual);
 
         xmlContent.setBoardSize("21");
-        actual = XmlFileVerifier.isFileContentOK(xmlContent, errorCollector);
+        actual = inputVerifier.isContentOK(xmlContent, errorCollector);
 
         assertEquals(false, actual);
     }
@@ -154,7 +156,7 @@ public class XmlFileTests {
 
         map.put("1", shipTypeType);
 
-        actual = XmlFileVerifier.isBattleshipAmountOk(battleships, map);
+        actual = inputVerifier.isBattleshipAmountOk(battleships, map);
 
         assertEquals(true, actual);
     }
@@ -180,7 +182,7 @@ public class XmlFileTests {
 
         map.put("1", shipTypeType);
 
-        actual = XmlFileVerifier.isBattleshipAmountOk(battleships, map);
+        actual = inputVerifier.isBattleshipAmountOk(battleships, map);
 
         assertEquals(false, actual);
     }

@@ -9,6 +9,7 @@ import logic.serializers.XmlSerializer;
 import module.BattleShipGameType;
 import module.BoardType;
 import ui.verifiers.ErrorCollector;
+import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
 
 import java.util.List;
@@ -30,7 +31,6 @@ public class TheGame {
         isGameOn = false;
         players = new Player[2];
         turns = 0;
-        this.xmlContent = xmlContent;
     }
 
     public void init() throws XmlContentException {
@@ -49,10 +49,11 @@ public class TheGame {
     // **************************************************** //
     public boolean loadFile(String path, ErrorCollector errorCollector) throws XmlContentException {
         if (!isGameOn) {
+            IInputVerifier inputVerifier = new XmlFileVerifier();
             try {
                 ISerializer serializer = new XmlSerializer(path);
                 xmlContent = serializer.getBattleShipGameType();
-                if (XmlFileVerifier.isFileContentOK(xmlContent, errorCollector)) {
+                if (inputVerifier.isContentOK(xmlContent, errorCollector)) {
                     isFileLoaded = true;
                 } else {
                     isFileLoaded = false;
@@ -101,6 +102,11 @@ public class TheGame {
 
     public String getCurrentPlayerName() {
         return currentPlayerName;
+    }
+
+    public char[][] getOpponentBoard() {
+        int opponentPlayerIndex = turns / 2;
+        return players[opponentPlayerIndex].getBoard().getAdversaryMode();
     }
 
     //TODO now we are creating only human users. Need to add computer user.

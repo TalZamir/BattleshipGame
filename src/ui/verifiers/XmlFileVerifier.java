@@ -12,9 +12,10 @@ import java.util.Map;
 /**
  * Created by barakm on 13/08/2017
  */
-public class XmlFileVerifier {
+public class XmlFileVerifier implements IInputVerifier {
 
-    public static boolean isFileOk(String filePath, ErrorCollector errorCollector) {
+    @Override
+    public boolean isFileOk(String filePath, ErrorCollector errorCollector) {
         if (filePath.equals("")) {
             errorCollector.addMessage(ErrorMessages.EMPTY_FILE_NAME.message());
         }
@@ -31,7 +32,8 @@ public class XmlFileVerifier {
         return true;
     }
 
-    public static boolean isFileContentOK(BattleShipGameType xmlContent, ErrorCollector errorCollector) {
+    @Override
+    public boolean isContentOK(BattleShipGameType xmlContent, ErrorCollector errorCollector) {
         if (Integer.parseInt(xmlContent.getBoardSize()) < 5 || Integer.parseInt(xmlContent.getBoardSize()) > 20) {
             errorCollector.addMessage(ErrorMessages.BOARD_SIZE.message());
         }
@@ -43,7 +45,8 @@ public class XmlFileVerifier {
         return true;
     }
 
-    public static boolean isBattleshipAmountOk(List<Battleship> battleships, Map<String, ShipTypeType> battleshipsMap) {
+    @Override
+    public boolean isBattleshipAmountOk(List<Battleship> battleships, Map<String, ShipTypeType> battleshipsMap) {
         Collection<ShipTypeType> battleshipsCollection = battleshipsMap.values();
         int counter = 0;
 

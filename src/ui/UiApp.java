@@ -4,13 +4,15 @@ import logic.TheGame;
 import logic.exceptions.XmlContentException;
 import ui.enums.MenuItem;
 import ui.verifiers.ErrorCollector;
+import ui.verifiers.IInputVerifier;
+import ui.verifiers.UserMoveInputVerifier;
 import ui.verifiers.XmlFileVerifier;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class UiApp {
+class UiApp {
 
     private static final String INVALID_INPUT = "Invalid input! Please try again";
     private TheGame theGame;
@@ -19,14 +21,13 @@ public class UiApp {
     // **************************************************** //
     // Starts Battleship Game UI
     // **************************************************** //
-    public void start() throws JAXBException, FileNotFoundException {
+    void start() throws JAXBException, FileNotFoundException {
         assistant = new Assistant();
         theGame = new TheGame();
         while (theGame.isActive()) {
             try {
                 assistant.printMenu();
                 doIteration();
-                assistant.printPlayerName(theGame.getCurrentPlayerName());
             } catch (XmlContentException exception) {
                 System.out.println("GAME ERROR: " + exception.getMessage());
             }
@@ -38,8 +39,9 @@ public class UiApp {
     // **************************************************** //
     //TODO: TAL - I think it should appears once. doIteration should be menuStartGame method.
     private void doIteration() throws XmlContentException {
-        switch (readUserInput()) {
+        switch (readUserMenuInput()) {
             case LOAD_XML:
+                System.out.println("Enter an xml file path including the file name extension:");
                 menuLoadXml();
                 break;
             case START_GAME:
@@ -49,27 +51,66 @@ public class UiApp {
                 System.out.println("Look! a Status...");
                 break;
             case PLAY_MOVE:
-                System.out.println("Playing...");
+                ErrorCollector errorCollector = new ErrorCollector();
+                UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
+                int boardSize = theGame.getCurrentPlayerShipBoard().length;
+                assistant.printPlayMoveMassage(boardSize);
+                printPlayerNameAndBoards();
+                UserMoveInput userMoveInput = readUserMoveInput();
+
+                if (!userMoveInputVerifier.isUserInputOk(userMoveInput, boardSize, errorCollector)) {
+                    errorCollector.getMessages().forEach(System.out::println);
+                }
+
                 break;
             case STATISTICS:
                 System.out.println("Ho, Statistics...");
                 break;
             case QUIT:
                 System.out.println("Quiting...");
+            case UNINITIALIZED:
+                System.out.println("Please enter one of the following menu number");
+                break;
         }
+
+        if (theGame.isGameOn()) {
+            printPlayerNameAndBoards();
+        }
+    }
+
+    private UserMoveInput readUserMoveInput() {
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Row: ");
+        int userRowInput = reader.nextInt();
+
+        System.out.println("Column: ");
+        String userColInput = reader.next();
+        return new UserMoveInput(userRowInput, userColInput);
+    }
+
+    private void printPlayerNameAndBoards() {
+        assistant.printPlayerName(theGame.getCurrentPlayerName() + " it's your turn");
+        assistant.printYourBoardText();
+        assistant.printBoard(theGame.getCurrentPlayerShipBoard());
+        assistant.printOpponentBoardText();
+        assistant.printBoard(theGame.getOpponentBoard());
     }
 
     // **************************************************** //
     // Menu item: Load XML file
     // **************************************************** //
-    private void menuLoadXml() throws XmlContentException {
+    private boolean menuLoadXml() throws XmlContentException {
         ErrorCollector errorCollector = new ErrorCollector();
         Scanner reader = new Scanner(System.in);
         String filePath = reader.nextLine();
+        IInputVerifier inputVerifier = new XmlFileVerifier();
 
-        if (!XmlFileVerifier.isFileOk(filePath, errorCollector) || !theGame.loadFile(filePath, errorCollector)) {
+        if (!inputVerifier.isFileOk(filePath, errorCollector) || !theGame.loadFile(filePath, errorCollector)) {
             errorCollector.getMessages().forEach(System.out::println);
+            return false;
         }
+
+        return true;
     }
 
     // **************************************************** //
@@ -93,7 +134,7 @@ public class UiApp {
     // **************************************************** //
     // Reads input from user
     // **************************************************** //
-    private MenuItem readUserInput() {
+    private MenuItem readUserMenuInput() {
         MenuItem input = MenuItem.UNINITIALIZED;
         while (input == MenuItem.UNINITIALIZED) {
             try {
@@ -108,6 +149,7 @@ public class UiApp {
                 System.out.println(INVALID_INPUT);
             }
         }
+
         return input;
     }
 }
