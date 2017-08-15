@@ -113,6 +113,8 @@ public class Board {
                     throw new XmlContentException(ErrorMessages.ILLEGAL_POSITION);
                 }
                 board[position.getRow()][position.getColumn()].setCellStatus(CellStatus.TEMP);
+                board[position.getRow()][position.getColumn()].setPoint(position);
+                board[position.getRow()][position.getColumn()].setShipId(currentBattleship.getId());
                 incrementCoordinate(position, currentBattleship.getDirection());
             }
             changeTempSigns();

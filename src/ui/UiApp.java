@@ -86,11 +86,14 @@ class UiApp {
             } else {
                 System.out.println(theGame.playMove(userMoveInput));
             }
+
+            if (theGame.isPlayerWon()) {
+                theGame.resetGame();
+            }
         } else {
             System.out.println("You must start a new game before performing a move.");
         }
     }
-
 
     private UserMoveInput readUserMoveInput() {
         Scanner reader = new Scanner(System.in);

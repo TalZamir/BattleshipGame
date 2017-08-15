@@ -20,7 +20,6 @@ public class TheGame {
 
     private GameType gameType;
     private Player[] players;
-    private int turns;
     private boolean isActive;
     private boolean isFileLoaded;
     private boolean isGameOn;
@@ -28,13 +27,14 @@ public class TheGame {
     private String currentPlayerName;
     private int currentPlayerIndex;
     private int opponentPlayerIndex;
+    private boolean isPlayerWon;
 
     public TheGame() {
         isActive = true;
         isFileLoaded = false;
         isGameOn = false;
         players = new Player[2];
-        turns = 0;
+        isPlayerWon = false;
         currentPlayerIndex = 0;
         opponentPlayerIndex = 1;
     }
@@ -123,6 +123,7 @@ public class TheGame {
 
         switch (cellStatus) {
             case WIN:
+                isPlayerWon = true;
                 messageToReturn = currentPlayerName + " you won!";
                 break;
             case SHIP:
@@ -139,6 +140,18 @@ public class TheGame {
         }
 
         return messageToReturn;
+    }
+
+    public boolean isPlayerWon() {
+        return isPlayerWon;
+    }
+
+    public void setPlayerWon(boolean playerWon) {
+        this.isPlayerWon = playerWon;
+    }
+
+    public void resetGame() {
+        //TODO: Need to implement.
     }
 
     private void switchTurn() {
