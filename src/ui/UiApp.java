@@ -201,6 +201,7 @@ class UiApp {
     // **************************************************** //
     // Menu item: displays game status
     // **************************************************** //
+    //TODO: Implement
     private void menuDisplayStatus() {
         if (theGame.isGameOn()) {
             System.out.println("Status");
@@ -212,6 +213,7 @@ class UiApp {
     // **************************************************** //
     // Menu item: shows game statistics
     // **************************************************** //
+    //TODO: Implement
     private void menuShowStatistics() {
         if (theGame.isGameOn()) {
             System.out.println("STATISTICS");
@@ -223,6 +225,7 @@ class UiApp {
     // **************************************************** //
     // Menu item: Quits from playing
     // **************************************************** //
+    //TODO: Implement
     private void menuQuit() {
         if (theGame.isGameOn()) {
             System.out.println("Quiting");
