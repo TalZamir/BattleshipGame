@@ -41,7 +41,6 @@ class UiApp {
     private void doIteration() throws XmlContentException {
         switch (readUserMenuInput()) {
             case LOAD_XML:
-                System.out.println("Enter an xml file path including the file name extension:");
                 menuLoadXml();
                 break;
             case START_GAME:
@@ -62,10 +61,6 @@ class UiApp {
             case UNINITIALIZED:
                 System.out.println("Please enter one of the following menu number");
                 break;
-        }
-
-        if (theGame.isGameOn()) {
-            printPlayerNameAndBoards();
         }
     }
 
@@ -116,18 +111,25 @@ class UiApp {
     // **************************************************** //
     // Menu item: Load XML file
     // **************************************************** //
-    private boolean menuLoadXml() throws XmlContentException {
-        ErrorCollector errorCollector = new ErrorCollector();
-        Scanner reader = new Scanner(System.in);
-        String filePath = reader.nextLine();
-        IInputVerifier inputVerifier = new XmlFileVerifier();
+    private void menuLoadXml() {
+        if (!theGame.isGameOn()) {
+            System.out.println("Please enter a path of a XML file:");
+            ErrorCollector errorCollector = new ErrorCollector();
+            Scanner reader = new Scanner(System.in);
+            String filePath = reader.nextLine();
+            IInputVerifier inputVerifier = new XmlFileVerifier();
 
-        if (!inputVerifier.isFileOk(filePath, errorCollector) || !theGame.loadFile(filePath, errorCollector)) {
-            errorCollector.getMessages().forEach(System.out::println);
-            return false;
+            try {
+                if (!inputVerifier.isFileOk(filePath, errorCollector) || !theGame.loadFile(filePath, errorCollector)) {
+                    errorCollector.getMessages().forEach(System.out::println);
+                }
+            } catch (XmlContentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        } else {
+            System.out.println("Sorry, but you can't load XML while game is on.");
         }
 
-        return true;
     }
 
     // **************************************************** //
