@@ -11,12 +11,11 @@ import javax.xml.bind.Unmarshaller;
 public class XmlSerializer implements ISerializer {
 
     private static final String CONTEXT_PATH = "module";
-    //private static final String RELATIVE_PATH_FOR_XML_FILE = "module/battleshipx.xml";
     private final BattleShipGameType battleShipGameType;
 
     public XmlSerializer(String xmlPath) throws JAXBException {
         JAXBContext jaxbContext;
-        JAXBElement unmarshalledObject = null;
+        JAXBElement unmarshalledObject;
         Unmarshaller unmarshaller;
         jaxbContext = JAXBContext.newInstance(CONTEXT_PATH);
         unmarshaller = jaxbContext.createUnmarshaller();

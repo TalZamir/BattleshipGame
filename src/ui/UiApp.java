@@ -92,12 +92,40 @@ class UiApp {
 
     private UserMoveInput readUserMoveInput() {
         Scanner reader = new Scanner(System.in);
-        System.out.println("Row: ");
-        int userRowInput = reader.nextInt();
+        String userRowInput, userColInput;
+        do {
+            System.out.print("Row: ");
+            userRowInput = reader.next();
+        }
+        while (!isInputOk(userRowInput));
 
-        System.out.println("Column: ");
-        int userColInput = reader.nextInt();
-        return new UserMoveInput(userRowInput, userColInput);
+        do {
+            System.out.print("Column: ");
+            userColInput = reader.next();
+        }
+        while (!isInputOk(userColInput));
+
+        return new UserMoveInput(Integer.parseInt(userRowInput), Integer.parseInt(userColInput));
+    }
+
+    private boolean isInputOk(String input) {
+        boolean isOk = true;
+        if (input.equals("")) {
+            isOk = false;
+        }
+
+        for (char c : input.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                isOk = false;
+                break;
+            }
+        }
+
+        if (!isOk) {
+            System.out.println("Invalid input. Must be a number");
+        }
+
+        return isOk;
     }
 
     private void printPlayerNameAndBoards() {
@@ -129,7 +157,6 @@ class UiApp {
         } else {
             System.out.println("Sorry, but you can't load XML while game is on.");
         }
-
     }
 
     // **************************************************** //

@@ -22,20 +22,6 @@ public class BattleshipBuilder {
     }
 
     // **************************************************** //
-    // Initiates builder battleships map
-    // **************************************************** //
-    private void init(List<ShipTypeType> shipTypes) throws XmlContentException {
-        battleshipsMap = new HashMap<>();
-        for (ShipTypeType battleship : shipTypes) {
-            if (battleshipsMap.containsKey(battleship.getId())) {
-                throw new XmlContentException(ErrorMessages.DUPLICATE_SHIP_ID);
-            } else {
-                battleshipsMap.put(battleship.getId(), battleship);
-            }
-        }
-    }
-
-    // **************************************************** //
     // Builds user battleships list
     // **************************************************** //
     public List<Battleship> buildUserBattleships(List<ShipType> ships) throws XmlContentException {
@@ -52,5 +38,19 @@ public class BattleshipBuilder {
             throw new XmlContentException(ErrorMessages.SHIP_MISSMATCH); // battleship ID doesn't exist
         }
         return battleships;
+    }
+
+    // **************************************************** //
+    // Initiates builder battleships map
+    // **************************************************** //
+    private void init(List<ShipTypeType> shipTypes) throws XmlContentException {
+        battleshipsMap = new HashMap<>();
+        for (ShipTypeType battleship : shipTypes) {
+            if (battleshipsMap.containsKey(battleship.getId())) {
+                throw new XmlContentException(ErrorMessages.DUPLICATE_SHIP_ID);
+            } else {
+                battleshipsMap.put(battleship.getId(), battleship);
+            }
+        }
     }
 }
