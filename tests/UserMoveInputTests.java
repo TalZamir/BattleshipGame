@@ -22,14 +22,14 @@ public class UserMoveInputTests {
 
     @Test
     public void correctInput() {
-        boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(1, "B"), 5, errorCollector);
+        boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(1, "E"), 5, errorCollector);
 
         assertEquals(true, actual);
     }
 
     @Test
     public void correctInputWithLowerCase() {
-        boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(1, "b"), 5, errorCollector);
+        boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(5, "b"), 5, errorCollector);
 
         assertEquals(true, actual);
     }

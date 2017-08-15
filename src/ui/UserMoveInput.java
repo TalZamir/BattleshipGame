@@ -20,4 +20,12 @@ public class UserMoveInput {
     public String getUserColInput() {
         return userColInput;
     }
+
+    public int getUserColInputForBoard() {
+        return userColInput.charAt(0) - 'A' + 1;
+    }
+
+    public int getUserRowInputForBoard() {
+        return getUserRowInput();
+    }
 }

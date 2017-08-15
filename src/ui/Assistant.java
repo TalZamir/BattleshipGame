@@ -13,12 +13,11 @@ class Assistant {
     void printPlayMoveMassage(int boardSize) {
         System.out.print(String.format("Enter row and column index.\n" +
                                                "Row should be an integer type between %d to %d\n" +
-                                               "and column should be an character type between %s to %s:\n",
+                                               "and column should be an character type between %s to %s\n\n",
                                        1,
-                                       boardSize,
+                                       boardSize - 1,
                                        "A",
-                                       String.valueOf(boardSize + 'A'))
-                               .toUpperCase());
+                                       (char) (boardSize - 2 + 'A')));
     }
 
     // **************************************************** //

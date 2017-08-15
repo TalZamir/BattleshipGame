@@ -1,39 +1,34 @@
 package logic;
 
-import logic.enums.BattleshipType;
-import module.BoardType;
 import module.ShipType;
 import module.ShipTypeType;
 
 public class Battleship {
 
-    private boolean isAlive;
     private final String id;
     private final int length;
     private final int score;
     private final String category;
     private final String direction;
     private final Coordinate position;
-
+    private boolean isAlive;
+    private int lengthForIsAlive;
 
     public Battleship(ShipTypeType shipTypeType, ShipType shipType) {
-        this.isAlive = true;
+        isAlive = true;
         // ShipTypeType attributes
-        this.id = shipTypeType.getId();
-        this.length = Integer.parseInt(shipTypeType.getLength());
-        this.score = Integer.parseInt(shipTypeType.getScore());
-        this.category = shipTypeType.getCategory();
+        id = shipTypeType.getId();
+        length = Integer.parseInt(shipTypeType.getLength());
+        lengthForIsAlive = length;
+        score = Integer.parseInt(shipTypeType.getScore());
+        category = shipTypeType.getCategory();
         // ShipType attributes
-        this.direction = shipType.getDirection();
-        this.position = new Coordinate(Integer.parseInt(shipType.getPosition().getX()), Integer.parseInt(shipType.getPosition().getY()));
+        direction = shipType.getDirection();
+        position = new Coordinate(Integer.parseInt(shipType.getPosition().getX()), Integer.parseInt(shipType.getPosition().getY()));
     }
 
     public boolean isAlive() {
         return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
     }
 
     public String getId() {
@@ -60,4 +55,8 @@ public class Battleship {
         return position;
     }
 
+    public void decrementLength() {
+        if (--lengthForIsAlive == 0)
+            isAlive = false;
+    }
 }

@@ -21,8 +21,8 @@ public class UserMoveInputVerifier {
         } else if (userMoveInput.getUserColInput().length() > 1) {
             isOK = false;
             errorCollector.addMessage("Column must be a character");
-        } else if (userMoveInput.getUserColInput().charAt(0) - 'A' < 1
-                || userMoveInput.getUserColInput().charAt(0) - 'A' > boardSize) {
+        } else if (userMoveInput.getUserColInput().charAt(0) - 'A' + 1 < 1
+                || userMoveInput.getUserColInput().charAt(0) - 'A' > boardSize - 1) {
             errorCollector.addMessage("Column must be in range");
             isOK = false;
         }

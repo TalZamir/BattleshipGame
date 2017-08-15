@@ -1,6 +1,7 @@
 package logic;
 
 import logic.builders.BattleshipBuilder;
+import logic.enums.CellStatus;
 import logic.enums.ErrorMessages;
 import logic.enums.GameType;
 import logic.exceptions.XmlContentException;
@@ -8,6 +9,7 @@ import logic.interfaces.ISerializer;
 import logic.serializers.XmlSerializer;
 import module.BattleShipGameType;
 import module.BoardType;
+import ui.UserMoveInput;
 import ui.verifiers.ErrorCollector;
 import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
@@ -24,6 +26,8 @@ public class TheGame {
     private boolean isGameOn;
     private BattleShipGameType xmlContent;
     private String currentPlayerName;
+    private int currentPlayerIndex;
+    private int opponentPlayerIndex;
 
     public TheGame() {
         isActive = true;
@@ -31,6 +35,8 @@ public class TheGame {
         isGameOn = false;
         players = new Player[2];
         turns = 0;
+        currentPlayerIndex = 0;
+        opponentPlayerIndex = 1;
     }
 
     public void init() throws XmlContentException {
@@ -73,10 +79,8 @@ public class TheGame {
     // **************************************************** //
     // Returns the current player ships board
     // **************************************************** //
-    public char[][] getCurrentPlayerShipBoard() {
-        int currentPlayerIndex = turns % 2;
-        currentPlayerName = players[currentPlayerIndex].getName();
-        return players[currentPlayerIndex].getBoard().getAllieMode();
+    public char[][] getCurrentPlayerBoardToPrint() {
+        return getCurrentPlayerLogicBoard().getAllieMode();
     }
 
     // **************************************************** //
@@ -104,9 +108,65 @@ public class TheGame {
         return currentPlayerName;
     }
 
-    public char[][] getOpponentBoard() {
-        int opponentPlayerIndex = turns / 2;
-        return players[opponentPlayerIndex].getBoard().getAdversaryMode();
+    public char[][] getOpponentBoardToPrint() {
+        return getOpponentLogicBoard().getAdversaryMode();
+    }
+
+    public String playMove(UserMoveInput userMoveInput) {
+        int row = userMoveInput.getUserRowInputForBoard();
+        int col = userMoveInput.getUserColInputForBoard();
+        String messageToReturn = null;
+
+        CellStatus cellStatus = getOpponentLogicBoard().playMove(row, col);
+
+        cellStatus = checkIfWin(cellStatus);
+
+        switch (cellStatus) {
+            case WIN:
+                messageToReturn = currentPlayerName + " you won!";
+                break;
+            case SHIP:
+                messageToReturn = "Yea! You have another turn!";
+                break;
+            case HIT:
+            case MISS:
+                messageToReturn = currentPlayerName + " you already hit here! Play another turn";
+                break;
+            case REGULAR:
+                messageToReturn = currentPlayerName + " you missed";
+                switchTurn();
+                break;
+        }
+
+        return messageToReturn;
+    }
+
+    private void switchTurn() {
+        if (currentPlayerIndex == 0) {
+            currentPlayerName = players[1].getName();
+            currentPlayerIndex = 1;
+            opponentPlayerIndex = 0;
+        } else {
+            currentPlayerName = players[0].getName();
+            currentPlayerIndex = 0;
+            opponentPlayerIndex = 1;
+        }
+    }
+
+    private CellStatus checkIfWin(CellStatus cellStatus) {
+        if (!getOpponentLogicBoard().isThereAliveShip()) {
+            return CellStatus.WIN;
+        }
+
+        return cellStatus;
+    }
+
+    private Board getCurrentPlayerLogicBoard() {
+        return players[currentPlayerIndex].getBoard();
+    }
+
+    private Board getOpponentLogicBoard() {
+        return players[opponentPlayerIndex].getBoard();
     }
 
     //TODO now we are creating only human users. Need to add computer user.
@@ -127,5 +187,6 @@ public class TheGame {
             players[playerIndex] = player; // Inserts player to players array
             playerIndex++;
         }
+        currentPlayerName = players[0].getName();
     }
 }

@@ -51,17 +51,7 @@ class UiApp {
                 System.out.println("Look! a Status...");
                 break;
             case PLAY_MOVE:
-                ErrorCollector errorCollector = new ErrorCollector();
-                UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
-                int boardSize = theGame.getCurrentPlayerShipBoard().length;
-                assistant.printPlayMoveMassage(boardSize);
-                printPlayerNameAndBoards();
-                UserMoveInput userMoveInput = readUserMoveInput();
-
-                if (!userMoveInputVerifier.isUserInputOk(userMoveInput, boardSize, errorCollector)) {
-                    errorCollector.getMessages().forEach(System.out::println);
-                }
-
+                menuPlayMove();
                 break;
             case STATISTICS:
                 System.out.println("Ho, Statistics...");
@@ -78,6 +68,21 @@ class UiApp {
         }
     }
 
+    private void menuPlayMove() {
+        ErrorCollector errorCollector = new ErrorCollector();
+        UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
+        int boardSize = theGame.getCurrentPlayerBoardToPrint().length;
+        assistant.printPlayMoveMassage(boardSize);
+        printPlayerNameAndBoards();
+        UserMoveInput userMoveInput = readUserMoveInput();
+
+        if (!userMoveInputVerifier.isUserInputOk(userMoveInput, boardSize, errorCollector)) {
+            errorCollector.getMessages().forEach(System.out::println);
+        } else {
+            System.out.println(theGame.playMove(userMoveInput));
+        }
+    }
+
     private UserMoveInput readUserMoveInput() {
         Scanner reader = new Scanner(System.in);
         System.out.println("Row: ");
@@ -91,9 +96,9 @@ class UiApp {
     private void printPlayerNameAndBoards() {
         assistant.printPlayerName(theGame.getCurrentPlayerName() + " it's your turn");
         assistant.printYourBoardText();
-        assistant.printBoard(theGame.getCurrentPlayerShipBoard());
+        assistant.printBoard(theGame.getCurrentPlayerBoardToPrint());
         assistant.printOpponentBoardText();
-        assistant.printBoard(theGame.getOpponentBoard());
+        assistant.printBoard(theGame.getOpponentBoardToPrint());
     }
 
     // **************************************************** //
@@ -127,7 +132,6 @@ class UiApp {
         } else {
             // XML loaded and game is not began yet
             theGame.init();
-            assistant.printBoard(theGame.getCurrentPlayerShipBoard());
         }
     }
 

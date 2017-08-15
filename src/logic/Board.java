@@ -8,6 +8,8 @@ import logic.exceptions.XmlContentException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static logic.enums.CellStatus.REGULAR;
+
 public class Board {
 
     CellStatus[][] board;
@@ -53,6 +55,38 @@ public class Board {
 
     public void setBattleships(LinkedList<Battleship> battleships) {
         this.battleships = battleships;
+    }
+
+    CellStatus playMove(int row, int col) {
+
+        switch (board[row][col]) {
+            case REGULAR:
+                board[row][col] = CellStatus.MISS;
+                return REGULAR;
+            case SHIP:
+                board[row][col] = CellStatus.HIT;
+                return CellStatus.SHIP;
+            case MISS:
+                return CellStatus.MISS;
+            case HIT:
+                return CellStatus.HIT;
+            case MINE:
+                return CellStatus.MINE;
+            case TEMP:
+            case WIN:
+            default:
+                return board[row][col];
+        }
+    }
+
+    boolean isThereAliveShip() {
+        for (Battleship battleship : battleships) {
+            if (battleship.isAlive()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // **************************************************** //
@@ -119,7 +153,7 @@ public class Board {
     // Sign compare
     // **************************************************** //
     private boolean signCompare(CellStatus sign) {
-        return sign == CellStatus.REGULAR || sign == CellStatus.TEMP;
+        return sign == REGULAR || sign == CellStatus.TEMP;
     }
 
     // **************************************************** //
@@ -141,7 +175,7 @@ public class Board {
     private void initBoard() {
         for (int i = 1; i < board.length; i++) {
             for (int j = 1; j < board.length; j++) {
-                board[i][j] = CellStatus.REGULAR;
+                board[i][j] = REGULAR;
             }
         }
     }
@@ -155,7 +189,7 @@ public class Board {
         for (int i = 1; i < board.length; i++) {
             for (int j = 1; j < board.length; j++) {
                 if (board[i][j] == statusToIgnore) {
-                    currentStatus = CellStatus.REGULAR.sign();
+                    currentStatus = REGULAR.sign();
                 } else {
                     currentStatus = board[i][j].sign();
                 }
