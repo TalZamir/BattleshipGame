@@ -150,6 +150,8 @@ class UiApp {
             try {
                 if (!inputVerifier.isFileOk(filePath, errorCollector) || !theGame.loadFile(filePath, errorCollector)) {
                     errorCollector.getMessages().forEach(System.out::println);
+                } else {
+                    System.out.println("File has loaded. You are ready to play :)");
                 }
             } catch (XmlContentException exception) {
                 System.out.println(exception.getMessage());
