@@ -28,9 +28,34 @@ public class UserMoveInputTests {
     }
 
     @Test
+    public void correctInputWithLowerCase() {
+        boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(1, "b"), 5, errorCollector);
+
+        assertEquals(true, actual);
+    }
+
+    @Test
     public void rowIsOutOfRange() {
         boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(6, "B"), 5, errorCollector);
+        assertEquals(false, actual);
 
+        actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(0, "B"), 5, errorCollector);
+        assertEquals(false, actual);
+    }
+
+    @Test
+    public void colIsOutOfRange() {
+        boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(2, "W"), 5, errorCollector);
+
+        assertEquals(false, actual);
+    }
+
+    @Test
+    public void strangeIsOutOfRange() {
+        boolean actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(2, "W4"), 5, errorCollector);
+        assertEquals(false, actual);
+
+        actual = userMoveInputVerifier.isUserInputOk(new UserMoveInput(321, "eew"), 5, errorCollector);
         assertEquals(false, actual);
     }
 }

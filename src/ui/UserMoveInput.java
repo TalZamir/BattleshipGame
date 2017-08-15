@@ -10,7 +10,7 @@ public class UserMoveInput {
 
     public UserMoveInput(int userRowInput, String userColInput) {
         this.userRowInput = userRowInput;
-        this.userColInput = userColInput;
+        this.userColInput = userColInput.toUpperCase();
     }
 
     public int getUserRowInput() {
