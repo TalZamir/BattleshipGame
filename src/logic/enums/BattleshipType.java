@@ -1,8 +1,8 @@
 package logic.enums;
 
 public enum BattleshipType {
-    VERTICAL("row"),
-    HORIZONTAL("column");
+    VERTICAL("column"),
+    HORIZONTAL("row");
 
     private String shipType;
 

@@ -124,9 +124,9 @@ public class Board {
     // **************************************************** //
     private void incrementCoordinate(Coordinate coordinate, String shipType) {
         if (shipType.toLowerCase().equals(BattleshipType.VERTICAL.shipType())) {
-            coordinate.setColumn(coordinate.getColumn() + 1);
-        } else {
             coordinate.setRow(coordinate.getRow() + 1);
+        } else {
+            coordinate.setColumn(coordinate.getColumn() + 1);
         }
     }
 
