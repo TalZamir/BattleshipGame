@@ -12,11 +12,11 @@ import static logic.enums.CellStatus.REGULAR;
 
 public class Board {
 
-    CellStatus[][] board;
-    List<Battleship> battleships;
+    private final Cell[][] board;
+    private List<Battleship> battleships;
 
     public Board(int boardSize, List<Battleship> battleships) throws XmlContentException {
-        this.board = new CellStatus[boardSize + 1][boardSize + 1];
+        board = new Cell[boardSize + 1][boardSize + 1];
         this.battleships = battleships;
         buildBoard();
     }
@@ -59,12 +59,13 @@ public class Board {
 
     CellStatus playMove(int row, int col) {
 
-        switch (board[row][col]) {
+        switch (board[row][col].getCellStatus()) {
             case REGULAR:
-                board[row][col] = CellStatus.MISS;
+                board[row][col].setCellStatus(CellStatus.MISS);
                 return REGULAR;
             case SHIP:
-                board[row][col] = CellStatus.HIT;
+                updateShipHit(board[row][col].getShipId());
+                board[row][col].setCellStatus(CellStatus.HIT);
                 return CellStatus.SHIP;
             case MISS:
                 return CellStatus.MISS;
@@ -75,7 +76,17 @@ public class Board {
             case TEMP:
             case WIN:
             default:
-                return board[row][col];
+                return board[row][col].getCellStatus();
+        }
+    }
+
+    //TODO: I think if there are more then one ship with the same id this method won't work
+    private void updateShipHit(String shipId) {
+        for (Battleship battleship : battleships) {
+            if (battleship.getId().equals(shipId)) {
+                battleship.decrementLength();
+                return;
+            }
         }
     }
 
@@ -101,7 +112,7 @@ public class Board {
                 if (!checkCoordinate(position)) {
                     throw new XmlContentException(ErrorMessages.ILLEGAL_POSITION);
                 }
-                board[position.getRow()][position.getColumn()] = CellStatus.TEMP;
+                board[position.getRow()][position.getColumn()].setCellStatus(CellStatus.TEMP);
                 incrementCoordinate(position, currentBattleship.getDirection());
             }
             changeTempSigns();
@@ -127,23 +138,23 @@ public class Board {
         int row = coordinate.getRow();
         int col = coordinate.getColumn();
 
-        if (row >= board.length || col >= board.length || row < 1 || col < 1 || !signCompare(board[row][col])) {
+        if (row >= board.length || col >= board.length || row < 1 || col < 1 || !signCompare(board[row][col].getCellStatus())) {
             result = false;
-        } else if (row - 1 != 0 && !signCompare(board[row - 1][col])) {
+        } else if (row - 1 != 0 && !signCompare(board[row - 1][col].getCellStatus())) {
             result = false;
-        } else if (row + 1 < board.length && !signCompare(board[row + 1][col])) {
+        } else if (row + 1 < board.length && !signCompare(board[row + 1][col].getCellStatus())) {
             result = false;
-        } else if (col - 1 != 0 && !signCompare(board[row][col - 1])) {
+        } else if (col - 1 != 0 && !signCompare(board[row][col - 1].getCellStatus())) {
             result = false;
-        } else if (col + 1 < board.length && !signCompare(board[row][col + 1])) {
+        } else if (col + 1 < board.length && !signCompare(board[row][col + 1].getCellStatus())) {
             result = false;
-        } else if (row - 1 != 0 && col - 1 != 0 && !signCompare(board[row - 1][col - 1])) {
+        } else if (row - 1 != 0 && col - 1 != 0 && !signCompare(board[row - 1][col - 1].getCellStatus())) {
             result = false;
-        } else if (row + 1 < board.length && col + 1 < board.length && !signCompare(board[row + 1][col + 1])) {
+        } else if (row + 1 < board.length && col + 1 < board.length && !signCompare(board[row + 1][col + 1].getCellStatus())) {
             result = false;
-        } else if (row - 1 != 0 && col + 1 < board.length && !signCompare(board[row - 1][col + 1])) {
+        } else if (row - 1 != 0 && col + 1 < board.length && !signCompare(board[row - 1][col + 1].getCellStatus())) {
             result = false;
-        } else if (row + 1 < board.length && col - 1 != 0 && !signCompare(board[row + 1][col - 1])) {
+        } else if (row + 1 < board.length && col - 1 != 0 && !signCompare(board[row + 1][col - 1].getCellStatus())) {
             result = false;
         }
         return result;
@@ -160,10 +171,10 @@ public class Board {
     // Change TEMP signs to SHIP signs
     // **************************************************** //
     private void changeTempSigns() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                if (board[i][j] == CellStatus.TEMP) {
-                    board[i][j] = CellStatus.SHIP;
+        for (int i = 1; i < board.length; i++) {
+            for (int j = 1; j < board.length; j++) {
+                if (board[i][j].getCellStatus() == CellStatus.TEMP) {
+                    board[i][j].setCellStatus(CellStatus.SHIP);
                 }
             }
         }
@@ -175,7 +186,8 @@ public class Board {
     private void initBoard() {
         for (int i = 1; i < board.length; i++) {
             for (int j = 1; j < board.length; j++) {
-                board[i][j] = REGULAR;
+                board[i][j] = new Cell();
+                board[i][j].setCellStatus(REGULAR);
             }
         }
     }
@@ -188,10 +200,10 @@ public class Board {
         char currentStatus;
         for (int i = 1; i < board.length; i++) {
             for (int j = 1; j < board.length; j++) {
-                if (board[i][j] == statusToIgnore) {
+                if (board[i][j].getCellStatus() == statusToIgnore) {
                     currentStatus = REGULAR.sign();
                 } else {
-                    currentStatus = board[i][j].sign();
+                    currentStatus = board[i][j].getCellStatus().sign();
                 }
                 allieBoard[i][j] = currentStatus;
             }

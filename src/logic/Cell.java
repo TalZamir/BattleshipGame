@@ -4,15 +4,24 @@ import logic.enums.CellStatus;
 
 public class Cell {
 
-    private final Coordinate point;
-    private char shipId;
+    private Coordinate point;
+    private String shipId;
     private CellStatus cellStatus;
 
-    public Cell(Coordinate point, char shipId) {
-        this.point = point;
-        this.shipId = shipId;
+    public Coordinate getPoint() {
+        return point;
+    }
 
-        cellStatus = CellStatus.REGULAR;
+    public void setPoint(Coordinate point) {
+        this.point = point;
+    }
+
+    public String getShipId() {
+        return shipId;
+    }
+
+    public void setShipId(String shipId) {
+        this.shipId = shipId;
     }
 
     public CellStatus getCellStatus() {
