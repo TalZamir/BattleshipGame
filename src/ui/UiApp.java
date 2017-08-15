@@ -48,16 +48,17 @@ class UiApp {
                 menuStartGame();
                 break;
             case STATUS:
-                System.out.println("Look! a Status...");
+                menuDisplayStatus();
                 break;
             case PLAY_MOVE:
                 menuPlayMove();
                 break;
             case STATISTICS:
-                System.out.println("Ho, Statistics...");
+                menuShowStatistics();
                 break;
             case QUIT:
-                System.out.println("Quiting...");
+                menuQuit();
+                break;
             case UNINITIALIZED:
                 System.out.println("Please enter one of the following menu number");
                 break;
@@ -68,20 +69,28 @@ class UiApp {
         }
     }
 
+    // **************************************************** //
+    // Menu item: plays player move
+    // **************************************************** //
     private void menuPlayMove() {
-        ErrorCollector errorCollector = new ErrorCollector();
-        UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
-        int boardSize = theGame.getCurrentPlayerBoardToPrint().length;
-        assistant.printPlayMoveMassage(boardSize);
-        printPlayerNameAndBoards();
-        UserMoveInput userMoveInput = readUserMoveInput();
+        if (theGame.isGameOn()) {
+            ErrorCollector errorCollector = new ErrorCollector();
+            UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
+            int boardSize = theGame.getCurrentPlayerBoardToPrint().length;
+            assistant.printPlayMoveMassage(boardSize);
+            printPlayerNameAndBoards();
+            UserMoveInput userMoveInput = readUserMoveInput();
 
-        if (!userMoveInputVerifier.isUserInputOk(userMoveInput, boardSize, errorCollector)) {
-            errorCollector.getMessages().forEach(System.out::println);
+            if (!userMoveInputVerifier.isUserInputOk(userMoveInput, boardSize, errorCollector)) {
+                errorCollector.getMessages().forEach(System.out::println);
+            } else {
+                System.out.println(theGame.playMove(userMoveInput));
+            }
         } else {
-            System.out.println(theGame.playMove(userMoveInput));
+            System.out.println("You must start a new game before performing a move.");
         }
     }
+
 
     private UserMoveInput readUserMoveInput() {
         Scanner reader = new Scanner(System.in);
@@ -155,5 +164,38 @@ class UiApp {
         }
 
         return input;
+    }
+
+    // **************************************************** //
+    // Menu item: displays game status
+    // **************************************************** //
+    private void menuDisplayStatus() {
+        if (theGame.isGameOn()) {
+            System.out.println("Status");
+        } else {
+            System.out.println("You must start a game in order to display a status.");
+        }
+    }
+
+    // **************************************************** //
+    // Menu item: shows game statistics
+    // **************************************************** //
+    private void menuShowStatistics() {
+        if (theGame.isGameOn()) {
+            System.out.println("STATISTICS");
+        } else {
+            System.out.println("You must start a game in order to show game statistics.");
+        }
+    }
+
+    // **************************************************** //
+    // Menu item: Quits from playing
+    // **************************************************** //
+    private void menuQuit() {
+        if (theGame.isGameOn()) {
+            System.out.println("Quiting");
+        } else {
+            System.out.println("You must start a game in order to quit.");
+        }
     }
 }
