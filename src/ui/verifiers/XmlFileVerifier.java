@@ -25,11 +25,7 @@ public class XmlFileVerifier implements IInputVerifier {
             errorCollector.addMessage(ErrorMessages.XML_PREFIX.message());
         }
 
-        if (errorCollector.getNumOfErrors() > 0) {
-            return false;
-        }
-
-        return true;
+        return errorCollector.getNumOfErrors() <= 0;
     }
 
     @Override
@@ -38,11 +34,7 @@ public class XmlFileVerifier implements IInputVerifier {
             errorCollector.addMessage(ErrorMessages.BOARD_SIZE.message());
         }
 
-        if (errorCollector.getNumOfErrors() > 0) {
-            return false;
-        }
-
-        return true;
+        return errorCollector.getNumOfErrors() <= 0;
     }
 
     @Override

@@ -101,7 +101,7 @@ class UiApp {
         int userRowInput = reader.nextInt();
 
         System.out.println("Column: ");
-        String userColInput = reader.next();
+        int userColInput = reader.nextInt();
         return new UserMoveInput(userRowInput, userColInput);
     }
 

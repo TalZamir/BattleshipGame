@@ -113,8 +113,8 @@ public class TheGame {
     }
 
     public String playMove(UserMoveInput userMoveInput) {
-        int row = userMoveInput.getUserRowInputForBoard();
-        int col = userMoveInput.getUserColInputForBoard();
+        int row = userMoveInput.getUserRowInput();
+        int col = userMoveInput.getUserColInput();
         String messageToReturn = null;
 
         CellStatus cellStatus = getOpponentLogicBoard().playMove(row, col);

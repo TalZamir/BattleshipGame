@@ -24,7 +24,7 @@ public class BattleshipBuilder {
     // **************************************************** //
     // Initiates builder battleships map
     // **************************************************** //
-    public void init(List<ShipTypeType> shipTypes) throws XmlContentException {
+    private void init(List<ShipTypeType> shipTypes) throws XmlContentException {
         battleshipsMap = new HashMap<>();
         for (ShipTypeType battleship : shipTypes) {
             if (battleshipsMap.containsKey(battleship.getId())) {

@@ -6,26 +6,26 @@ package ui;
 public class UserMoveInput {
 
     private final int userRowInput;
-    private final String userColInput;
+    private final int userColInput;
 
-    public UserMoveInput(int userRowInput, String userColInput) {
+    public UserMoveInput(int userRowInput, int userColInput) {
         this.userRowInput = userRowInput;
-        this.userColInput = userColInput.toUpperCase();
+        this.userColInput = userColInput;
     }
 
     public int getUserRowInput() {
         return userRowInput;
     }
 
-    public String getUserColInput() {
+    public int getUserColInput() {
         return userColInput;
     }
 
-    public int getUserColInputForBoard() {
-        return userColInput.charAt(0) - 'A' + 1;
-    }
+    //    public int getUserColInputForBoard() {
+    //        return userColInput.charAt(0) - 'A' + 1;
+    //    }
 
-    public int getUserRowInputForBoard() {
-        return getUserRowInput();
-    }
+    //    public int getUserRowInputForBoard() {
+    //        return getUserRowInput();
+    //    }
 }

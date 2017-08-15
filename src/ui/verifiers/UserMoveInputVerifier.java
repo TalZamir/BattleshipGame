@@ -15,14 +15,21 @@ public class UserMoveInputVerifier {
             isOK = false;
         }
 
-        if (userMoveInput.getUserColInput().equals("")) {
-            errorCollector.addMessage("Input cannot be empty");
-            isOK = false;
-        } else if (userMoveInput.getUserColInput().length() > 1) {
-            isOK = false;
-            errorCollector.addMessage("Column must be a character");
-        } else if (userMoveInput.getUserColInput().charAt(0) - 'A' + 1 < 1
-                || userMoveInput.getUserColInput().charAt(0) - 'A' > boardSize - 1) {
+        //        if (userMoveInput.getUserColInput().equals("")) {
+        //            errorCollector.addMessage("Input cannot be empty");
+        //            isOK = false;
+        //        } else
+        //            if (userMoveInput.getUserColInput().length() > 1) {
+        //            isOK = false;
+        //            errorCollector.addMessage("Column must be a character");
+        //        } else if (userMoveInput.getUserColInput().charAt(0) - 'A' + 1 < 1
+        //                || userMoveInput.getUserColInput().charAt(0) - 'A' > boardSize - 1) {
+        //            errorCollector.addMessage("Column must be in range");
+        //            isOK = false;
+        //        }
+
+        if (userMoveInput.getUserColInput() < 1
+                || userMoveInput.getUserColInput() > boardSize) {
             errorCollector.addMessage("Column must be in range");
             isOK = false;
         }

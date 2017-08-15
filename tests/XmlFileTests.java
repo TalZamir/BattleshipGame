@@ -21,35 +21,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Created by barakm on 27/07/2017
  */
-public class XmlFileTests {
+class XmlFileTests {
 
     private static final String RELATIVE_PATH = "module/battleshipx.xml";
     private final ErrorCollector errorCollector = new ErrorCollector();
     private final IInputVerifier inputVerifier = new XmlFileVerifier();
 
     @Test
-    public void loadEmptyFile() {
+    void loadEmptyFile() {
         boolean actual = inputVerifier.isFileOk("", errorCollector);
 
         assertEquals(false, actual);
     }
 
     @Test
-    public void verifyFileIsNotXml() {
+    void verifyFileIsNotXml() {
         boolean actual = inputVerifier.isFileOk("bla.bla", errorCollector);
 
         assertEquals(false, actual);
     }
 
     @Test
-    public void verifyFileIsXml() {
+    void verifyFileIsXml() {
         boolean actual = inputVerifier.isFileOk("bla.xml", errorCollector);
 
         assertEquals(true, actual);
     }
 
     @Test
-    public void verifyBoardsSize() throws JAXBException {
+    void verifyBoardsSize() throws JAXBException {
         BattleShipGameType xmlContent = new BattleShipGameType();
 
         xmlContent.setBoardSize("5");
@@ -74,7 +74,7 @@ public class XmlFileTests {
     }
 
     @Test
-    public void verifyFileNotExist() {
+    void verifyFileNotExist() {
         boolean actual;
         TheGame theGame = new TheGame();
 
@@ -89,7 +89,7 @@ public class XmlFileTests {
     }
 
     @Test
-    public void verifyFileExist() {
+    void verifyFileExist() {
         boolean actual;
         TheGame theGame = new TheGame();
 
@@ -104,7 +104,7 @@ public class XmlFileTests {
     }
 
     @Test
-    public void verifyGameIsOn() {
+    void verifyGameIsOn() {
         boolean actual;
         TheGame theGame = new TheGame();
 
@@ -117,11 +117,7 @@ public class XmlFileTests {
 
         //Try to load another file after start game.
         try {
-            if (theGame.loadFile(RELATIVE_PATH, errorCollector)) {
-                actual = false;
-            } else {
-                actual = true;
-            }
+            actual = !theGame.loadFile(RELATIVE_PATH, errorCollector);
         } catch (XmlContentException e) {
             actual = true;
         }
@@ -130,7 +126,7 @@ public class XmlFileTests {
     }
 
     @Test
-    public void verifyBattleshipAmountIsOk() {
+    void verifyBattleshipAmountIsOk() {
         boolean actual;
         List<Battleship> battleships = new ArrayList<>();
         Map<String, ShipTypeType> map = new HashMap<>();
@@ -162,7 +158,7 @@ public class XmlFileTests {
     }
 
     @Test
-    public void verifyBattleshipAmountIsNotOk() {
+    void verifyBattleshipAmountIsNotOk() {
         boolean actual;
         List<Battleship> battleships = new ArrayList<>();
         Map<String, ShipTypeType> map = new HashMap<>();
