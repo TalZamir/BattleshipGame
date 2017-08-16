@@ -42,7 +42,7 @@ public class TheGame {
     }
 
     // **************************************************** //
-    // Initilaize game logic
+    // Initialize game logic
     // **************************************************** //
     public void init() throws XmlContentException {
         isGameOn = true;
@@ -139,7 +139,8 @@ public class TheGame {
         switch (cellStatus) {
             case WIN:
                 isPlayerWon = true;
-                messageToReturn = currentPlayerName + " you won!";
+                messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +
+                        "~~~~~~~~~~~~~~ " + currentPlayerName + " WON THE GAME! ~~~~~~~~~~~~~~";
                 break;
             case SHIP:
                 messageToReturn = currentPlayerName + ": A HIT! You have another turn!";
@@ -184,7 +185,7 @@ public class TheGame {
     }
 
     public void resetGame() {
-        //TODO: Need to implement.
+        isGameOn = false;
     }
 
     private void switchTurn() {
@@ -237,6 +238,14 @@ public class TheGame {
             playerIndex++;
         }
         currentPlayerName = players[0].getName();
+    }
+
+    public String quitMatch() {
+        isGameOn = false;
+        String messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +
+                "~~~~ " + players[currentPlayerIndex].getName() + " quit... " + players[opponentPlayerIndex].getName() +
+                " WON THE GAME! ~~~~";
+        return messageToReturn;
     }
 
 

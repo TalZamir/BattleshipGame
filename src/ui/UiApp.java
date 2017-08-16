@@ -89,6 +89,9 @@ class UiApp {
             }
 
             if (theGame.isPlayerWon()) {
+                System.out.println(theGame.getStatistics());
+                System.out.println("-  The game will restart now...");
+                System.out.println("---------------------------------------------------");
                 theGame.resetGame();
             }
         } else {
@@ -239,7 +242,10 @@ class UiApp {
     //TODO: Implement
     private void menuQuit() {
         if (theGame.isGameOn()) {
-            System.out.println("Quiting");
+            System.out.println(theGame.quitMatch());
+            System.out.println(theGame.getStatistics());
+            System.out.println("-  The game will restart now...");
+            System.out.println("---------------------------------------------------");
         } else {
             System.out.println("You must start a game in order to quit.");
         }
