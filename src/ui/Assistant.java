@@ -8,7 +8,7 @@ class Assistant {
     private static final String SPACE = "   ";
     private static final int SEPARATOR = 0;
     private static final int MENU_START = 1;
-    private static final int MENU_END = 6;
+    private static final int MENU_END = 8;
 
     void printPlayMoveMassage(int boardSize) {
         System.out.print(String.format("Enter row and column index.\n" +
@@ -31,6 +31,8 @@ class Assistant {
         System.out.println("4. Play Move");
         System.out.println("5. Show Game Statistics");
         System.out.println("6. Quit Current Match");
+        System.out.println("7. Place a Mine");
+        System.out.println("8. Exit Game");
         System.out.println("*************************************");
     }
 

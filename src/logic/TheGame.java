@@ -15,6 +15,7 @@ import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class TheGame {
 
@@ -28,6 +29,7 @@ public class TheGame {
     private int currentPlayerIndex;
     private int opponentPlayerIndex;
     private boolean isPlayerWon;
+    private long startingTime;
 
     public TheGame() {
         isActive = true;
@@ -39,8 +41,12 @@ public class TheGame {
         opponentPlayerIndex = 1;
     }
 
+    // **************************************************** //
+    // Initilaize game logic
+    // **************************************************** //
     public void init() throws XmlContentException {
         isGameOn = true;
+        startingTime = System.currentTimeMillis();
         initGameComponents();
 
         if (xmlContent.getGameType().equalsIgnoreCase(GameType.BASIC.getGameTypeValue())) {
@@ -104,14 +110,23 @@ public class TheGame {
         return isFileLoaded;
     }
 
+    // **************************************************** //
+    // Returns the current player name
+    // **************************************************** //
     public String getCurrentPlayerName() {
         return currentPlayerName;
     }
 
+    // **************************************************** //
+    // Returns the opponent board (partial mode)
+    // **************************************************** //
     public char[][] getOpponentBoardToPrint() {
         return getOpponentLogicBoard().getAdversaryMode();
     }
 
+    // **************************************************** //
+    // Plays a game move
+    // **************************************************** //
     public String playMove(UserMoveInput userMoveInput) {
         int row = userMoveInput.getUserRowInput();
         int col = userMoveInput.getUserColInput();
@@ -127,19 +142,37 @@ public class TheGame {
                 messageToReturn = currentPlayerName + " you won!";
                 break;
             case SHIP:
-                messageToReturn = "Yea! You have another turn!";
+                messageToReturn = currentPlayerName + ": A HIT! You have another turn!";
+                players[currentPlayerIndex].increaseHit();
                 break;
             case HIT:
             case MISS:
-                messageToReturn = currentPlayerName + " you already hit here! Play another turn";
+                messageToReturn = currentPlayerName + ": you already attacked this cell, please choose a different one.";
                 break;
             case REGULAR:
-                messageToReturn = currentPlayerName + " you missed";
+                messageToReturn = currentPlayerName + ": You missed...";
+                players[currentPlayerIndex].increaseMiss();
+                players[currentPlayerIndex].updateTime();
                 switchTurn();
                 break;
         }
 
         return messageToReturn;
+    }
+
+    // **************************************************** //
+    // Returns game statistics
+    // **************************************************** //
+    public String getStatistics() {
+        long millis = System.currentTimeMillis() - startingTime;
+        String time = String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(millis),
+                TimeUnit.MILLISECONDS.toSeconds(millis) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+        );
+        return ("Total Played Turns: " + (players[0].getTurns() + players[1].getTurns()) + System.lineSeparator() +
+                "Total Time: " + time + System.lineSeparator() +
+                players[0].toString() + System.lineSeparator() + players[1].toString());
     }
 
     public boolean isPlayerWon() {
@@ -157,10 +190,12 @@ public class TheGame {
     private void switchTurn() {
         if (currentPlayerIndex == 0) {
             currentPlayerName = players[1].getName();
+            players[1].setTurnStartTime(System.currentTimeMillis());
             currentPlayerIndex = 1;
             opponentPlayerIndex = 0;
         } else {
             currentPlayerName = players[0].getName();
+            players[0].setTurnStartTime(System.currentTimeMillis());
             currentPlayerIndex = 0;
             opponentPlayerIndex = 1;
         }
@@ -198,8 +233,17 @@ public class TheGame {
             Board board = new Board(boardSize, battleships); // Builds player board
             Player player = new Player(String.format("Player%d", playerIndex + 1), board); // Sets player board
             players[playerIndex] = player; // Inserts player to players array
+            player.setTurnStartTime(startingTime);
             playerIndex++;
         }
         currentPlayerName = players[0].getName();
+    }
+
+
+    // **************************************************** //
+    // Indicates that the user ask to shut down the game
+    // **************************************************** //
+    public void exitGame() {
+        isActive = false;
     }
 }

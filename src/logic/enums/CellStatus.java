@@ -2,10 +2,10 @@ package logic.enums;
 
 public enum CellStatus {
 
-    HIT('$'),
-    MISS('#'),
+    HIT('*'),
+    MISS('0'),
     SHIP('@'),
-    REGULAR('*'),
+    REGULAR('~'),
     MINE('+'),
     TEMP('&'),
     // TODO: Do we still need the 'W' sign?

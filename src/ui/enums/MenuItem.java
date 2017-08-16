@@ -8,6 +8,8 @@ public enum MenuItem {
     PLAY_MOVE(4),
     STATISTICS(5),
     QUIT(6),
+    MINE(7),
+    EXIT(8),
     UNINITIALIZED(0);
 
     private int item;

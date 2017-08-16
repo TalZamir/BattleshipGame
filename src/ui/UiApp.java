@@ -58,6 +58,12 @@ class UiApp {
             case QUIT:
                 menuQuit();
                 break;
+            case MINE:
+                menuPlaceMine();
+                break;
+            case EXIT:
+                menuExitGame();
+                break;
             case UNINITIALIZED:
                 System.out.println("Please enter one of the following menu number");
                 break;
@@ -203,10 +209,13 @@ class UiApp {
     // **************************************************** //
     // Menu item: displays game status
     // **************************************************** //
-    //TODO: Implement
     private void menuDisplayStatus() {
         if (theGame.isGameOn()) {
-            System.out.println("Status");
+            System.out.println("~~ It's " + theGame.getCurrentPlayerName() + " turn ~~");
+            System.out.println("Self Board:");
+            assistant.printBoard(theGame.getCurrentPlayerBoardToPrint());
+            System.out.println("Game Board:");
+            assistant.printBoard(theGame.getOpponentBoardToPrint());
         } else {
             System.out.println("You must start a game in order to display a status.");
         }
@@ -218,7 +227,7 @@ class UiApp {
     //TODO: Implement
     private void menuShowStatistics() {
         if (theGame.isGameOn()) {
-            System.out.println("STATISTICS");
+            System.out.println(theGame.getStatistics());
         } else {
             System.out.println("You must start a game in order to show game statistics.");
         }
@@ -233,6 +242,29 @@ class UiApp {
             System.out.println("Quiting");
         } else {
             System.out.println("You must start a game in order to quit.");
+        }
+    }
+
+    // **************************************************** //
+    // Menu item: Place a mine
+    // **************************************************** //
+    private void menuPlaceMine() {
+        if(theGame.isGameOn()) {
+            System.out.println("MINE");
+        } else {
+            System.out.println("You must start a game in order to place a mine.");
+        }
+    }
+
+    // **************************************************** //
+    // Menu item: Exit game
+    // **************************************************** //
+    private void menuExitGame() {
+        if(!theGame.isGameOn()) {
+            theGame.exitGame();
+            System.out.println("Thank you for playing! Exiting...");
+        } else {
+            System.out.println("You must finish the current match before exiting the game.");
         }
     }
 }
