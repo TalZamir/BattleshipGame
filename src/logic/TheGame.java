@@ -45,14 +45,27 @@ public class TheGame {
     // Initialize game logic
     // **************************************************** //
     public void init() throws XmlContentException {
-        isGameOn = true;
-        startingTime = System.currentTimeMillis();
         initGameComponents();
 
         if (xmlContent.getGameType().equalsIgnoreCase(GameType.BASIC.getGameTypeValue())) {
             gameType = GameType.BASIC;
         } else {
             gameType = GameType.ADVANCE;
+        }
+    }
+
+    // **************************************************** //
+    // Starts a game
+    // **************************************************** //
+    public void startGame() throws XmlContentException {
+        if (isFileLoaded) {
+            isGameOn = true;
+            startingTime = System.currentTimeMillis();
+            for (Player player : players) {
+                player.setTurnStartTime(startingTime);
+            }
+        } else {
+            throw new XmlContentException(ErrorMessages.START_WITHOUT_XML); // XML not loaded yet
         }
     }
 
@@ -67,15 +80,21 @@ public class TheGame {
                 xmlContent = serializer.getBattleShipGameType();
                 if (inputVerifier.isContentOK(xmlContent, errorCollector)) {
                     isFileLoaded = true;
+                    init();
                 } else {
                     isFileLoaded = false;
                     return false;
                 }
+            } catch (XmlContentException exception) {
+                isFileLoaded = false; // if the last file was fine and the current one is not
+                throw exception; // XML content exception
             } catch (Exception exception) {
                 isFileLoaded = false; // if the last file was fine and the current one is not
                 throw new XmlContentException(ErrorMessages.INVALID_XML); // XML reading error
             }
-        } else {
+        } else
+
+        {
             return false;
         }
 
@@ -229,12 +248,16 @@ public class TheGame {
     // **************************************************** //
     private void setBoards(int boardSize, List<BoardType> boards, BattleshipBuilder battleshipBuilder) throws XmlContentException {
         int playerIndex = 0;
+
+        if (boards.size() != 2) {
+            throw new XmlContentException(ErrorMessages.XML_CONTENT); // XML reading error
+        }
+
         for (BoardType boardType : boards) {
             List<Battleship> battleships = battleshipBuilder.buildUserBattleships(boardType.getShip()); // Builds player battleships
             Board board = new Board(boardSize, battleships); // Builds player board
             Player player = new Player(String.format("Player%d", playerIndex + 1), board); // Sets player board
             players[playerIndex] = player; // Inserts player to players array
-            player.setTurnStartTime(startingTime);
             playerIndex++;
         }
         currentPlayerName = players[0].getName();

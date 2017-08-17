@@ -183,7 +183,8 @@ class UiApp {
             System.out.println("A game is already running.");
         } else {
             // XML loaded and game is not began yet
-            theGame.init();
+            theGame.startGame();
+            System.out.println("The game has been started successfully!");
         }
     }
 
