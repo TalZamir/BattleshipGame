@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Player implements IPlayer {
 
+    private static final int MINES_AMOUNT = 2;
     private final Board board;
     private final String name;
     private int hits;
@@ -22,7 +23,7 @@ public class Player implements IPlayer {
         this.misses = 0;
         this.turns = 0;
         this.time = 0;
-        this.mines = 2;
+        this.mines = MINES_AMOUNT;
     }
 
     // **************************************************** //
@@ -86,7 +87,8 @@ public class Player implements IPlayer {
 
     @Override
     public String toString() {
-        return (name + "  -  Hits: " + hits + "  Misses: " + misses + "  Average move time: " + averageTime());
+        return (name + "  -  Hits: " + hits + "/" + turns + "  Misses: " + misses + "/" + turns +
+                "  Mines: " + (MINES_AMOUNT - mines) + "/" + MINES_AMOUNT + "  Average move time: " + averageTime());
     }
 
     public int getHits() {

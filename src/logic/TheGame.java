@@ -170,6 +170,7 @@ public class TheGame {
                 break;
             case MINE:
                 messageToReturn = "The mine has been placed successfully.";
+                switchTurn();
                 break;
             case HIT:
             case MISS:
