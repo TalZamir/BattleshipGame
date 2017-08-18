@@ -12,6 +12,9 @@ import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import static ui.enums.MenuItem.MINE;
+import static ui.enums.MenuItem.PLAY_MOVE;
+
 class UiApp {
 
     private static final String INVALID_INPUT = "Invalid input! Please try again";
@@ -29,7 +32,7 @@ class UiApp {
                 assistant.printMenu();
                 doIteration();
             } catch (XmlContentException exception) {
-                System.out.println("GAME ERROR: " + exception.getMessage());
+                System.out.println(exception.getMessage());
             }
         }
     }
@@ -50,7 +53,7 @@ class UiApp {
                 menuDisplayStatus();
                 break;
             case PLAY_MOVE:
-                menuPlayMove();
+                menuPlayMove(PLAY_MOVE);
                 break;
             case STATISTICS:
                 menuShowStatistics();
@@ -59,7 +62,7 @@ class UiApp {
                 menuQuit();
                 break;
             case MINE:
-                menuPlaceMine();
+                menuPlayMove(MINE);
                 break;
             case EXIT:
                 menuExitGame();
@@ -73,7 +76,7 @@ class UiApp {
     // **************************************************** //
     // Menu item: plays player move
     // **************************************************** //
-    private void menuPlayMove() {
+    private void menuPlayMove(MenuItem moveType) throws XmlContentException {
         if (theGame.isGameOn()) {
             ErrorCollector errorCollector = new ErrorCollector();
             UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
@@ -85,7 +88,7 @@ class UiApp {
             if (!userMoveInputVerifier.isUserInputOk(userMoveInput, boardSize, errorCollector)) {
                 errorCollector.getMessages().forEach(System.out::println);
             } else {
-                System.out.println(theGame.playMove(userMoveInput));
+                System.out.println(theGame.playMove(userMoveInput, (moveType == PLAY_MOVE)));
             }
 
             if (theGame.isPlayerWon()) {
@@ -249,17 +252,6 @@ class UiApp {
             System.out.println("---------------------------------------------------");
         } else {
             System.out.println("You must start a game in order to quit.");
-        }
-    }
-
-    // **************************************************** //
-    // Menu item: Place a mine
-    // **************************************************** //
-    private void menuPlaceMine() {
-        if(theGame.isGameOn()) {
-            System.out.println("MINE");
-        } else {
-            System.out.println("You must start a game in order to place a mine.");
         }
     }
 

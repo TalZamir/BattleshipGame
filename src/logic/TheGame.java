@@ -17,6 +17,8 @@ import ui.verifiers.XmlFileVerifier;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static logic.enums.CellStatus.MINE;
+
 public class TheGame {
 
     private GameType gameType;
@@ -146,24 +148,28 @@ public class TheGame {
     // **************************************************** //
     // Plays a game move
     // **************************************************** //
-    public String playMove(UserMoveInput userMoveInput) {
+    public String playMove(UserMoveInput userMoveInput, boolean isRegularMove) throws XmlContentException {
         int row = userMoveInput.getUserRowInput();
         int col = userMoveInput.getUserColInput();
         String messageToReturn = null;
-
-        CellStatus cellStatus = getOpponentLogicBoard().playMove(row, col);
-
-        cellStatus = checkIfWin(cellStatus);
+        CellStatus cellStatus;
+        if (isRegularMove) {
+            cellStatus = getOpponentLogicBoard().playMove(row, col);
+        } else {
+            placeMine(row, col);
+            cellStatus = MINE;
+        }
 
         switch (cellStatus) {
-            case WIN:
-                isPlayerWon = true;
-                messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +
-                        "~~~~~~~~~~~~~~ " + currentPlayerName + " WON THE GAME! ~~~~~~~~~~~~~~";
-                break;
             case SHIP:
-                messageToReturn = currentPlayerName + ": A HIT! You have another turn!";
+                messageToReturn = currentPlayerName + ": A HIT! You have another turn.";
                 players[currentPlayerIndex].increaseHit();
+                break;
+            case SHIP_DOWN:
+                messageToReturn = winnerCheck();
+                break;
+            case MINE:
+                messageToReturn = "The mine has been placed successfully.";
                 break;
             case HIT:
             case MISS:
@@ -172,7 +178,6 @@ public class TheGame {
             case REGULAR:
                 messageToReturn = currentPlayerName + ": You missed...";
                 players[currentPlayerIndex].increaseMiss();
-                players[currentPlayerIndex].updateTime();
                 switchTurn();
                 break;
         }
@@ -221,12 +226,17 @@ public class TheGame {
         }
     }
 
-    private CellStatus checkIfWin(CellStatus cellStatus) {
-        if (!getOpponentLogicBoard().isThereAliveShip()) {
-            return CellStatus.WIN;
+    private String winnerCheck() {
+        String messageToReturn;
+        players[currentPlayerIndex].increaseHit();
+        if (getOpponentLogicBoard().isThereAliveShip()) {
+            messageToReturn = "BOOM! You destroyed one of the opponent's ships! You have another turn.";
+        } else {
+            isPlayerWon = true;
+            messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +
+                    "~~~~~~~~~~~~~~ " + currentPlayerName + " WON THE GAME! ~~~~~~~~~~~~~~";
         }
-
-        return cellStatus;
+        return messageToReturn;
     }
 
     private Board getCurrentPlayerLogicBoard() {
@@ -263,6 +273,20 @@ public class TheGame {
         currentPlayerName = players[0].getName();
     }
 
+    // **************************************************** //
+    // Place a mine
+    // **************************************************** //
+    private void placeMine(int row, int col) throws XmlContentException {
+        if (players[currentPlayerIndex].getMines() == 0) {
+            throw new XmlContentException(ErrorMessages.MINE_LIMIT); // Mines amount over
+        }
+        players[currentPlayerIndex].getBoard().drawMine(row, col);
+        players[currentPlayerIndex].decreaseMine();
+    }
+
+    // **************************************************** //
+    // Quit the match
+    // **************************************************** //
     public String quitMatch() {
         isGameOn = false;
         String messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +

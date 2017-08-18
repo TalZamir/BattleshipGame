@@ -13,6 +13,7 @@ public class Player implements IPlayer {
     private int turns;
     private long time;
     private long turnStartTime;
+    private int mines;
 
     public Player(String name, Board board) {
         this.name = name;
@@ -21,6 +22,7 @@ public class Player implements IPlayer {
         this.misses = 0;
         this.turns = 0;
         this.time = 0;
+        this.mines = 2;
     }
 
     // **************************************************** //
@@ -28,7 +30,6 @@ public class Player implements IPlayer {
     // **************************************************** //
     public void increaseHit() {
         hits++;
-        turns++;
         updateTime();
     }
 
@@ -37,12 +38,20 @@ public class Player implements IPlayer {
     // **************************************************** //
     public void increaseMiss() {
         misses++;
-        turns++;
+        updateTime();
+    }
+
+    // **************************************************** //
+    // Decrease mines amount
+    // **************************************************** //
+    public void decreaseMine() {
+        mines--;
         updateTime();
     }
 
     public void updateTime() {
         time += System.currentTimeMillis() - turnStartTime;
+        turns++;
         turnStartTime = System.currentTimeMillis();
     }
 
@@ -113,4 +122,12 @@ public class Player implements IPlayer {
     }
 
     public void setTurnStartTime(long turnStartTime) { this.turnStartTime = turnStartTime; }
+
+    public int getMines() {
+        return mines;
+    }
+
+    public void setMines(int mines) {
+        this.mines = mines;
+    }
 }

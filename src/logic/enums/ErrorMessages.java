@@ -16,7 +16,9 @@ public enum ErrorMessages {
     BOARD_SIZE("Board size must be between 5 to 20"),
     GAME_IS_ALREADY_ON("You can't load a XML file while a game is already running."),
     START_WITHOUT_XML("You can't start a game without loading a valid XML file!"),
-    XML_PREFIX("You must enter an xml file!");
+    XML_PREFIX("You must enter an xml file!"),
+    MINE_ERROR("The position for the mine is illegal!"),
+    MINE_LIMIT("You already used all of your mines!");
 
     private String message;
 
