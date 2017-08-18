@@ -210,7 +210,7 @@ public class Board {
         char currentStatus;
         for (int i = 1; i < board.length; i++) {
             for (int j = 1; j < board.length; j++) {
-                if (board[i][j].getCellStatus() == statusToIgnore) {
+                if (board[i][j].getCellStatus() == statusToIgnore || (statusToIgnore == SHIP && board[i][j].getCellStatus() == MINE)) {
                     currentStatus = REGULAR.sign();
                 } else {
                     currentStatus = board[i][j].getCellStatus().sign();

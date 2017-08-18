@@ -17,7 +17,7 @@ import ui.verifiers.XmlFileVerifier;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static logic.enums.CellStatus.MINE;
+import static logic.enums.CellStatus.MINE_PLACED;
 
 public class TheGame {
 
@@ -157,7 +157,7 @@ public class TheGame {
             cellStatus = getOpponentLogicBoard().playMove(row, col);
         } else {
             placeMine(row, col);
-            cellStatus = MINE;
+            cellStatus = MINE_PLACED;
         }
 
         switch (cellStatus) {
@@ -169,6 +169,10 @@ public class TheGame {
                 messageToReturn = winnerCheck();
                 break;
             case MINE:
+                messageToReturn = "BOOOOMMMMM!";
+                switchTurn();
+                break;
+            case MINE_PLACED:
                 messageToReturn = "The mine has been placed successfully.";
                 switchTurn();
                 break;
@@ -302,5 +306,12 @@ public class TheGame {
     // **************************************************** //
     public void exitGame() {
         isActive = false;
+    }
+
+    // **************************************************** //
+    // Indicates that the user ask to shut down the game
+    // **************************************************** //
+    public boolean hasMines() {
+        return (players[currentPlayerIndex].getMines() > 0);
     }
 }

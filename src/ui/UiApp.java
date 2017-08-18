@@ -62,7 +62,7 @@ class UiApp {
                 menuQuit();
                 break;
             case MINE:
-                menuPlayMove(MINE);
+                menuPlaceMine();
                 break;
             case EXIT:
                 menuExitGame();
@@ -256,10 +256,26 @@ class UiApp {
     }
 
     // **************************************************** //
+    // Menu item: Load XML file
+    // **************************************************** //
+    private void menuPlaceMine() throws XmlContentException {
+        if (theGame.isGameOn()) {
+            if (theGame.hasMines()) {
+                System.out.println("Please choose a location to place a mine:");
+                menuPlayMove(MINE);
+            } else {
+                System.out.println("You ran out of mines!");
+            }
+        } else {
+            System.out.println("You must start a game before placing a mine.");
+        }
+    }
+
+    // **************************************************** //
     // Menu item: Exit game
     // **************************************************** //
     private void menuExitGame() {
-        if(!theGame.isGameOn()) {
+        if (!theGame.isGameOn()) {
             theGame.exitGame();
             System.out.println("Thank you for playing! Exiting...");
         } else {
