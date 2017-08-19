@@ -109,7 +109,7 @@ class Assistant {
 
     public void printTurnIntro(TheGame theGame, String intro) {
         if (intro == null) {
-            System.out.println("~~~~~  " + theGame.getCurrentPlayerName() + " Turn (Score: " + theGame.getCurrentPlayerScore() + ")  ~~~~~");
+            printTurnMsg(theGame);
         } else {
             System.out.println(intro);
         }
@@ -117,5 +117,9 @@ class Assistant {
         printBoard(theGame.getCurrentPlayerBoardToPrint());
         System.out.println("Tracking Board:");
         printBoard(theGame.getOpponentBoardToPrint());
+    }
+
+    public void printTurnMsg(TheGame theGame) {
+        System.out.println("~~~~~  " + theGame.getCurrentPlayerName() + " Turn (Score: " + theGame.getCurrentPlayerScore() + ")  ~~~~~");
     }
 }

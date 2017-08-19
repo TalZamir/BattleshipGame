@@ -93,6 +93,8 @@ class UiApp {
                 System.out.println("-  The game will restart now...");
                 System.out.println("---------------------------------------------------");
                 theGame.resetGame();
+            } else {
+                assistant.printTurnMsg(theGame); // Indicates who's turn is it
             }
         } else {
             System.out.println("You must start a new game before performing a move.");
@@ -102,7 +104,7 @@ class UiApp {
     private UserMoveInput readUserMoveInput() {
         Scanner reader = new Scanner(System.in);
         String userRowInput, userColInput;
-        String userMsg = "Please enter row number: ";
+        String userMsg = "Please enter a row number: ";
         int boardSize = theGame.getCurrentPlayerBoardToPrint().length;
         UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
         do {
@@ -111,7 +113,7 @@ class UiApp {
         }
         while ((userMsg = userMoveInputVerifier.checkInput(userRowInput, boardSize)) != null);
 
-        userMsg = "Please enter column number: ";
+        userMsg = "Please enter a column number: ";
 
         do {
             System.out.println(userMsg);
@@ -120,14 +122,6 @@ class UiApp {
         while ((userMsg = userMoveInputVerifier.checkInput(userColInput, boardSize)) != null);
 
         return new UserMoveInput(Integer.parseInt(userRowInput), Integer.parseInt(userColInput));
-    }
-
-    private void printPlayerNameAndBoards() {
-        assistant.printPlayerName(theGame.getCurrentPlayerName() + " it's your turn");
-        assistant.printYourBoardText();
-        assistant.printBoard(theGame.getCurrentPlayerBoardToPrint());
-        assistant.printOpponentBoardText();
-        assistant.printBoard(theGame.getOpponentBoardToPrint());
     }
 
     // **************************************************** //
