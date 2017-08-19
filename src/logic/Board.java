@@ -75,6 +75,7 @@ public class Board {
                 result = CellStatus.HIT;
                 break;
             case MINE:
+                board[row][col].setCellStatus(CellStatus.HIT);
                 result = CellStatus.MINE;
                 break;
             default:
@@ -230,5 +231,12 @@ public class Board {
             throw new XmlContentException(ErrorMessages.MINE_ERROR);
         }
         board[row][col].setCellStatus(MINE);
+    }
+
+    // **************************************************** //
+    // Draws a Miss sign instead of a Mine when a mine attacked a mine
+    // **************************************************** //
+    public void drawMineAsMiss(int row, int col) {
+        board[row][col].setCellStatus(MISS);
     }
 }

@@ -151,7 +151,6 @@ public class TheGame {
     public String playMove(UserMoveInput userMoveInput, boolean isRegularMove) throws XmlContentException {
         int row = userMoveInput.getUserRowInput();
         int col = userMoveInput.getUserColInput();
-        String messageToReturn = null;
         CellStatus cellStatus;
         if (isRegularMove) {
             cellStatus = getOpponentLogicBoard().playMove(row, col);
@@ -159,7 +158,14 @@ public class TheGame {
             placeMine(row, col);
             cellStatus = MINE_PLACED;
         }
+        return handleCellStatus(cellStatus, row, col);
+    }
 
+    // **************************************************** //
+    // Cell Status handler
+    // **************************************************** //
+    private String handleCellStatus(CellStatus cellStatus, int row, int col) {
+        String messageToReturn = null;
         switch (cellStatus) {
             case SHIP:
                 messageToReturn = currentPlayerName + ": A HIT! You have another turn.";
@@ -169,7 +175,9 @@ public class TheGame {
                 messageToReturn = winnerCheck();
                 break;
             case MINE:
-                messageToReturn = "BOOOOMMMMM!";
+                messageToReturn = "OH NO! You hit a mine!";
+                messageToReturn += System.lineSeparator() + handleMine(row, col);
+                players[currentPlayerIndex].increaseHit();
                 switchTurn();
                 break;
             case MINE_PLACED:
@@ -187,6 +195,38 @@ public class TheGame {
                 break;
         }
 
+        return messageToReturn;
+    }
+
+    // **************************************************** //
+    // Handles mine hit
+    // **************************************************** //
+    private String handleMine(int row, int col) {
+        String messageToReturn = null;
+        CellStatus cellStatus = getCurrentPlayerLogicBoard().playMove(row, col);
+        switch (cellStatus) {
+            case REGULAR:
+                messageToReturn = "Lucky you! Your parallel cell was empty.";
+                break;
+            case MISS:
+            case HIT:
+                messageToReturn = "HA! The parallel cell was already attacked.";
+                break;
+            case SHIP:
+                messageToReturn = "One of your battleships got hit!";
+                break;
+            case SHIP_DOWN:
+                messageToReturn = "One of your battleships destroyed!";
+                if (!getCurrentPlayerLogicBoard().isThereAliveShip()) {
+                    isPlayerWon = true;
+                    messageToReturn += System.lineSeparator() + getVictoryMsg(opponentPlayerIndex);
+                }
+                break;
+            case MINE:
+                messageToReturn = "What a coincidence! You got a mine on this cell too.";
+                getCurrentPlayerLogicBoard().drawMineAsMiss(row, col);
+                break;
+        }
         return messageToReturn;
     }
 
@@ -213,8 +253,10 @@ public class TheGame {
         this.isPlayerWon = playerWon;
     }
 
-    public void resetGame() {
+    public void resetGame() throws XmlContentException {
         isGameOn = false;
+        isPlayerWon = false;
+        init();
     }
 
     private void switchTurn() {
@@ -238,8 +280,7 @@ public class TheGame {
             messageToReturn = "BOOM! You destroyed one of the opponent's ships! You have another turn.";
         } else {
             isPlayerWon = true;
-            messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +
-                    "~~~~~~~~~~~~~~ " + currentPlayerName + " WON THE GAME! ~~~~~~~~~~~~~~";
+            messageToReturn = getVictoryMsg(currentPlayerIndex);
         }
         return messageToReturn;
     }
@@ -313,5 +354,13 @@ public class TheGame {
     // **************************************************** //
     public boolean hasMines() {
         return (players[currentPlayerIndex].getMines() > 0);
+    }
+
+    // **************************************************** //
+    // Returns victory message
+    // **************************************************** //
+    private String getVictoryMsg(int winnerIndex) {
+        return ("-------------------- GAME OVER --------------------" + System.lineSeparator() +
+                "~~~~~~~~~~~~~~ " + players[winnerIndex].getName() + " WON THE GAME! ~~~~~~~~~~~~~~");
     }
 }
