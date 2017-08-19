@@ -107,8 +107,12 @@ class Assistant {
         System.out.println();
     }
 
-    public void printTurnIntro(TheGame theGame) {
-        System.out.println("~~~~~  " + theGame.getCurrentPlayerName() + " Turn (Score: " + theGame.getCurrentPlayerScore() + ")  ~~~~~");
+    public void printTurnIntro(TheGame theGame, String intro) {
+        if (intro == null) {
+            System.out.println("~~~~~  " + theGame.getCurrentPlayerName() + " Turn (Score: " + theGame.getCurrentPlayerScore() + ")  ~~~~~");
+        } else {
+            System.out.println(intro);
+        }
         System.out.println("Personal Board:");
         printBoard(theGame.getCurrentPlayerBoardToPrint());
         System.out.println("Tracking Board:");

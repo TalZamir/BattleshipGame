@@ -20,6 +20,7 @@ class UiApp {
     private static final String INVALID_INPUT = "Invalid input! Please try again";
     private TheGame theGame;
     private Assistant assistant;
+    private final String USER_INTRO = null;
 
     // **************************************************** //
     // Starts Battleship Game UI
@@ -82,14 +83,10 @@ class UiApp {
             UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
             int boardSize = theGame.getCurrentPlayerBoardToPrint().length;
             // assistant.printPlayMoveMassage(boardSize);
-            printPlayerNameAndBoards();
+            printIntro("Please choose your desired location:");
             UserMoveInput userMoveInput = readUserMoveInput();
 
-            if (!userMoveInputVerifier.isUserInputOk(userMoveInput, boardSize, errorCollector)) {
-                errorCollector.getMessages().forEach(System.out::println);
-            } else {
-                System.out.println(theGame.playMove(userMoveInput, (moveType == PLAY_MOVE)));
-            }
+            System.out.println(theGame.playMove(userMoveInput, (moveType == PLAY_MOVE)));
 
             if (theGame.isPlayerWon()) {
                 System.out.println(theGame.getStatistics());
@@ -105,39 +102,24 @@ class UiApp {
     private UserMoveInput readUserMoveInput() {
         Scanner reader = new Scanner(System.in);
         String userRowInput, userColInput;
+        String userMsg = "Please enter row number: ";
+        int boardSize = theGame.getCurrentPlayerBoardToPrint().length;
+        UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
         do {
-            System.out.print("Row: ");
+            System.out.println(userMsg);
             userRowInput = reader.next();
         }
-        while (!isInputOk(userRowInput));
+        while ((userMsg = userMoveInputVerifier.checkInput(userRowInput, boardSize)) != null);
+
+        userMsg = "Please enter column number: ";
 
         do {
-            System.out.print("Column: ");
+            System.out.println(userMsg);
             userColInput = reader.next();
         }
-        while (!isInputOk(userColInput));
+        while ((userMsg = userMoveInputVerifier.checkInput(userColInput, boardSize)) != null);
 
         return new UserMoveInput(Integer.parseInt(userRowInput), Integer.parseInt(userColInput));
-    }
-
-    private boolean isInputOk(String input) {
-        boolean isOk = true;
-        if (input.equals("")) {
-            isOk = false;
-        }
-
-        for (char c : input.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                isOk = false;
-                break;
-            }
-        }
-
-        if (!isOk) {
-            System.out.println("Invalid input. Must be a number");
-        }
-
-        return isOk;
     }
 
     private void printPlayerNameAndBoards() {
@@ -187,7 +169,7 @@ class UiApp {
             // XML loaded and game is not began yet
             theGame.startGame();
             System.out.println("The game has been started successfully!");
-            assistant.printTurnIntro(theGame);
+            printIntro(USER_INTRO);
         }
     }
 
@@ -218,7 +200,7 @@ class UiApp {
     // **************************************************** //
     private void menuDisplayStatus() {
         if (theGame.isGameOn()) {
-            assistant.printTurnIntro(theGame);
+            assistant.printTurnIntro(theGame, USER_INTRO);
         } else {
             System.out.println("You must start a game in order to display a status.");
         }
@@ -277,5 +259,12 @@ class UiApp {
         } else {
             System.out.println("You must finish the current match before exiting the game.");
         }
+    }
+
+    // **************************************************** //
+    // Prints turn intro text
+    // **************************************************** //
+    private void printIntro(String intro) {
+        assistant.printTurnIntro(theGame, intro);
     }
 }
