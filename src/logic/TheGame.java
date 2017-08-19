@@ -337,6 +337,7 @@ public class TheGame {
     // **************************************************** //
     public String quitMatch() {
         isGameOn = false;
+        players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1); // Quiting counts as a turn
         String messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +
                 "~~~~ " + players[currentPlayerIndex].getName() + " quit... " + players[opponentPlayerIndex].getName() +
                 " WON THE GAME! ~~~~";
