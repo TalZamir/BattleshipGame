@@ -81,7 +81,7 @@ class UiApp {
             ErrorCollector errorCollector = new ErrorCollector();
             UserMoveInputVerifier userMoveInputVerifier = new UserMoveInputVerifier();
             int boardSize = theGame.getCurrentPlayerBoardToPrint().length;
-            assistant.printPlayMoveMassage(boardSize);
+            // assistant.printPlayMoveMassage(boardSize);
             printPlayerNameAndBoards();
             UserMoveInput userMoveInput = readUserMoveInput();
 
@@ -187,6 +187,7 @@ class UiApp {
             // XML loaded and game is not began yet
             theGame.startGame();
             System.out.println("The game has been started successfully!");
+            assistant.printTurnIntro(theGame);
         }
     }
 
@@ -217,11 +218,7 @@ class UiApp {
     // **************************************************** //
     private void menuDisplayStatus() {
         if (theGame.isGameOn()) {
-            System.out.println("~~ It's " + theGame.getCurrentPlayerName() + " turn ~~");
-            System.out.println("Self Board:");
-            assistant.printBoard(theGame.getCurrentPlayerBoardToPrint());
-            System.out.println("Game Board:");
-            assistant.printBoard(theGame.getOpponentBoardToPrint());
+            assistant.printTurnIntro(theGame);
         } else {
             System.out.println("You must start a game in order to display a status.");
         }

@@ -1,5 +1,7 @@
 package ui;
 
+import logic.TheGame;
+
 /**
  * Created by xozh4v on 8/10/2017.
  */
@@ -103,5 +105,13 @@ class Assistant {
 
     private void printNewLine() {
         System.out.println();
+    }
+
+    public void printTurnIntro(TheGame theGame) {
+        System.out.println("~~~~~  " + theGame.getCurrentPlayerName() + " Turn (Score: " + theGame.getCurrentPlayerScore() + ")  ~~~~~");
+        System.out.println("Personal Board:");
+        printBoard(theGame.getCurrentPlayerBoardToPrint());
+        System.out.println("Tracking Board:");
+        printBoard(theGame.getOpponentBoardToPrint());
     }
 }

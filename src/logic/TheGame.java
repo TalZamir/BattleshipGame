@@ -365,4 +365,11 @@ public class TheGame {
         return ("-------------------- GAME OVER --------------------" + System.lineSeparator() +
                 "~~~~~~~~~~~~~~ " + players[winnerIndex].getName() + " WON THE GAME! ~~~~~~~~~~~~~~");
     }
+
+    // **************************************************** //
+    // Returns current player score
+    // **************************************************** //
+    public int getCurrentPlayerScore() {
+        return players[currentPlayerIndex].getScore();
+    }
 }
