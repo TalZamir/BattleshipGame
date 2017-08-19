@@ -89,10 +89,7 @@ class UiApp {
             System.out.println(theGame.playMove(userMoveInput, (moveType == PLAY_MOVE)));
 
             if (theGame.isPlayerWon()) {
-                System.out.println(theGame.getStatistics());
-                System.out.println("-  The game will restart now...");
-                System.out.println("---------------------------------------------------");
-                theGame.resetGame();
+                finishMatch();
             } else {
                 assistant.printTurnMsg(theGame); // Indicates who's turn is it
             }
@@ -260,5 +257,16 @@ class UiApp {
     // **************************************************** //
     private void printIntro(String intro) {
         assistant.printTurnIntro(theGame, intro);
+    }
+
+    private void finishMatch() throws XmlContentException {
+        System.out.println(theGame.getStatistics());
+        System.out.println("Player1 Board: ");
+        assistant.printBoard(theGame.getBoardById(0));
+        System.out.println("Player2 Board: ");
+        assistant.printBoard(theGame.getBoardById(1));
+        System.out.println("-  The game will restart now...");
+        System.out.println("---------------------------------------------------");
+        theGame.resetGame();
     }
 }

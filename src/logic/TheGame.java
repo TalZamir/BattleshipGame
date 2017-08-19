@@ -372,4 +372,14 @@ public class TheGame {
     public int getCurrentPlayerScore() {
         return players[currentPlayerIndex].getScore();
     }
+
+    public char[][] getBoardById(int id) {
+        char[][] result = null; // In order to prevent bugs.
+        if (id == 0) {
+            result = players[0].getBoard().getAllieMode();
+        } else if (id == 1) {
+            result = players[1].getBoard().getAllieMode();
+        }
+        return result;
+    }
 }
