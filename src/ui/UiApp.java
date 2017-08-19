@@ -213,12 +213,10 @@ class UiApp {
     // Menu item: Quits from playing
     // **************************************************** //
     //TODO: Implement
-    private void menuQuit() {
+    private void menuQuit() throws XmlContentException {
         if (theGame.isGameOn()) {
             System.out.println(theGame.quitMatch());
-            System.out.println(theGame.getStatistics());
-            System.out.println("-  The game will restart now...");
-            System.out.println("---------------------------------------------------");
+            finishMatch();
         } else {
             System.out.println("You must start a game in order to quit.");
         }
