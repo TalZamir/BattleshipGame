@@ -12,6 +12,7 @@ public class Player implements IPlayer {
     private int hits;
     private int misses;
     private int turns;
+    private int score;
     private long time;
     private long turnStartTime;
     private int mines;
@@ -21,6 +22,7 @@ public class Player implements IPlayer {
         this.board = board;
         this.hits = 0;
         this.misses = 0;
+        this.score = 0;
         this.turns = 0;
         this.time = 0;
         this.mines = MINES_AMOUNT;
@@ -70,6 +72,13 @@ public class Player implements IPlayer {
         return avgStr;
     }
 
+    // **************************************************** //
+    // Increase player score
+    // **************************************************** //
+    public void increaseScore(int amount) {
+        this.score += amount;
+    }
+
     //TODO
     @Override
     public int getUserId() {
@@ -87,7 +96,7 @@ public class Player implements IPlayer {
 
     @Override
     public String toString() {
-        return (name + "  -  Hits: " + hits + "/" + turns + "  Misses: " + misses + "/" + turns +
+        return (name + "  -  Score: " + score + "  Turns: " + turns + "  Hits: " + hits + "  Misses: " + misses +
                 "  Mines: " + (MINES_AMOUNT - mines) + "/" + MINES_AMOUNT + "  Average move time: " + averageTime());
     }
 
@@ -131,5 +140,13 @@ public class Player implements IPlayer {
 
     public void setMines(int mines) {
         this.mines = mines;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

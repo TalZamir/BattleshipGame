@@ -176,7 +176,6 @@ class UiApp {
     // **************************************************** //
     // Menu item: Start game
     // **************************************************** //
-
     private void menuStartGame() throws XmlContentException {
         if (!theGame.isFileLoaded()) {
             // No XML file

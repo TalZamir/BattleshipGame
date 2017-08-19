@@ -14,6 +14,7 @@ public class Board {
 
     private final Cell[][] board;
     private List<Battleship> battleships;
+    private int lastDestroyedScore;
 
     public Board(int boardSize, List<Battleship> battleships) throws XmlContentException {
         board = new Cell[boardSize + 1][boardSize + 1];
@@ -95,6 +96,7 @@ public class Board {
             result = SHIP;
         } else {
             result = SHIP_DOWN;
+            lastDestroyedScore = cell.getShipRef().getScore();
         }
         return result;
     }
@@ -238,5 +240,12 @@ public class Board {
     // **************************************************** //
     public void drawMineAsMiss(int row, int col) {
         board[row][col].setCellStatus(MISS);
+    }
+
+    // **************************************************** //
+    // Returns the score of the last destroyed battleship
+    // **************************************************** //
+    public int getLastDestroyedScore() {
+        return lastDestroyedScore;
     }
 }

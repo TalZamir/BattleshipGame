@@ -217,6 +217,7 @@ public class TheGame {
                 break;
             case SHIP_DOWN:
                 messageToReturn = "One of your battleships destroyed!";
+                players[opponentPlayerIndex].increaseScore(players[currentPlayerIndex].getBoard().getLastDestroyedScore());
                 if (!getCurrentPlayerLogicBoard().isThereAliveShip()) {
                     isPlayerWon = true;
                     messageToReturn += System.lineSeparator() + getVictoryMsg(opponentPlayerIndex);
@@ -276,6 +277,7 @@ public class TheGame {
     private String winnerCheck() {
         String messageToReturn;
         players[currentPlayerIndex].increaseHit();
+        players[currentPlayerIndex].increaseScore(players[opponentPlayerIndex].getBoard().getLastDestroyedScore());
         if (getOpponentLogicBoard().isThereAliveShip()) {
             messageToReturn = "BOOM! You destroyed one of the opponent's ships! You have another turn.";
         } else {
