@@ -14,12 +14,13 @@ public enum ErrorMessages {
     EMPTY_FILE_NAME("File name can not be empty"),
     INVALID_XML("Invalid XML file"),
     BOARD_SIZE("Board size must be between 5 to 20"),
-    GAME_IS_ALREADY_ON("You can't load a XML file while a game is already running."),
+    GAME_IS_ALREADY_ON("Sorry, but you can't load XML while game is on."),
     START_WITHOUT_XML("You can't start a game without loading a valid XML file!"),
     XML_PREFIX("You must enter an xml file!"),
     MINE_ERROR("The position for the mine is illegal!"),
     MINE_LIMIT("You already used all of your mines!"),
-    INVALID_GAME_TYPE("Invalid game type"), INVALID_BATTLESHIP_DIRECTION("Invalid battleship direction");
+    INVALID_GAME_TYPE("Invalid game type"),
+    INVALID_BATTLESHIP_DIRECTION("Invalid battleship direction");
 
     private final String message;
 

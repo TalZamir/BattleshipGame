@@ -1,6 +1,7 @@
 package ui;
 
 import logic.TheGame;
+import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
 import ui.enums.MenuItem;
 import ui.verifiers.ErrorCollector;
@@ -142,7 +143,7 @@ class UiApp {
                 System.out.println(exception.getMessage());
             }
         } else {
-            System.out.println("Sorry, but you can't load XML while game is on.");
+            System.out.println(ErrorMessages.GAME_IS_ALREADY_ON.message());
         }
     }
 
