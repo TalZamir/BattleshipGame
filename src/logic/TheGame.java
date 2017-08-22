@@ -173,7 +173,7 @@ public class TheGame {
                                     TimeUnit.MILLISECONDS.toSeconds(millis) -
                                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
         );
-        return "Total Played Turns: " + players[0].getTurns() + players[1].getTurns() + System.lineSeparator() +
+        return "Total Played Turns: " + (players[0].getTurns() + players[1].getTurns()) + System.lineSeparator() +
                 "Total Time: " + time + System.lineSeparator() +
                 players[0] + System.lineSeparator() + players[1];
     }
