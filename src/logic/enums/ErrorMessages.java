@@ -17,6 +17,7 @@ public enum ErrorMessages {
     GAME_IS_ALREADY_ON("Sorry, but you can't load XML while game is on."),
     START_WITHOUT_XML("You can't start a game without loading a valid XML file!"),
     XML_PREFIX("You must enter an xml file!"),
+    SHIP_LENGTH("Battleship length is illegal!"),
     MINE_ERROR("The position for the mine is illegal!"),
     MINE_LIMIT("You already used all of your mines!"),
     INVALID_GAME_TYPE("Invalid game type"),

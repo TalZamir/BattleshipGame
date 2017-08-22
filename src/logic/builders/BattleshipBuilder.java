@@ -29,6 +29,8 @@ public class BattleshipBuilder {
         for (ShipType ship : ships) {
             if (!battleshipsMap.containsKey(ship.getShipTypeId())) {
                 throw new XmlContentException(ErrorMessages.UNKNOWN_SHIP_ID); // battleship ID doesn't exist
+            } else if (Integer.parseInt(battleshipsMap.get(ship.getShipTypeId()).getLength()) <= 0) {
+                throw new XmlContentException(ErrorMessages.SHIP_LENGTH);
             }
 
             battleships.add(new Battleship(battleshipsMap.get(ship.getShipTypeId()), ship));
