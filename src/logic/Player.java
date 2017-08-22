@@ -17,21 +17,38 @@ public class Player implements IPlayer {
     private long turnStartTime;
     private int mines;
 
-    public Player(String name, Board board) {
+    Player(String name, Board board) {
         this.name = name;
         this.board = board;
-        this.hits = 0;
-        this.misses = 0;
-        this.score = 0;
-        this.turns = 0;
-        this.time = 0;
-        this.mines = MINES_AMOUNT;
+        hits = 0;
+        misses = 0;
+        score = 0;
+        turns = 0;
+        time = 0;
+        mines = MINES_AMOUNT;
+    }
+
+    //TODO
+    @Override
+    public int getUserId() {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name + "  -  Score: " + score + "  Turns: " + turns + "  Hits: " + hits + "  Misses: " + misses +
+                "  Mines: " + (MINES_AMOUNT - mines) + "/" + MINES_AMOUNT + "  Average move time: " + averageTime();
     }
 
     // **************************************************** //
     // Increase hits amonut and turns amount by 1 and handles time
     // **************************************************** //
-    public void increaseHit() {
+    void increaseHit() {
         hits++;
         updateTime();
     }
@@ -39,7 +56,7 @@ public class Player implements IPlayer {
     // **************************************************** //
     // Increase misses amonut and turns amount by 1 and handles time
     // **************************************************** //
-    public void increaseMiss() {
+    void increaseMiss() {
         misses++;
         updateTime();
     }
@@ -47,12 +64,47 @@ public class Player implements IPlayer {
     // **************************************************** //
     // Decrease mines amount
     // **************************************************** //
-    public void decreaseMine() {
+    void decreaseMine() {
         mines--;
         updateTime();
     }
 
-    public void updateTime() {
+    // **************************************************** //
+    // Increase player score
+    // **************************************************** //
+    void increaseScore(int amount) {
+        this.score += amount;
+    }
+
+    Board getBoard() {
+        return board;
+    }
+
+    int getTurns() {
+        return turns;
+    }
+
+    void setTurns(int turns) {
+        this.turns = turns;
+    }
+
+    void setTurnStartTime(long turnStartTime) {
+        this.turnStartTime = turnStartTime;
+    }
+
+    int getMines() {
+        return mines;
+    }
+
+    int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    private void updateTime() {
         time += System.currentTimeMillis() - turnStartTime;
         turns++;
         turnStartTime = System.currentTimeMillis();
@@ -65,88 +117,9 @@ public class Player implements IPlayer {
         } else {
             avg = 0;
         }
-        String avgStr = String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(avg),
-                TimeUnit.MILLISECONDS.toSeconds(avg) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(avg)));
-        return avgStr;
-    }
-
-    // **************************************************** //
-    // Increase player score
-    // **************************************************** //
-    public void increaseScore(int amount) {
-        this.score += amount;
-    }
-
-    //TODO
-    @Override
-    public int getUserId() {
-        return 0;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return (name + "  -  Score: " + score + "  Turns: " + turns + "  Hits: " + hits + "  Misses: " + misses +
-                "  Mines: " + (MINES_AMOUNT - mines) + "/" + MINES_AMOUNT + "  Average move time: " + averageTime());
-    }
-
-    public int getHits() {
-        return hits;
-    }
-
-    public void setHits(int score) {
-        this.hits = score;
-    }
-
-    public int getMisses() {
-        return misses;
-    }
-
-    public void setMisses(int misses) {
-        this.misses = misses;
-    }
-
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public int getTurns() {
-        return turns;
-    }
-
-    public void setTurns(int turns) {
-        this.turns = turns;
-    }
-
-    public void setTurnStartTime(long turnStartTime) { this.turnStartTime = turnStartTime; }
-
-    public int getMines() {
-        return mines;
-    }
-
-    public void setMines(int mines) {
-        this.mines = mines;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
+        return String.format("%02d:%02d",
+                             TimeUnit.MILLISECONDS.toMinutes(avg),
+                             TimeUnit.MILLISECONDS.toSeconds(avg) -
+                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(avg)));
     }
 }

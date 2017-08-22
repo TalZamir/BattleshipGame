@@ -126,7 +126,7 @@ class XmlFileTests {
     }
 
     @Test
-    void verifyBattleshipAmountIsOk() {
+    void verifyBattleshipAmountIsOk() throws XmlContentException {
         boolean actual;
         List<Battleship> battleships = new ArrayList<>();
         Map<String, ShipTypeType> map = new HashMap<>();
@@ -134,6 +134,8 @@ class XmlFileTests {
         ShipTypeType shipTypeType = new ShipTypeType();
         ShipType shipType1 = new ShipType();
         ShipType shipType2 = new ShipType();
+        shipType1.setDirection("row");
+        shipType2.setDirection("column");
 
         setShipTypeType(shipTypeType, "2", "1", "1", "1", "1");
 
@@ -158,7 +160,7 @@ class XmlFileTests {
     }
 
     @Test
-    void verifyBattleshipAmountIsNotOk() {
+    void verifyBattleshipAmountIsNotOk() throws XmlContentException {
         boolean actual;
         List<Battleship> battleships = new ArrayList<>();
         Map<String, ShipTypeType> map = new HashMap<>();

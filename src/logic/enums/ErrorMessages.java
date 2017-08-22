@@ -18,9 +18,10 @@ public enum ErrorMessages {
     START_WITHOUT_XML("You can't start a game without loading a valid XML file!"),
     XML_PREFIX("You must enter an xml file!"),
     MINE_ERROR("The position for the mine is illegal!"),
-    MINE_LIMIT("You already used all of your mines!");
+    MINE_LIMIT("You already used all of your mines!"),
+    INVALID_GAME_TYPE("Invalid game type"), INVALID_BATTLESHIP_DIRECTION("Invalid battleship direction");
 
-    private String message;
+    private final String message;
 
     ErrorMessages(String message) {
         this.message = message;

@@ -1,5 +1,8 @@
 package logic;
 
+import logic.enums.BattleshipDirectionType;
+import logic.enums.ErrorMessages;
+import logic.exceptions.XmlContentException;
 import module.ShipType;
 import module.ShipTypeType;
 
@@ -9,12 +12,12 @@ public class Battleship {
     private final int length;
     private final int score;
     private final String category;
-    private final String direction;
+    private final BattleshipDirectionType direction;
     private final Coordinate position;
     private boolean isAlive;
     private int lengthForIsAlive;
 
-    public Battleship(ShipTypeType shipTypeType, ShipType shipType) {
+    public Battleship(ShipTypeType shipTypeType, ShipType shipType) throws XmlContentException {
         isAlive = true;
         // ShipTypeType attributes
         id = shipTypeType.getId();
@@ -23,12 +26,8 @@ public class Battleship {
         score = Integer.parseInt(shipTypeType.getScore());
         category = shipTypeType.getCategory();
         // ShipType attributes
-        direction = shipType.getDirection();
+        direction = getEnumDirection(shipType.getDirection());
         position = new Coordinate(Integer.parseInt(shipType.getPosition().getX()), Integer.parseInt(shipType.getPosition().getY()));
-    }
-
-    public boolean isAlive() {
-        return isAlive;
     }
 
     public String getId() {
@@ -39,24 +38,39 @@ public class Battleship {
         return length;
     }
 
-    public int getScore() {
-        return score;
-    }
-
     public String getCategory() {
         return category;
     }
 
-    public String getDirection() {
+    boolean isAlive() {
+        return isAlive;
+    }
+
+    int getScore() {
+        return score;
+    }
+
+    BattleshipDirectionType getDirection() {
         return direction;
     }
 
-    public Coordinate getPosition() {
+    Coordinate getPosition() {
         return position;
     }
 
-    public void decrementLength() {
-        if (--lengthForIsAlive == 0)
+    void decrementLength() {
+        if (--lengthForIsAlive == 0) {
             isAlive = false;
+        }
+    }
+
+    private BattleshipDirectionType getEnumDirection(String direction) throws XmlContentException {
+        for (BattleshipDirectionType battleshipDirectionType : BattleshipDirectionType.values()) {
+            if (direction.equalsIgnoreCase(battleshipDirectionType.value())) {
+                return battleshipDirectionType;
+            }
+        }
+
+        throw new XmlContentException(ErrorMessages.INVALID_BATTLESHIP_DIRECTION);
     }
 }

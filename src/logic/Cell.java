@@ -12,23 +12,23 @@ public class Cell {
         return point;
     }
 
-    public void setPoint(Coordinate point) {
+    void setPoint(Coordinate point) {
         this.point = point;
     }
 
-    public Battleship getShipRef() {
+    Battleship getShipRef() {
         return shipRef;
     }
 
-    public void setShipRef(Battleship shipRef) {
+    void setShipRef(Battleship shipRef) {
         this.shipRef = shipRef;
     }
 
-    public CellStatus getCellStatus() {
+    CellStatus getCellStatus() {
         return cellStatus;
     }
 
-    public void setCellStatus(CellStatus cellStatus) {
+    void setCellStatus(CellStatus cellStatus) {
         this.cellStatus = cellStatus;
     }
 }

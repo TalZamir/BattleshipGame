@@ -20,7 +20,7 @@ class UiApp {
     private static final String INVALID_INPUT = "Invalid input! Please try again";
     private TheGame theGame;
     private Assistant assistant;
-    private final String USER_INTRO = null;
+    private static final String USER_INTRO = null;
 
     // **************************************************** //
     // Starts Battleship Game UI
@@ -86,7 +86,7 @@ class UiApp {
             printIntro("Please choose your desired location:");
             UserMoveInput userMoveInput = readUserMoveInput();
 
-            System.out.println(theGame.playMove(userMoveInput, (moveType == PLAY_MOVE)));
+            System.out.println(theGame.playMove(userMoveInput, moveType == PLAY_MOVE));
 
             if (theGame.isPlayerWon()) {
                 finishMatch();
@@ -126,7 +126,7 @@ class UiApp {
     // **************************************************** //
     private void menuLoadXml() {
         if (!theGame.isGameOn()) {
-            System.out.println("Please enter a path of a XML file:");
+            System.out.println("Please enter a path of an XML file:");
             ErrorCollector errorCollector = new ErrorCollector();
             Scanner reader = new Scanner(System.in);
             String filePath = reader.nextLine();

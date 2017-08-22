@@ -51,8 +51,10 @@ public class TheGame {
 
         if (xmlContent.getGameType().equalsIgnoreCase(GameType.BASIC.getGameTypeValue())) {
             gameType = GameType.BASIC;
-        } else {
+        } else if (xmlContent.getGameType().equalsIgnoreCase(GameType.ADVANCE.getGameTypeValue())) {
             gameType = GameType.ADVANCE;
+        } else {
+            throw new XmlContentException(ErrorMessages.INVALID_GAME_TYPE);
         }
     }
 
@@ -162,6 +164,77 @@ public class TheGame {
     }
 
     // **************************************************** //
+    // Returns game statistics
+    // **************************************************** //
+    public String getStatistics() {
+        long millis = System.currentTimeMillis() - startingTime;
+        String time = String.format("%02d:%02d",
+                                    TimeUnit.MILLISECONDS.toMinutes(millis),
+                                    TimeUnit.MILLISECONDS.toSeconds(millis) -
+                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+        );
+        return "Total Played Turns: " + players[0].getTurns() + players[1].getTurns() + System.lineSeparator() +
+                "Total Time: " + time + System.lineSeparator() +
+                players[0] + System.lineSeparator() + players[1];
+    }
+
+    public boolean isPlayerWon() {
+        return isPlayerWon;
+    }
+
+    public void setPlayerWon(boolean playerWon) {
+        isPlayerWon = playerWon;
+    }
+
+    public void resetGame() throws XmlContentException {
+        isGameOn = false;
+        isPlayerWon = false;
+        init();
+    }
+
+    // **************************************************** //
+    // Quit the match
+    // **************************************************** //
+    public String quitMatch() {
+        isGameOn = false;
+        players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1); // Quiting counts as a turn
+        return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
+                "~~~~ " + players[currentPlayerIndex].getName() + " quit... " + players[opponentPlayerIndex].getName() +
+                " WON THE GAME! ~~~~";
+    }
+
+    // **************************************************** //
+    // Indicates that the user ask to shut down the game
+    // **************************************************** //
+    public void exitGame() {
+        isActive = false;
+    }
+
+    // **************************************************** //
+    // Indicates that the user ask to shut down the game
+    // **************************************************** //
+    public boolean hasMines() {
+        return players[currentPlayerIndex].getMines() > 0;
+    }
+
+    // **************************************************** //
+    // Returns current player score
+    // **************************************************** //
+    public int getCurrentPlayerScore() {
+        return players[currentPlayerIndex].getScore();
+    }
+
+    public char[][] getBoardById(int id) {
+        char[][] result = null; // In order to prevent bugs.
+        if (id == 0) {
+            result = players[0].getBoard().getAllieMode();
+        } else if (id == 1) {
+            result = players[1].getBoard().getAllieMode();
+        }
+        return result;
+    }
+
+    // **************************************************** //
     // Cell Status handler
     // **************************************************** //
     private String handleCellStatus(CellStatus cellStatus, int row, int col) {
@@ -229,35 +302,6 @@ public class TheGame {
                 break;
         }
         return messageToReturn;
-    }
-
-    // **************************************************** //
-    // Returns game statistics
-    // **************************************************** //
-    public String getStatistics() {
-        long millis = System.currentTimeMillis() - startingTime;
-        String time = String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toMinutes(millis),
-                TimeUnit.MILLISECONDS.toSeconds(millis) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
-        );
-        return ("Total Played Turns: " + (players[0].getTurns() + players[1].getTurns()) + System.lineSeparator() +
-                "Total Time: " + time + System.lineSeparator() +
-                players[0].toString() + System.lineSeparator() + players[1].toString());
-    }
-
-    public boolean isPlayerWon() {
-        return isPlayerWon;
-    }
-
-    public void setPlayerWon(boolean playerWon) {
-        this.isPlayerWon = playerWon;
-    }
-
-    public void resetGame() throws XmlContentException {
-        isGameOn = false;
-        isPlayerWon = false;
-        init();
     }
 
     private void switchTurn() {
@@ -333,54 +377,10 @@ public class TheGame {
     }
 
     // **************************************************** //
-    // Quit the match
-    // **************************************************** //
-    public String quitMatch() {
-        isGameOn = false;
-        players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1); // Quiting counts as a turn
-        String messageToReturn = "-------------------- GAME OVER --------------------" + System.lineSeparator() +
-                "~~~~ " + players[currentPlayerIndex].getName() + " quit... " + players[opponentPlayerIndex].getName() +
-                " WON THE GAME! ~~~~";
-        return messageToReturn;
-    }
-
-
-    // **************************************************** //
-    // Indicates that the user ask to shut down the game
-    // **************************************************** //
-    public void exitGame() {
-        isActive = false;
-    }
-
-    // **************************************************** //
-    // Indicates that the user ask to shut down the game
-    // **************************************************** //
-    public boolean hasMines() {
-        return (players[currentPlayerIndex].getMines() > 0);
-    }
-
-    // **************************************************** //
     // Returns victory message
     // **************************************************** //
     private String getVictoryMsg(int winnerIndex) {
-        return ("-------------------- GAME OVER --------------------" + System.lineSeparator() +
-                "~~~~~~~~~~~~~~ " + players[winnerIndex].getName() + " WON THE GAME! ~~~~~~~~~~~~~~");
-    }
-
-    // **************************************************** //
-    // Returns current player score
-    // **************************************************** //
-    public int getCurrentPlayerScore() {
-        return players[currentPlayerIndex].getScore();
-    }
-
-    public char[][] getBoardById(int id) {
-        char[][] result = null; // In order to prevent bugs.
-        if (id == 0) {
-            result = players[0].getBoard().getAllieMode();
-        } else if (id == 1) {
-            result = players[1].getBoard().getAllieMode();
-        }
-        return result;
+        return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
+                "~~~~~~~~~~~~~~ " + players[winnerIndex].getName() + " WON THE GAME! ~~~~~~~~~~~~~~";
     }
 }

@@ -1,6 +1,6 @@
 package logic;
 
-import logic.enums.BattleshipType;
+import logic.enums.BattleshipDirectionType;
 import logic.enums.CellStatus;
 import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
@@ -16,24 +16,10 @@ public class Board {
     private List<Battleship> battleships;
     private int lastDestroyedScore;
 
-    public Board(int boardSize, List<Battleship> battleships) throws XmlContentException {
+    Board(int boardSize, List<Battleship> battleships) throws XmlContentException {
         board = new Cell[boardSize + 1][boardSize + 1];
         this.battleships = battleships;
         buildBoard();
-    }
-
-    // **************************************************** //
-    // Returns the board without MISS cells
-    // **************************************************** //
-    public char[][] getAllieMode() {
-        return getModifiedBoard(CellStatus.SHOW_ALL);
-    }
-
-    // **************************************************** //
-    // Returns the board without SHIP cells
-    // **************************************************** //
-    public char[][] getAdversaryMode() {
-        return getModifiedBoard(CellStatus.SHIP);
     }
 
     // **************************************************** //
@@ -56,6 +42,45 @@ public class Board {
 
     public void setBattleships(LinkedList<Battleship> battleships) {
         this.battleships = battleships;
+    }
+
+    // **************************************************** //
+    // Returns the board without MISS cells
+    // **************************************************** //
+    char[][] getAllieMode() {
+        return getModifiedBoard(CellStatus.SHOW_ALL);
+    }
+
+    // **************************************************** //
+    // Returns the board without SHIP cells
+    // **************************************************** //
+    char[][] getAdversaryMode() {
+        return getModifiedBoard(CellStatus.SHIP);
+    }
+
+    // **************************************************** //
+    // Draws a mine on the board (with validity checks)
+    // **************************************************** //
+    void drawMine(int row, int col) throws XmlContentException {
+        CellStatus sign = board[row][col].getCellStatus();
+        if (sign != REGULAR || !checkCoordinate(new Coordinate(row, col))) {
+            throw new XmlContentException(ErrorMessages.MINE_ERROR);
+        }
+        board[row][col].setCellStatus(MINE);
+    }
+
+    // **************************************************** //
+    // Draws a Miss sign instead of a Mine when a mine attacked a mine
+    // **************************************************** //
+    void drawMineAsMiss(int row, int col) {
+        board[row][col].setCellStatus(MISS);
+    }
+
+    // **************************************************** //
+    // Returns the score of the last destroyed battleship
+    // **************************************************** //
+    int getLastDestroyedScore() {
+        return lastDestroyedScore;
     }
 
     CellStatus playMove(int row, int col) {
@@ -86,6 +111,16 @@ public class Board {
         return result;
     }
 
+    boolean isThereAliveShip() {
+        for (Battleship battleship : battleships) {
+            if (battleship.isAlive()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // **************************************************** //
     // Performs 'Hit' actions
     // **************************************************** //
@@ -99,16 +134,6 @@ public class Board {
             lastDestroyedScore = cell.getShipRef().getScore();
         }
         return result;
-    }
-
-    boolean isThereAliveShip() {
-        for (Battleship battleship : battleships) {
-            if (battleship.isAlive()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // **************************************************** //
@@ -135,8 +160,8 @@ public class Board {
     // **************************************************** //
     // Get the next battleship cell position by its type
     // **************************************************** //
-    private void incrementCoordinate(Coordinate coordinate, String shipType) {
-        if (shipType.toLowerCase().equals(BattleshipType.VERTICAL.shipType())) {
+    private void incrementCoordinate(Coordinate coordinate, BattleshipDirectionType shipType) {
+        if (shipType == BattleshipDirectionType.COLUMN) {
             coordinate.setRow(coordinate.getRow() + 1);
         } else {
             coordinate.setColumn(coordinate.getColumn() + 1);
@@ -177,7 +202,7 @@ public class Board {
     // Sign compare
     // **************************************************** //
     private boolean signCompare(CellStatus sign) {
-        return (sign == SHIP || sign == MINE || sign == HIT);
+        return sign == SHIP || sign == MINE || sign == HIT;
     }
 
     // **************************************************** //
@@ -213,7 +238,7 @@ public class Board {
         char currentStatus;
         for (int i = 1; i < board.length; i++) {
             for (int j = 1; j < board.length; j++) {
-                if (board[i][j].getCellStatus() == statusToIgnore || (statusToIgnore == SHIP && board[i][j].getCellStatus() == MINE)) {
+                if (board[i][j].getCellStatus() == statusToIgnore || statusToIgnore == SHIP && board[i][j].getCellStatus() == MINE) {
                     currentStatus = REGULAR.sign();
                 } else {
                     currentStatus = board[i][j].getCellStatus().sign();
@@ -222,30 +247,5 @@ public class Board {
             }
         }
         return allieBoard;
-    }
-
-    // **************************************************** //
-    // Draws a mine on the board (with validity checks)
-    // **************************************************** //
-    public void drawMine(int row, int col) throws XmlContentException {
-        CellStatus sign = board[row][col].getCellStatus();
-        if (sign != REGULAR || !checkCoordinate(new Coordinate(row, col))) {
-            throw new XmlContentException(ErrorMessages.MINE_ERROR);
-        }
-        board[row][col].setCellStatus(MINE);
-    }
-
-    // **************************************************** //
-    // Draws a Miss sign instead of a Mine when a mine attacked a mine
-    // **************************************************** //
-    public void drawMineAsMiss(int row, int col) {
-        board[row][col].setCellStatus(MISS);
-    }
-
-    // **************************************************** //
-    // Returns the score of the last destroyed battleship
-    // **************************************************** //
-    public int getLastDestroyedScore() {
-        return lastDestroyedScore;
     }
 }

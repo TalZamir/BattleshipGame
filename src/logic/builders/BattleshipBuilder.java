@@ -30,6 +30,7 @@ public class BattleshipBuilder {
             if (!battleshipsMap.containsKey(ship.getShipTypeId())) {
                 throw new XmlContentException(ErrorMessages.UNKNOWN_SHIP_ID); // battleship ID doesn't exist
             }
+
             battleships.add(new Battleship(battleshipsMap.get(ship.getShipTypeId()), ship));
         }
 
