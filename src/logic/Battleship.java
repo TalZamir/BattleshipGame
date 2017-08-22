@@ -65,10 +65,19 @@ public class Battleship {
     }
 
     private BattleshipDirectionType getEnumDirection(String direction) throws XmlContentException {
-        for (BattleshipDirectionType battleshipDirectionType : BattleshipDirectionType.values()) {
-            if (direction.equalsIgnoreCase(battleshipDirectionType.value())) {
-                return battleshipDirectionType;
-            }
+        //TODO: this code should be activated on the second exercise
+        //        for (BattleshipDirectionType battleshipDirectionType : BattleshipDirectionType.values()) {
+        //            if (direction.equalsIgnoreCase(battleshipDirectionType.value())) {
+        //                return battleshipDirectionType;
+        //            }
+        //        }
+
+        if (direction.equalsIgnoreCase(BattleshipDirectionType.ROW.value())) {
+            return BattleshipDirectionType.ROW;
+        }
+
+        if (direction.equalsIgnoreCase(BattleshipDirectionType.COLUMN.value())) {
+            return BattleshipDirectionType.COLUMN;
         }
 
         throw new XmlContentException(ErrorMessages.INVALID_BATTLESHIP_DIRECTION);
