@@ -8,8 +8,6 @@ public enum CellStatus {
     REGULAR('~'),
     MINE('+'),
     TEMP('&'),
-    // TODO: Do we still need the 'W' sign?
-    WIN('W'),
     SHIP_DOWN('^'), // symbol has no meaning
     MINE_PLACED('^'), // symbol has no meaning
     SHOW_ALL('^'); // symbol has no meaning
