@@ -3,7 +3,7 @@ package logic.enums;
 public enum CellStatus {
 
     HIT('*'),
-    MISS('0'),
+    MISS('O'),
     SHIP('@'),
     REGULAR('~'),
     MINE('+'),

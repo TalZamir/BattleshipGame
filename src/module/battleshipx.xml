@@ -15,12 +15,6 @@
             <length>2</length>
             <score>5</score>
         </shipType>
-        <shipType id="shipTypeC">
-            <category>REGULAR</category>
-            <amount>1</amount>
-            <length>1.5</length>
-            <score>5</score>
-        </shipType>
     </shipTypes>
     <boards>
         <board>
@@ -39,11 +33,6 @@
                 <position x="3" y="3"/>
                 <direction>ROW</direction>
             </ship>
-            <ship>
-                <shipTypeId>shipTypeC</shipTypeId>
-                <position x="6" y="1"/>
-                <direction>ROW</direction>
-            </ship>
         </board>
         <board>
             <ship>
@@ -59,11 +48,6 @@
             <ship>
                 <shipTypeId>shipTypeB</shipTypeId>
                 <position x="8" y="6"/>
-                <direction>ROW</direction>
-            </ship>
-            <ship>
-                <shipTypeId>shipTypeC</shipTypeId>
-                <position x="6" y="1"/>
                 <direction>ROW</direction>
             </ship>
         </board>
