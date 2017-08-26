@@ -142,19 +142,34 @@ public class Board {
     private void buildBoard() throws XmlContentException {
         initBoard();
 
+        //TODO: Not working!! Talk to me when you see this
         for (Battleship currentBattleship : battleships) {
-            Coordinate position = currentBattleship.getPosition();
-            for (int i = 0; i < currentBattleship.getLength(); i++) {
-                if (!checkCoordinate(position)) {
-                    throw new XmlContentException(ErrorMessages.ILLEGAL_POSITION);
-                }
-                board[position.getRow()][position.getColumn()].setCellStatus(CellStatus.TEMP);
-                board[position.getRow()][position.getColumn()].setPoint(position);
-                board[position.getRow()][position.getColumn()].setShipRef(currentBattleship);
-                incrementCoordinate(position, currentBattleship.getDirection());
+            if (currentBattleship.getDirection() == BattleshipDirectionType.DOWN_RIGHT) {
+                buildRegularShip(currentBattleship);
+            } else if (currentBattleship.getDirection() == BattleshipDirectionType.RIGHT_DOWN) {
+
+            } else if (currentBattleship.getDirection() == BattleshipDirectionType.UP_RIGHT) {
+
+            } else if (currentBattleship.getDirection() == BattleshipDirectionType.RIGHT_UP) {
+
+            } else {
+                buildRegularShip(currentBattleship);
             }
-            changeTempSigns();
         }
+    }
+
+    private void buildRegularShip(Battleship currentBattleship) throws XmlContentException {
+        Coordinate position = currentBattleship.getPosition();
+        for (int i = 0; i < currentBattleship.getLength(); i++) {
+            if (!checkCoordinate(position)) {
+                throw new XmlContentException(ErrorMessages.ILLEGAL_POSITION);
+            }
+            board[position.getRow()][position.getColumn()].setCellStatus(CellStatus.TEMP);
+            board[position.getRow()][position.getColumn()].setPoint(position);
+            board[position.getRow()][position.getColumn()].setShipRef(currentBattleship);
+            incrementCoordinate(position, currentBattleship.getDirection());
+        }
+        changeTempSigns();
     }
 
     // **************************************************** //
