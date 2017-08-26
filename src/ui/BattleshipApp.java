@@ -1,5 +1,7 @@
 package ui;
 
+import ui.javafx.JavaFxClass;
+
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 
@@ -9,8 +11,8 @@ public final class BattleshipApp {
     }
 
     public static void main(String[] args) throws JAXBException, FileNotFoundException {
-        UiApp ui = new UiApp();
-        ui.start();
+        JavaFxClass ui = new JavaFxClass();
+        ui.init(args);
     }
 
 }

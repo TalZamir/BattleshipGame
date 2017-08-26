@@ -1,8 +1,9 @@
-package ui;
+package ui.console;
 
 import logic.TheGame;
 import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
+import ui.UserMoveInput;
 import ui.enums.MenuItem;
 import ui.verifiers.ErrorCollector;
 import ui.verifiers.IInputVerifier;
@@ -16,7 +17,7 @@ import java.util.Scanner;
 import static ui.enums.MenuItem.MINE;
 import static ui.enums.MenuItem.PLAY_MOVE;
 
-class UiApp {
+public class UiApp {
 
     private static final String INVALID_INPUT = "Invalid input! Please try again";
     private TheGame theGame;
@@ -26,7 +27,7 @@ class UiApp {
     // **************************************************** //
     // Starts Battleship Game UI
     // **************************************************** //
-    void start() throws JAXBException, FileNotFoundException {
+    public void start() throws JAXBException, FileNotFoundException {
         assistant = new Assistant();
         theGame = new TheGame();
         while (theGame.isActive()) {
