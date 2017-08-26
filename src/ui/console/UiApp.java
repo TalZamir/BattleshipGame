@@ -43,7 +43,6 @@ public class UiApp {
     // **************************************************** //
     // Performs game iteration
     // **************************************************** //
-    //TODO: TAL - I think it should appears once. doIteration should be menuStartGame method.
     private void doIteration() throws XmlContentException {
         switch (readUserMenuInput()) {
             case LOAD_XML:
@@ -202,7 +201,6 @@ public class UiApp {
     // **************************************************** //
     // Menu item: shows game statistics
     // **************************************************** //
-    //TODO: Implement
     private void menuShowStatistics() {
         if (theGame.isGameOn()) {
             System.out.println(theGame.getStatistics());
@@ -214,7 +212,6 @@ public class UiApp {
     // **************************************************** //
     // Menu item: Quits from playing
     // **************************************************** //
-    //TODO: Implement
     private void menuQuit() throws XmlContentException {
         if (theGame.isGameOn()) {
             System.out.println(theGame.quitMatch());
