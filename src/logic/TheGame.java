@@ -10,6 +10,7 @@ import logic.serializers.XmlSerializer;
 import module.BattleShipGameType;
 import module.BoardType;
 import ui.UserMoveInput;
+import ui.console.Assistant;
 import ui.verifiers.ErrorCollector;
 import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
@@ -56,6 +57,9 @@ public class TheGame {
         }
 
         initGameComponents();
+
+        Assistant assistant = new Assistant();
+        assistant.printBoard(getCurrentPlayerBoardToPrint());
     }
 
     // **************************************************** //
@@ -96,9 +100,7 @@ public class TheGame {
                 isFileLoaded = false; // if the last file was fine and the current one is not
                 throw new XmlContentException(ErrorMessages.INVALID_XML); // XML reading error
             }
-        } else
-
-        {
+        } else {
             return false;
         }
 

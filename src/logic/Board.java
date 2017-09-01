@@ -143,7 +143,7 @@ public class Board {
     // **************************************************** //
     private void buildBoard() throws XmlContentException {
         initBoard();
-        IBuildShipDetails buildShipDetails = null;
+        IBuildShipDetails buildShipDetails;
         for (Battleship currentBattleship : battleships) {
             if (currentBattleship.getCategory() == ShipCategoryType.L_SHIP) {
                 if (currentBattleship.getDirection() == BattleshipDirectionType.DOWN_RIGHT) {
@@ -152,11 +152,10 @@ public class Board {
                     buildShipDetails = new BattleshipRightDown(currentBattleship);
                 } else if (currentBattleship.getDirection() == BattleshipDirectionType.UP_RIGHT) {
                     buildShipDetails = new BattleshipUpRight(currentBattleship);
-                } else if (currentBattleship.getDirection() == BattleshipDirectionType.RIGHT_UP) {
+                } else {
                     buildShipDetails = new BattleshipRightUp(currentBattleship);
                 }
 
-                assert buildShipDetails != null;
                 buildRegularShip(buildShipDetails);
                 ((AdvancedBattleship) buildShipDetails).switchDirection();
                 buildRegularShip(buildShipDetails);

@@ -2,6 +2,8 @@ package ui.verifiers;
 
 import logic.Battleship;
 import logic.enums.ErrorMessages;
+import logic.enums.GameType;
+import logic.enums.ShipCategoryType;
 import module.BattleShipGameType;
 import module.ShipTypeType;
 
@@ -32,6 +34,15 @@ public class XmlFileVerifier implements IInputVerifier {
     public boolean isContentOK(BattleShipGameType xmlContent, ErrorCollector errorCollector) {
         if (Integer.parseInt(xmlContent.getBoardSize()) < 5 || Integer.parseInt(xmlContent.getBoardSize()) > 20) {
             errorCollector.addMessage(ErrorMessages.BOARD_SIZE.message());
+        }
+
+        if (xmlContent.getGameType().equalsIgnoreCase(GameType.BASIC.getGameTypeValue())) {
+            xmlContent.getShipTypes()
+                      .getShipType().forEach(ship -> {
+                if (ship.getCategory().equalsIgnoreCase(ShipCategoryType.L_SHIP.getValue())) {
+                    errorCollector.addMessage(ErrorMessages.INVALID_GAME_TYPE_OR_SHIP_CATEGORY.message());
+                }
+            });
         }
 
         return errorCollector.getNumOfErrors() <= 0;

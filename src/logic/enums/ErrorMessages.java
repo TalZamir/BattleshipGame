@@ -21,7 +21,8 @@ public enum ErrorMessages {
     MINE_ERROR("The position for the mine is illegal!"),
     MINE_LIMIT("You already used all of your mines!"),
     INVALID_GAME_TYPE("Invalid game type"),
-    INVALID_BATTLESHIP_DIRECTION("Invalid battleship direction");
+    INVALID_BATTLESHIP_DIRECTION("Invalid battleship direction"),
+    INVALID_GAME_TYPE_OR_SHIP_CATEGORY("Invalid game type and ship type");
 
     private final String message;
 

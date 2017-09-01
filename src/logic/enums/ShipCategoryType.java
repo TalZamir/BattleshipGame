@@ -5,7 +5,7 @@ package logic.enums;
  */
 public enum ShipCategoryType {
     REGULAR("REGULAR"),
-    L_SHIP("(L_SHIP");
+    L_SHIP("L_SHIP");
 
     private final String value;
 
