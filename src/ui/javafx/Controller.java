@@ -93,9 +93,10 @@ public class Controller extends JPanel implements Initializable {
             File file = fileChooser.showOpenDialog(null);
             ErrorCollector errorCollector = new ErrorCollector();
             IInputVerifier inputVerifier = new XmlFileVerifier();
+
             try {
                 if (file == null
-                        //                        || !inputVerifier.isFileOk(file.getPath(), errorCollector)
+                        || !inputVerifier.isFileOk(file.getName(), errorCollector)
                         || !theGame.loadFile(file.getPath(), errorCollector)) {
                     //TODO: print errors in an ui component.
                     errorCollector.getMessages().forEach(System.out::println);
