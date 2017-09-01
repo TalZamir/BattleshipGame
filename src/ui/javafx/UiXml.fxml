@@ -8,9 +8,9 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<ScrollPane fx:controller="ui.javafx.Controller" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="750.0"
-            prefWidth="1150.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0"
+            prefWidth="1150.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ui.javafx.Controller">
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="748.0" prefWidth="1148.0">
         <MenuBar prefHeight="32.0" prefWidth="1150.0">
             <Menu mnemonicParsing="false" text="File">
@@ -43,13 +43,19 @@
         </TableView>
         <Button fx:id="buttonLoadXml" layoutX="14.0" layoutY="67.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Load XML"/>
-        <Button fx:id="buttonStartGame" layoutX="14.0" layoutY="134.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonStartGame" layoutX="14.0" layoutY="132.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Start Game"/>
-        <Button fx:id="buttonPlayMove" layoutX="14.0" layoutY="203.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonGameStatus" layoutX="14.0" layoutY="197.0" mnemonicParsing="false" prefHeight="45.0"
+                prefWidth="157.0" text="Game Status"/>
+        <Button fx:id="buttonPlayMove" layoutX="14.0" layoutY="262.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Play Move"/>
-        <Button fx:id="buttonQuitMatch" layoutX="14.0" layoutY="270.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonStatistics" layoutX="14.0" layoutY="327.0" mnemonicParsing="false" prefHeight="45.0"
+                prefWidth="157.0" text="Statistics"/>
+        <Button fx:id="buttonQuitMatch" layoutX="14.0" layoutY="392.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Quit Match"/>
-        <Button fx:id="buttonExitGame" layoutX="14.0" layoutY="337.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonMine" layoutX="14.0" layoutY="457.0" mnemonicParsing="false" prefHeight="45.0"
+                prefWidth="157.0" text="Place a Mine"/>
+        <Button fx:id="buttonExitGame" layoutX="14.0" layoutY="522.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Exit Game"/>
     </AnchorPane>
 </ScrollPane>

@@ -25,6 +25,13 @@ public class Controller extends JPanel implements Initializable {
 
     private static final String USER_INTRO = null;
     private final TheGame theGame;
+
+    @FXML
+    private Button buttonGameStatus;
+    @FXML
+    private Button buttonStatistics;
+    @FXML
+    private Button buttonMine;
     @FXML
     private Button buttonPlayMove;
     @FXML
@@ -51,6 +58,30 @@ public class Controller extends JPanel implements Initializable {
         buttonPlayMove.setOnAction(this::onPlayMoveClicked);
         buttonQuitMatch.setOnAction(this::onQuitMatchClicked);
         buttonStartGame.setOnAction(this::onStartGameClicked);
+        buttonGameStatus.setOnAction(this::onGameStatusClicked);
+        buttonStatistics.setOnAction(this::onStatisticsClicked);
+        buttonMine.setOnAction(this::onPlaceMineClicked);
+    }
+
+    private void onPlaceMineClicked(ActionEvent event) {
+        if (theGame.isGameOn()) {
+            if (theGame.hasMines()) {
+                System.out.println("Please choose a location to place a mine:");
+                onPlayMoveClicked(event);
+            } else {
+                System.out.println("You ran out of mines!");
+            }
+        } else {
+            System.out.println("You must start a game before placing a mine.");
+        }
+    }
+
+    private void onStatisticsClicked(ActionEvent event) {
+
+    }
+
+    private void onGameStatusClicked(ActionEvent event) {
+
     }
 
     //TODO: handle all system.println methods.
@@ -82,7 +113,12 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void onExitClicked(ActionEvent event) {
-
+        if (!theGame.isGameOn()) {
+            theGame.exitGame();
+            System.out.println("Thank you for playing! Exiting...");
+        } else {
+            System.out.println("You must finish the current match before exiting the game.");
+        }
     }
 
     private void onLoadXmlClicked(ActionEvent event) {
