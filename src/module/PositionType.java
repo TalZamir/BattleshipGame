@@ -1,4 +1,3 @@
-
 package module;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -7,14 +6,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
-
 /**
- * <p>Java class for positionType complex type.
- * 
+ * <p>Java class for coordinate complex type.
+ * <p>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
- * &lt;complexType name="positionType">
+ * &lt;complexType name="coordinate">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
  *       &lt;attribute name="x" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -23,12 +21,10 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/simpleContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "positionType", propOrder = {
-    "value"
+        "value"
 })
 public class PositionType {
 
@@ -41,11 +37,9 @@ public class PositionType {
 
     /**
      * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getValue() {
         return value;
@@ -53,11 +47,9 @@ public class PositionType {
 
     /**
      * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setValue(String value) {
         this.value = value;
@@ -65,11 +57,9 @@ public class PositionType {
 
     /**
      * Gets the value of the x property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getX() {
         return x;
@@ -77,11 +67,9 @@ public class PositionType {
 
     /**
      * Sets the value of the x property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setX(String value) {
         this.x = value;
@@ -89,11 +77,9 @@ public class PositionType {
 
     /**
      * Gets the value of the y property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getY() {
         return y;
@@ -101,14 +87,11 @@ public class PositionType {
 
     /**
      * Sets the value of the y property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setY(String value) {
         this.y = value;
     }
-
 }

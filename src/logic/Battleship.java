@@ -2,18 +2,20 @@ package logic;
 
 import logic.enums.BattleshipDirectionType;
 import logic.enums.ErrorMessages;
+import logic.enums.ShipCategoryType;
 import logic.exceptions.XmlContentException;
+import logic.interfaces.IBuildShipDetails;
 import module.ShipType;
 import module.ShipTypeType;
 
-public class Battleship {
+public class Battleship implements IBuildShipDetails {
 
     private final String id;
     private final int length;
     private final int score;
-    private final String category;
     private final BattleshipDirectionType direction;
     private final Coordinate position;
+    private final ShipCategoryType category;
     private boolean isAlive;
     private int lengthForIsAlive;
 
@@ -24,7 +26,7 @@ public class Battleship {
         length = Integer.parseInt(shipTypeType.getLength());
         lengthForIsAlive = length;
         score = Integer.parseInt(shipTypeType.getScore());
-        category = shipTypeType.getCategory();
+        category = getEnumCategory(shipTypeType.getCategory());
         // ShipType attributes
         direction = getEnumDirection(shipType.getDirection());
         position = new Coordinate(Integer.parseInt(shipType.getPosition().getX()), Integer.parseInt(shipType.getPosition().getY()));
@@ -34,11 +36,22 @@ public class Battleship {
         return id;
     }
 
+    @Override
     public int getLength() {
         return length;
     }
 
-    public String getCategory() {
+    @Override
+    public BattleshipDirectionType getDirection() {
+        return direction;
+    }
+
+    @Override
+    public Coordinate getPosition() {
+        return position;
+    }
+
+    ShipCategoryType getCategory() {
         return category;
     }
 
@@ -50,17 +63,17 @@ public class Battleship {
         return score;
     }
 
-    BattleshipDirectionType getDirection() {
-        return direction;
-    }
-
-    Coordinate getPosition() {
-        return position;
-    }
-
     void decrementLength() {
         if (--lengthForIsAlive == 0) {
             isAlive = false;
+        }
+    }
+
+    private ShipCategoryType getEnumCategory(String category) {
+        if (category.equalsIgnoreCase(ShipCategoryType.REGULAR.getValue())) {
+            return ShipCategoryType.REGULAR;
+        } else {
+            return ShipCategoryType.L_SHIP;
         }
     }
 

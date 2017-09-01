@@ -5,12 +5,34 @@ import logic.TheGame;
 /**
  * Created by xozh4v on 8/10/2017.
  */
-class Assistant {
+public class Assistant {
 
     private static final String SPACE = "   ";
     private static final int SEPARATOR = 0;
     private static final int MENU_START = 1;
     private static final int MENU_END = 8;
+
+    // **************************************************** //
+    // Prints game boards
+    // **************************************************** //
+    public void printBoard(char[][] board) {
+        // Columns row
+        printRowIndex(SEPARATOR);
+        for (int i = 1; i < board.length; i++) {
+            printWithSpace(i);
+        }
+
+        System.out.print(System.getProperty("line.separator"));
+        // Actual board
+        for (int row = 1; row < board.length; row++) {
+            printRowIndex(row);
+            for (int col = 1; col < board.length; col++) {
+                printWithSpace(board[row][col]);
+            }
+            System.out.print(System.getProperty("line.separator"));
+        }
+        printNewLine();
+    }
 
     void printPlayMoveMassage(int boardSize) {
         System.out.print(String.format("Enter row and column index.\n" +
@@ -38,28 +60,6 @@ class Assistant {
         System.out.println("*************************************");
     }
 
-    // **************************************************** //
-    // Prints game boards
-    // **************************************************** //
-    void printBoard(char[][] board) {
-        // Columns row
-        printRowIndex(SEPARATOR);
-        for (int i = 1; i < board.length; i++) {
-            printWithSpace(i);
-        }
-
-        System.out.print(System.getProperty("line.separator"));
-        // Actual board
-        for (int row = 1; row < board.length; row++) {
-            printRowIndex(row);
-            for (int col = 1; col < board.length; col++) {
-                printWithSpace(board[row][col]);
-            }
-            System.out.print(System.getProperty("line.separator"));
-        }
-        printNewLine();
-    }
-
     int getMenuStart() {
         return MENU_START;
     }
@@ -79,6 +79,23 @@ class Assistant {
 
     void printOpponentBoardText() {
         System.out.println("Opponent Board:");
+    }
+
+    void printTurnIntro(TheGame theGame, String intro) {
+        if (intro == null) {
+            printTurnMsg(theGame);
+        } else {
+            System.out.println(intro);
+        }
+        System.out.println("Personal Board:");
+        printBoard(theGame.getCurrentPlayerBoardToPrint());
+        System.out.println("Tracking Board:");
+        printBoard(theGame.getOpponentBoardToPrint());
+    }
+
+    void printTurnMsg(TheGame theGame) {
+        System.out.println("~~~~  " + theGame.getCurrentPlayerName() + " Turn (Score: " + theGame
+                .getCurrentPlayerScore() + ")  ~~~~~");
     }
 
     // **************************************************** //
@@ -105,22 +122,5 @@ class Assistant {
 
     private void printNewLine() {
         System.out.println();
-    }
-
-    void printTurnIntro(TheGame theGame, String intro) {
-        if (intro == null) {
-            printTurnMsg(theGame);
-        } else {
-            System.out.println(intro);
-        }
-        System.out.println("Personal Board:");
-        printBoard(theGame.getCurrentPlayerBoardToPrint());
-        System.out.println("Tracking Board:");
-        printBoard(theGame.getOpponentBoardToPrint());
-    }
-
-    void printTurnMsg(TheGame theGame) {
-        System.out.println("~~~~  " + theGame.getCurrentPlayerName() + " Turn (Score: " + theGame
-                .getCurrentPlayerScore() + ")  ~~~~~");
     }
 }

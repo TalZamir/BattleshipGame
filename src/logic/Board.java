@@ -3,7 +3,9 @@ package logic;
 import logic.enums.BattleshipDirectionType;
 import logic.enums.CellStatus;
 import logic.enums.ErrorMessages;
+import logic.enums.ShipCategoryType;
 import logic.exceptions.XmlContentException;
+import logic.interfaces.IBuildShipDetails;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -141,24 +143,33 @@ public class Board {
     // **************************************************** //
     private void buildBoard() throws XmlContentException {
         initBoard();
-
-        //TODO: Not working!! Talk to me when you see this
+        IBuildShipDetails buildShipDetails = null;
         for (Battleship currentBattleship : battleships) {
-            if (currentBattleship.getDirection() == BattleshipDirectionType.DOWN_RIGHT) {
-                buildRegularShip(currentBattleship);
-            } else if (currentBattleship.getDirection() == BattleshipDirectionType.RIGHT_DOWN) {
+            if (currentBattleship.getCategory() == ShipCategoryType.L_SHIP) {
+                if (currentBattleship.getDirection() == BattleshipDirectionType.DOWN_RIGHT) {
+                    buildShipDetails = new BattleshipDownRight(currentBattleship);
+                } else if (currentBattleship.getDirection() == BattleshipDirectionType.RIGHT_DOWN) {
+                    buildShipDetails = new BattleshipRightDown(currentBattleship);
+                } else if (currentBattleship.getDirection() == BattleshipDirectionType.UP_RIGHT) {
+                    buildShipDetails = new BattleshipUpRight(currentBattleship);
+                } else if (currentBattleship.getDirection() == BattleshipDirectionType.RIGHT_UP) {
+                    buildShipDetails = new BattleshipRightUp(currentBattleship);
+                }
 
-            } else if (currentBattleship.getDirection() == BattleshipDirectionType.UP_RIGHT) {
-
-            } else if (currentBattleship.getDirection() == BattleshipDirectionType.RIGHT_UP) {
-
+                assert buildShipDetails != null;
+                buildRegularShip(buildShipDetails);
+                ((AdvancedBattleship) buildShipDetails).switchDirection();
+                buildRegularShip(buildShipDetails);
             } else {
                 buildRegularShip(currentBattleship);
             }
+
+            changeTempSigns();
+            board[currentBattleship.getPosition().getRow()][currentBattleship.getPosition().getColumn()].setShipRef(currentBattleship);
         }
     }
 
-    private void buildRegularShip(Battleship currentBattleship) throws XmlContentException {
+    private void buildRegularShip(IBuildShipDetails currentBattleship) throws XmlContentException {
         Coordinate position = currentBattleship.getPosition();
         for (int i = 0; i < currentBattleship.getLength(); i++) {
             if (!checkCoordinate(position)) {
@@ -166,10 +177,8 @@ public class Board {
             }
             board[position.getRow()][position.getColumn()].setCellStatus(CellStatus.TEMP);
             board[position.getRow()][position.getColumn()].setPoint(position);
-            board[position.getRow()][position.getColumn()].setShipRef(currentBattleship);
             incrementCoordinate(position, currentBattleship.getDirection());
         }
-        changeTempSigns();
     }
 
     // **************************************************** //

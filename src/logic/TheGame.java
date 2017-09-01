@@ -47,8 +47,6 @@ public class TheGame {
     // Initialize game logic
     // **************************************************** //
     public void init() throws XmlContentException {
-        initGameComponents();
-
         if (xmlContent.getGameType().equalsIgnoreCase(GameType.BASIC.getGameTypeValue())) {
             gameType = GameType.BASIC;
         } else if (xmlContent.getGameType().equalsIgnoreCase(GameType.ADVANCE.getGameTypeValue())) {
@@ -56,6 +54,8 @@ public class TheGame {
         } else {
             throw new XmlContentException(ErrorMessages.INVALID_GAME_TYPE);
         }
+
+        initGameComponents();
     }
 
     // **************************************************** //
