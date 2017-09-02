@@ -1,5 +1,6 @@
 package logic;
 
+import logic.bases.BattleshipBase;
 import logic.battleships.Battleship;
 import logic.builders.BattleshipBuilder;
 import logic.enums.CellStatus;
@@ -252,14 +253,16 @@ public class TheGame {
 
     private SortedMap<Integer, Integer> getShipTypesAndAmount(List<Battleship> battleships) {
         SortedMap<Integer, Integer> map = new TreeMap<>();
-        battleships.forEach(s -> {
-            Integer numOfShipType = 1;
-            if (map.containsKey(s.getLength())) {
-                numOfShipType = map.get(s.getLength());
-                numOfShipType++;
-            }
-            map.put(s.getLength(), numOfShipType);
-        });
+        battleships.stream()
+                   .filter(BattleshipBase::isAlive)
+                   .forEach(ship -> {
+                       Integer numOfShipType = 1;
+                       if (map.containsKey(ship.getLength())) {
+                           numOfShipType = map.get(ship.getLength());
+                           numOfShipType++;
+                       }
+                       map.put(ship.getLength(), numOfShipType);
+                   });
 
         return map;
     }

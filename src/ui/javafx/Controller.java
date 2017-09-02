@@ -5,7 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -13,6 +17,7 @@ import logic.TheGame;
 import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
 import ui.UserMoveInput;
+import ui.components.BoardButton;
 import ui.verifiers.ErrorCollector;
 import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
@@ -60,7 +65,6 @@ public class Controller extends JPanel implements Initializable {
     @FXML
     private AnchorPane contentPane;
 
-
     public Controller() {
         theGame = new TheGame();
         errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -92,8 +96,10 @@ public class Controller extends JPanel implements Initializable {
                 if (file == null
                         || !inputVerifier.isFileOk(file.getName(), errorCollector)
                         || !theGame.loadFile(file.getPath(), errorCollector)) {
-                    errorCollector.getMessages().forEach(errorAlert::setContentText);
-                    errorAlert.show();
+                    if (!errorCollector.getMessages().isEmpty()) {
+                        errorCollector.getMessages().forEach(errorAlert::setContentText);
+                        errorAlert.show();
+                    }
                 } else {
                     informationAlert.setContentText("File has loaded. You are ready to play :)");
                     informationAlert.show();
@@ -123,6 +129,7 @@ public class Controller extends JPanel implements Initializable {
                 theGame.startGame();
                 initBoardsComponents(theGame.getBoardSize());
                 drawBoards();
+                textFieldMessage.setText(getTurnMsg());
                 informationAlert.setContentText("The game has been started successfully!");
                 informationAlert.show();
             } catch (XmlContentException e) {
@@ -169,41 +176,40 @@ public class Controller extends JPanel implements Initializable {
                                        String battleshipsPlayerMessage) {
         stringBuilder.append(battleshipsPlayerMessage);
         stringBuilder.append(lineSeparator());
-        shipsType.forEach((k, v) -> {
-            stringBuilder.append("From ship type ")
-                         .append(k)
-                         .append(" left ")
-                         .append(v)
-                         .append(" ships")
-                         .append(lineSeparator());
-        });
+        shipsType.forEach((k, v) -> stringBuilder.append("From ship type ")
+                                                 .append(k)
+                                                 .append(" left ")
+                                                 .append(v)
+                                                 .append(" ships")
+                                                 .append(lineSeparator()));
     }
 
     private void onPlayMoveClicked(ActionEvent event) {
         if (theGame.isGameOn()) {
             BoardButton boardButton = (BoardButton) event.getTarget();
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
-                    boardButton.getColumn());
+                                                            boardButton.getColumn());
             try {
                 theGame.playMove(userMoveInput, true);
-                // todo: What the hell is the second parameter???
-                // theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId()));
-                drawBoards();
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
+                errorAlert.show();
             }
+            drawBoards();
 
             if (theGame.isPlayerWon()) {
                 try {
                     finishMatch();
                 } catch (XmlContentException e) {
                     errorAlert.setContentText(e.getMessage());
+                    errorAlert.show();
                 }
             } else {
                 textFieldMessage.setText(getTurnMsg()); // Indicates who's turn is it
             }
         } else {
             errorAlert.setContentText("You must start a new game before performing a move.");
+            errorAlert.show();
         }
     }
 
@@ -225,28 +231,33 @@ public class Controller extends JPanel implements Initializable {
             }
         } else {
             errorAlert.setContentText("You must start a game before placing a mine.");
+            errorAlert.show();
         }
     }
 
     private void onQuitMatchClicked(ActionEvent event) {
         if (theGame.isGameOn()) {
-            confirmationMassage.setContentText(theGame.quitMatch());
+            confirmationMassage.setContentText("Are you sure you want to quit?");
             if (confirmationMassage.showAndWait().get() == ButtonType.OK) {
+                informationAlert.setContentText(theGame.quitMatch());
+                informationAlert.showAndWait();
                 try {
                     finishMatch();
                 } catch (XmlContentException e) {
                     errorAlert.setContentText(e.getMessage());
+                    errorAlert.show();
                 }
             }
         } else {
             errorAlert.setContentText("You must start a game in order to quit.");
+            errorAlert.show();
         }
     }
 
     private void finishMatch() throws XmlContentException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(theGame.getStatistics());
-        stringBuilder.append("\n");
+        stringBuilder.append(lineSeparator());
         stringBuilder.append("-  The game will restart now...");
         textFieldMessage.setText(stringBuilder.toString());
         theGame.resetGame();
@@ -261,6 +272,7 @@ public class Controller extends JPanel implements Initializable {
             exit(0);
         } else {
             errorAlert.setContentText("You must finish the current match before exiting the game.");
+            errorAlert.show();
         }
     }
 
@@ -278,7 +290,6 @@ public class Controller extends JPanel implements Initializable {
         initCells(personalBoard, personalPane, false);
         Label lab = new Label("Tracking Board:");
         lab.setAlignment(Pos.CENTER);
-
 
         grid.setHgap(50); // Horizontal gap
         grid.setVgap(10); // Vertical gap
@@ -343,5 +354,4 @@ public class Controller extends JPanel implements Initializable {
             }
         }
     }
-
 }
