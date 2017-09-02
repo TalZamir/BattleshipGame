@@ -1,11 +1,12 @@
 package logic;
 
+import logic.bases.BattleshipBase;
 import logic.enums.CellStatus;
 
 public class Cell {
 
     private Coordinate point;
-    private Battleship shipRef;
+    private BattleshipBase shipRef;
     private CellStatus cellStatus;
 
     public Coordinate getPoint() {
@@ -16,11 +17,11 @@ public class Cell {
         this.point = point;
     }
 
-    Battleship getShipRef() {
+    BattleshipBase getShipRef() {
         return shipRef;
     }
 
-    void setShipRef(Battleship shipRef) {
+    void setShipRef(BattleshipBase shipRef) {
         this.shipRef = shipRef;
     }
 

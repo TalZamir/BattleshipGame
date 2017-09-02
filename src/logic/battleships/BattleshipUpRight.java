@@ -1,4 +1,6 @@
-package logic;
+package logic.battleships;
+
+import logic.Coordinate;
 
 /**
  * Created by barakm on 01/09/2017

@@ -1,22 +1,24 @@
-package logic;
+package logic.battleships;
 
+import logic.bases.BattleshipBase;
 import logic.enums.BattleshipDirectionType;
-import logic.interfaces.IBuildShipDetails;
 
 /**
  * Created by barakm on 29/08/2017
  */
-public abstract class AdvancedBattleship implements IBuildShipDetails {
+public abstract class AdvancedBattleship extends BattleshipBase {
 
     private final Battleship battleship;
     protected BattleshipDirectionType currentDirection;
     protected int row, column;
+
 
     protected AdvancedBattleship(Battleship battleship) {
         this.battleship = battleship;
         currentDirection = BattleshipDirectionType.COLUMN;
         row = battleship.getPosition().getRow();
         column = battleship.getPosition().getColumn();
+        lengthForIsAlive = battleship.getLength() * 2 - 1;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package ui.verifiers;
 
-import logic.Battleship;
+import logic.battleships.Battleship;
 import module.BattleShipGameType;
 import module.ShipTypeType;
 

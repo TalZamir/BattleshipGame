@@ -1,26 +1,24 @@
-package logic;
+package logic.battleships;
 
+import logic.Coordinate;
+import logic.bases.BattleshipBase;
 import logic.enums.BattleshipDirectionType;
 import logic.enums.ErrorMessages;
 import logic.enums.ShipCategoryType;
 import logic.exceptions.XmlContentException;
-import logic.interfaces.IBuildShipDetails;
 import module.ShipType;
 import module.ShipTypeType;
 
-public class Battleship implements IBuildShipDetails {
+public class Battleship extends BattleshipBase {
 
     private final String id;
     private final int length;
-    private final int score;
     private final BattleshipDirectionType direction;
     private final Coordinate position;
     private final ShipCategoryType category;
-    private boolean isAlive;
-    private int lengthForIsAlive;
 
     public Battleship(ShipTypeType shipTypeType, ShipType shipType) throws XmlContentException {
-        isAlive = true;
+
         // ShipTypeType attributes
         id = shipTypeType.getId();
         length = Integer.parseInt(shipTypeType.getLength());
@@ -51,22 +49,8 @@ public class Battleship implements IBuildShipDetails {
         return position;
     }
 
-    ShipCategoryType getCategory() {
+    public ShipCategoryType getCategory() {
         return category;
-    }
-
-    boolean isAlive() {
-        return isAlive;
-    }
-
-    int getScore() {
-        return score;
-    }
-
-    void decrementLength() {
-        if (--lengthForIsAlive == 0) {
-            isAlive = false;
-        }
     }
 
     private ShipCategoryType getEnumCategory(String category) {

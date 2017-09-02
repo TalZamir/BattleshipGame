@@ -1,5 +1,12 @@
 package logic;
 
+import logic.bases.BattleshipBase;
+import logic.battleships.AdvancedBattleship;
+import logic.battleships.Battleship;
+import logic.battleships.BattleshipDownRight;
+import logic.battleships.BattleshipRightDown;
+import logic.battleships.BattleshipRightUp;
+import logic.battleships.BattleshipUpRight;
 import logic.enums.BattleshipDirectionType;
 import logic.enums.CellStatus;
 import logic.enums.ErrorMessages;
@@ -164,7 +171,6 @@ public class Board {
             }
 
             changeTempSigns();
-            board[currentBattleship.getPosition().getRow()][currentBattleship.getPosition().getColumn()].setShipRef(currentBattleship);
         }
     }
 
@@ -176,6 +182,7 @@ public class Board {
             }
             board[position.getRow()][position.getColumn()].setCellStatus(CellStatus.TEMP);
             board[position.getRow()][position.getColumn()].setPoint(position);
+            board[position.getRow()][position.getColumn()].setShipRef((BattleshipBase) currentBattleship);
             incrementCoordinate(position, currentBattleship.getDirection());
         }
     }

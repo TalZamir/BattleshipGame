@@ -1,6 +1,6 @@
 package ui.verifiers;
 
-import logic.Battleship;
+import logic.battleships.Battleship;
 import logic.enums.ErrorMessages;
 import logic.enums.GameType;
 import logic.enums.ShipCategoryType;

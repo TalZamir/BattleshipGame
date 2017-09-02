@@ -1,5 +1,6 @@
 package logic;
 
+import logic.battleships.Battleship;
 import logic.builders.BattleshipBuilder;
 import logic.enums.CellStatus;
 import logic.enums.ErrorMessages;

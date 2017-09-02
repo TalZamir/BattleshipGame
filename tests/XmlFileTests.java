@@ -1,5 +1,5 @@
-import logic.Battleship;
 import logic.TheGame;
+import logic.battleships.Battleship;
 import logic.exceptions.XmlContentException;
 import module.BattleShipGameType;
 import module.PositionType;

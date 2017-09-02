@@ -1,6 +1,6 @@
 package logic.builders;
 
-import logic.Battleship;
+import logic.battleships.Battleship;
 import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
 import module.ShipType;

@@ -1,5 +1,6 @@
-package logic;
+package logic.battleships;
 
+import logic.Coordinate;
 import logic.enums.BattleshipDirectionType;
 
 /**
