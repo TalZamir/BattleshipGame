@@ -7,8 +7,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
-import javafx.stage.FileChooser;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import logic.TheGame;
 import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
@@ -29,8 +30,8 @@ public class Controller extends JPanel implements Initializable {
 
     private static final String USER_INTRO = null;
     private final TheGame theGame;
-    private Button[][] trackingBoard;
-    private Button[][] personalBoard;
+    private BoardButton[][] trackingBoard;
+    private BoardButton[][] personalBoard;
 
     private final Alert errorAlert;
     private final Alert informationAlert;
@@ -127,9 +128,7 @@ public class Controller extends JPanel implements Initializable {
             // XML loaded and game is not began yet
             try {
                 theGame.startGame();
-                System.out.println("The game has been started successfully!");
                 initBoardsComponents(theGame.getBoardSize());
-                //TODO: handle with this exception.
                 informationAlert.setContentText("The game has been started successfully!");
                 informationAlert.show();
             } catch (XmlContentException e) {
@@ -142,7 +141,6 @@ public class Controller extends JPanel implements Initializable {
     private void onGameStatusClicked(ActionEvent event) {
         if (theGame.isGameOn()) {
             String turnMsg = getTurnMsg();
-
             textFieldMessage.setText(turnMsg);
         } else {
             errorAlert.setContentText("You must start a game in order to display a status.");
@@ -161,11 +159,11 @@ public class Controller extends JPanel implements Initializable {
     private void onPlayMoveClicked(ActionEvent event) {
 
         if (theGame.isGameOn()) {
-            myButton myButton = (myButton) event.getTarget();
-            UserMoveInput userMoveInput = new UserMoveInput(myButton.getRow(),
-                                                            myButton.getColumn());
+            BoardButton boardButton = (BoardButton) event.getTarget();
+            UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
+                                                            boardButton.getColumn());
             try {
-                theGame.playMove(userMoveInput, myButton.getParent().getId().equalsIgnoreCase(currentPlayerBoard.getId()));
+                theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(currentPlayerBoard.getId()));
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
             }
@@ -196,7 +194,6 @@ public class Controller extends JPanel implements Initializable {
     private void onPlaceMineClicked(ActionEvent event) {
         if (theGame.isGameOn()) {
             if (theGame.hasMines()) {
-                //                System.out.println("Please choose a location to place a mine:");
                 onPlayMoveClicked(event);
             } else {
                 textFieldMessage.setText("You ran out of mines!");
@@ -243,9 +240,9 @@ public class Controller extends JPanel implements Initializable {
     // Initiates boards components
     // **************************************************** //
     private void initBoardsComponents(int convenientBoardSize) {
-        trackingBoard = new Button[convenientBoardSize][convenientBoardSize];
-        personalBoard = new Button[convenientBoardSize][convenientBoardSize];
-        this.setSize(500, 500);
+        trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
+        personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
+        setSize(500, 500);
         initCells(trackingBoard, trackingPane, true);
         initCells(personalBoard, personalPane, false);
     }
@@ -253,13 +250,13 @@ public class Controller extends JPanel implements Initializable {
     // **************************************************** //
     // Initiates boards components
     // **************************************************** //
-    private void initCells(Button[][] boardComponent, Pane pane, boolean isClickable) {
+    private void initCells(BoardButton[][] boardComponent, Pane pane, boolean isClickable) {
         int space = 40;
         int rowSpace = 0;
         int colSpace = 0;
         for (int i = 1; i < boardComponent.length; i++) {
             for (int j = 1; j < boardComponent.length; j++) {
-                Button button = new Button();
+                BoardButton button = new BoardButton(i, j);
                 button.setLayoutX(rowSpace);
                 button.setLayoutY(colSpace);
                 button.setText("~");
