@@ -23,6 +23,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static java.lang.System.exit;
+
 /**
  * Created by barakm on 29/08/2017
  */
@@ -224,6 +226,8 @@ public class Controller extends JPanel implements Initializable {
         if (!theGame.isGameOn() && confirmationMassage.showAndWait().get() == ButtonType.OK) {
             theGame.exitGame();
             informationAlert.setContentText("Thank you for playing! Exiting...");
+            informationAlert.showAndWait();
+            exit(0);
         } else {
             errorAlert.setContentText("You must finish the current match before exiting the game.");
         }
