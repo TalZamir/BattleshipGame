@@ -158,19 +158,23 @@ public class Controller extends JPanel implements Initializable {
                 errorAlert.show();
             }
 
-            if (theGame.isPlayerWon()) {
-                try {
-                    finishMatch();
-                } catch (XmlContentException e) {
-                    errorAlert.setContentText(e.getMessage());
-                    errorAlert.show();
-                }
-            } else {
-                textFieldMessage.setText(getTurnMsg()); // Indicates who's turn is it
-            }
+            isPlayerWon();
         } else {
             errorAlert.setContentText("You must start a new game before performing a move.");
             errorAlert.show();
+        }
+    }
+
+    private void isPlayerWon() {
+        if (theGame.isPlayerWon()) {
+            try {
+                finishMatch();
+            } catch (XmlContentException e) {
+                errorAlert.setContentText(e.getMessage());
+                errorAlert.show();
+            }
+        } else {
+            textFieldMessage.setText(getTurnMsg()); // Indicates who's turn is it
         }
     }
 
