@@ -3,11 +3,7 @@ package ui.javafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import logic.TheGame;
@@ -124,6 +120,7 @@ public class Controller extends JPanel implements Initializable {
             try {
                 theGame.startGame();
                 initBoardsComponents(theGame.getBoardSize());
+                drawBoards();
                 informationAlert.setContentText("The game has been started successfully!");
                 informationAlert.show();
             } catch (XmlContentException e) {
@@ -258,7 +255,7 @@ public class Controller extends JPanel implements Initializable {
                 button.setLayoutY(colSpace);
                 button.setText("~");
                 if (isClickable) {
-                    button.setOnAction(this::onQuitMatchClicked);
+                    button.setOnAction(this::onPlayMoveClicked);
                 } else {
                     button.setDisable(true);
                 }
@@ -268,6 +265,25 @@ public class Controller extends JPanel implements Initializable {
             }
             rowSpace = 0;
             colSpace += space;
+        }
+    }
+
+    // **************************************************** //
+    // Draw boards
+    // **************************************************** //
+    private void drawBoards() {
+        drawSpecificBoard(personalBoard, theGame.getCurrentPlayerBoardToPrint());
+        drawSpecificBoard(trackingBoard, theGame.getOpponentBoardToPrint());
+    }
+
+    // **************************************************** //
+    // Drawing a given UI board
+    // **************************************************** //
+    private void drawSpecificBoard(BoardButton[][] physicalboard, char[][] logicalBoard) {
+        for (int i = 1; i < physicalboard.length; i++) {
+            for (int j = 1; j < physicalboard.length; j++) {
+                physicalboard[i][j].setText(String.valueOf(logicalBoard[i][j]));
+            }
         }
     }
 }
