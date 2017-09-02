@@ -155,6 +155,7 @@ public class Controller extends JPanel implements Initializable {
                 theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId()));
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
+                errorAlert.show();
             }
 
             if (theGame.isPlayerWon()) {
@@ -162,12 +163,14 @@ public class Controller extends JPanel implements Initializable {
                     finishMatch();
                 } catch (XmlContentException e) {
                     errorAlert.setContentText(e.getMessage());
+                    errorAlert.show();
                 }
             } else {
                 textFieldMessage.setText(getTurnMsg()); // Indicates who's turn is it
             }
         } else {
             errorAlert.setContentText("You must start a new game before performing a move.");
+            errorAlert.show();
         }
     }
 
@@ -189,6 +192,7 @@ public class Controller extends JPanel implements Initializable {
             }
         } else {
             errorAlert.setContentText("You must start a game before placing a mine.");
+            errorAlert.show();
         }
     }
 
@@ -200,10 +204,12 @@ public class Controller extends JPanel implements Initializable {
                     finishMatch();
                 } catch (XmlContentException e) {
                     errorAlert.setContentText(e.getMessage());
+                    errorAlert.show();
                 }
             }
         } else {
             errorAlert.setContentText("You must start a game in order to quit.");
+            errorAlert.show();
         }
     }
 
@@ -224,6 +230,7 @@ public class Controller extends JPanel implements Initializable {
             exit(0);
         } else {
             errorAlert.setContentText("You must finish the current match before exiting the game.");
+            errorAlert.show();
         }
     }
 
