@@ -10,7 +10,6 @@ import logic.serializers.XmlSerializer;
 import module.BattleShipGameType;
 import module.BoardType;
 import ui.UserMoveInput;
-import ui.console.Assistant;
 import ui.verifiers.ErrorCollector;
 import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
@@ -57,9 +56,6 @@ public class TheGame {
         }
 
         initGameComponents();
-
-        Assistant assistant = new Assistant();
-        assistant.printBoard(getCurrentPlayerBoardToPrint());
     }
 
     // **************************************************** //
@@ -237,6 +233,13 @@ public class TheGame {
     }
 
     // **************************************************** //
+    // Returns board size (original size + 1)
+    // **************************************************** //
+    public int getBoardSize() {
+        return players[0].getBoard().getSize();
+    }
+
+    // **************************************************** //
     // Cell Status handler
     // **************************************************** //
     private String handleCellStatus(CellStatus cellStatus, int row, int col) {
@@ -385,12 +388,5 @@ public class TheGame {
     private String getVictoryMsg(int winnerIndex) {
         return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
                 "~~~~~~~~~~~~~~ " + players[winnerIndex].getName() + " WON THE GAME! ~~~~~~~~~~~~~~";
-    }
-
-    // **************************************************** //
-    // Returns board size (original size + 1)
-    // **************************************************** //
-    public int getBoardSize() {
-        return players[0].getBoard().getSize();
     }
 }

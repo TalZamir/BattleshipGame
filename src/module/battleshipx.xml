@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <BattleShipGame xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="battleshipx.xsd">
     <GameType>BASIC</GameType>
-    <boardSize>20</boardSize>
+    <boardSize>8</boardSize>
     <shipTypes>
         <shipType id="shipTypeA">
             <category>REGULAR</category>
