@@ -3,11 +3,7 @@ package ui.javafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import logic.TheGame;
@@ -81,6 +77,9 @@ public class Controller extends JPanel implements Initializable {
         buttonMine.setOnAction(this::onPlaceMineClicked);
     }
 
+    // **************************************************** //
+    // Menu item: Load XML file
+    // **************************************************** //
     private void onLoadXmlClicked(ActionEvent event) {
 
         if (!theGame.isGameOn()) {
@@ -110,6 +109,9 @@ public class Controller extends JPanel implements Initializable {
         }
     }
 
+    // **************************************************** //
+    // Menu item: Start game
+    // **************************************************** //
     private void onStartGameClicked(ActionEvent event) {
         if (!theGame.isFileLoaded()) {
             // No XML file
@@ -126,6 +128,8 @@ public class Controller extends JPanel implements Initializable {
                 initBoardsComponents(theGame.getBoardSize());
                 informationAlert.setContentText("The game has been started successfully!");
                 informationAlert.show();
+                drawBoards(personalBoard, theGame.getCurrentPlayerBoardToPrint());
+                drawBoards(trackingBoard, theGame.getOpponentBoardToPrint());
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
                 errorAlert.show();
@@ -133,6 +137,9 @@ public class Controller extends JPanel implements Initializable {
         }
     }
 
+    // **************************************************** //
+    // Menu item: displays game status
+    // **************************************************** //
     private void onGameStatusClicked(ActionEvent event) {
         if (theGame.isGameOn()) {
             String turnMsg = getTurnMsg();
@@ -151,12 +158,15 @@ public class Controller extends JPanel implements Initializable {
                 ")  ~~~~~";
     }
 
+    // **************************************************** //
+    // Menu item: plays player move
+    // **************************************************** //
     private void onPlayMoveClicked(ActionEvent event) {
 
         if (theGame.isGameOn()) {
             BoardButton boardButton = (BoardButton) event.getTarget();
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
-                                                            boardButton.getColumn());
+                    boardButton.getColumn());
             try {
                 theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(currentPlayerBoard.getId()));
             } catch (XmlContentException e) {
@@ -258,7 +268,7 @@ public class Controller extends JPanel implements Initializable {
                 button.setLayoutY(colSpace);
                 button.setText("~");
                 if (isClickable) {
-                    button.setOnAction(this::onQuitMatchClicked);
+                    button.setOnAction(this::onPlayMoveClicked);
                 } else {
                     button.setDisable(true);
                 }
@@ -268,6 +278,17 @@ public class Controller extends JPanel implements Initializable {
             }
             rowSpace = 0;
             colSpace += space;
+        }
+    }
+
+    // **************************************************** //
+    // Draws a given UI board
+    // **************************************************** //
+    private void drawBoards(BoardButton[][] physicalBoard, char[][] logicalBoard) {
+        for (int i = 1; i < physicalBoard.length; i++) {
+            for (int j = 1; j < physicalBoard.length; j++) {
+                physicalBoard[i][j].setText(String.valueOf(logicalBoard[i][j]));
+            }
         }
     }
 }
