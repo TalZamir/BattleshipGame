@@ -23,8 +23,10 @@ import javax.swing.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.SortedMap;
 
 import static java.lang.System.exit;
+import static java.lang.System.lineSeparator;
 
 /**
  * Created by barakm on 29/08/2017
@@ -143,15 +145,43 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private String getTurnMsg() {
-        return "~~~~  " +
-                theGame.getCurrentPlayerName() +
-                " Turn (Score: " +
-                theGame.getCurrentPlayerScore() +
-                ")  ~~~~~";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("~~~~  ")
+                     .append(theGame.getCurrentPlayerName())
+                     .append(" Turn (Score: ")
+                     .append(theGame.getCurrentPlayerScore())
+                     .append(")  ~~~~~")
+                     .append(lineSeparator())
+                     .append(theGame.getStatistics())
+                     .append(lineSeparator());
+
+        appendBattleships(stringBuilder);
+        return stringBuilder.toString();
+    }
+
+    private void appendBattleships(StringBuilder stringBuilder) {
+        SortedMap<Integer, Integer> shipsType = theGame.getCurrentPlayerShipsTypesAndAmount();
+        appendBattleshipsList(stringBuilder, shipsType, "Your remain battleships:");
+        shipsType = theGame.getOpponentPLayerShipsTypesAndAmount();
+        appendBattleshipsList(stringBuilder, shipsType, "Opponent remain battleships:");
+    }
+
+    private void appendBattleshipsList(StringBuilder stringBuilder,
+                                       SortedMap<Integer, Integer> shipsType,
+                                       String battleshipsPlayerMessage) {
+        stringBuilder.append(battleshipsPlayerMessage);
+        stringBuilder.append(lineSeparator());
+        shipsType.forEach((k, v) -> {
+            stringBuilder.append("From ship type ")
+                         .append(k)
+                         .append(" left ")
+                         .append(v)
+                         .append(" ships")
+                         .append(lineSeparator());
+        });
     }
 
     private void onPlayMoveClicked(ActionEvent event) {
-
         if (theGame.isGameOn()) {
             BoardButton boardButton = (BoardButton) event.getTarget();
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),

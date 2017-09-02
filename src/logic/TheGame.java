@@ -16,14 +16,16 @@ import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
 
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import static logic.enums.CellStatus.MINE_PLACED;
 
 public class TheGame {
 
+    private final Player[] players;
     private GameType gameType;
-    private Player[] players;
     private boolean isActive;
     private boolean isFileLoaded;
     private boolean isGameOn;
@@ -238,6 +240,28 @@ public class TheGame {
     // **************************************************** //
     public int getBoardSize() {
         return players[0].getBoard().getSize();
+    }
+
+    public SortedMap<Integer, Integer> getCurrentPlayerShipsTypesAndAmount() {
+        return getShipTypesAndAmount(getCurrentPlayerLogicBoard().getBattleships());
+    }
+
+    public SortedMap<Integer, Integer> getOpponentPLayerShipsTypesAndAmount() {
+        return getShipTypesAndAmount(getOpponentLogicBoard().getBattleships());
+    }
+
+    private SortedMap<Integer, Integer> getShipTypesAndAmount(List<Battleship> battleships) {
+        SortedMap<Integer, Integer> map = new TreeMap<>();
+        battleships.forEach(s -> {
+            Integer numOfShipType = 1;
+            if (map.containsKey(s.getLength())) {
+                numOfShipType = map.get(s.getLength());
+                numOfShipType++;
+            }
+            map.put(s.getLength(), numOfShipType);
+        });
+
+        return map;
     }
 
     // **************************************************** //
