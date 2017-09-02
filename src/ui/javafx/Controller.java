@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import logic.TheGame;
@@ -36,7 +36,7 @@ public class Controller extends JPanel implements Initializable {
     private BoardButton[][] trackingBoard;
     private BoardButton[][] personalBoard;
     @FXML
-    private TextField textFieldMessage;
+    private TextArea textFieldMessage;
     @FXML
     private Button buttonGameStatus;
     @FXML
@@ -211,8 +211,9 @@ public class Controller extends JPanel implements Initializable {
     private void finishMatch() throws XmlContentException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(theGame.getStatistics());
-        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append("\n");
         stringBuilder.append("-  The game will restart now...");
+        textFieldMessage.setText(stringBuilder.toString());
         theGame.resetGame();
     }
 
