@@ -385,4 +385,11 @@ public class TheGame {
         return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
                 "~~~~~~~~~~~~~~ " + players[winnerIndex].getName() + " WON THE GAME! ~~~~~~~~~~~~~~";
     }
+
+    // **************************************************** //
+    // Returns board size (original size + 1)
+    // **************************************************** //
+    public int getBoardSize() {
+        return players[0].getBoard().getSize();
+    }
 }

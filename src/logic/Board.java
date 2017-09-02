@@ -271,4 +271,11 @@ public class Board {
         }
         return allieBoard;
     }
+
+    // **************************************************** //
+    // Returns board size
+    // **************************************************** //
+    public int getSize() {
+        return board.length;
+    }
 }

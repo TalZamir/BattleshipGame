@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import logic.TheGame;
 import logic.enums.ErrorMessages;
@@ -25,6 +26,8 @@ public class Controller extends JPanel implements Initializable {
 
     private static final String USER_INTRO = null;
     private final TheGame theGame;
+    private Button[][] trackingBoard;
+    private Button[][] personalBoard;
 
     @FXML
     private Button buttonGameStatus;
@@ -46,6 +49,10 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonStartGame;
     @FXML
     private Button buttonLoadXml;
+    @FXML
+    private Pane trackingPane;
+    @FXML
+    private Pane personalPane;
 
     public Controller() {
         theGame = new TheGame();
@@ -97,6 +104,7 @@ public class Controller extends JPanel implements Initializable {
             try {
                 theGame.startGame();
                 System.out.println("The game has been started successfully!");
+                initBoardsComponents(theGame.getBoardSize());
                 //TODO: handle with this exception.
             } catch (XmlContentException e) {
                 e.printStackTrace();
@@ -145,6 +153,44 @@ public class Controller extends JPanel implements Initializable {
             }
         } else {
             System.out.println(ErrorMessages.GAME_IS_ALREADY_ON.message());
+        }
+    }
+
+    // **************************************************** //
+    // Initiates boards components
+    // **************************************************** //
+    private void initBoardsComponents(int convenientBoardSize) {
+        trackingBoard = new Button[convenientBoardSize][convenientBoardSize];
+        personalBoard = new Button[convenientBoardSize][convenientBoardSize];
+        this.setSize(500, 500);
+        initCells(trackingBoard, trackingPane, true);
+        initCells(personalBoard, personalPane, false);
+    }
+
+    // **************************************************** //
+    // Initiates boards components
+    // **************************************************** //
+    private void initCells(Button[][] boardComponent, Pane pane, boolean isClickable) {
+        int space = 40;
+        int rowSpace = 0;
+        int colSpace = 0;
+        for (int i = 1; i < boardComponent.length; i++) {
+            for (int j = 1; j < boardComponent.length; j++) {
+                Button button = new Button();
+                button.setLayoutX(rowSpace);
+                button.setLayoutY(colSpace);
+                button.setText("~");
+                if (isClickable) {
+                    button.setOnAction(this::onQuitMatchClicked);
+                } else {
+                    button.setDisable(true);
+                }
+                boardComponent[i][j] = button;
+                pane.getChildren().add(button);
+                rowSpace += space;
+            }
+            rowSpace = 0;
+            colSpace += space;
         }
     }
 }
