@@ -3,7 +3,10 @@ package ui.javafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import logic.TheGame;
@@ -26,14 +29,12 @@ import static java.lang.System.exit;
  */
 public class Controller extends JPanel implements Initializable {
 
-    private static final String USER_INTRO = null;
     private final TheGame theGame;
-    private BoardButton[][] trackingBoard;
-    private BoardButton[][] personalBoard;
-
     private final Alert errorAlert;
     private final Alert informationAlert;
     private final Alert confirmationMassage;
+    private BoardButton[][] trackingBoard;
+    private BoardButton[][] personalBoard;
     @FXML
     private TextField textFieldMessage;
     @FXML
@@ -46,10 +47,6 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonQuitMatch;
     @FXML
     private Button buttonExitGame;
-    @FXML
-    private TableView currentPlayerBoard;
-    @FXML
-    private TableView opponentPlayerBoard;
     @FXML
     private Button buttonStartGame;
     @FXML
@@ -155,7 +152,7 @@ public class Controller extends JPanel implements Initializable {
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
                                                             boardButton.getColumn());
             try {
-                theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(currentPlayerBoard.getId()));
+                theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId()));
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
             }
