@@ -10,6 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
@@ -81,6 +87,64 @@ public class Controller extends JPanel implements Initializable {
         buttonGameStatus.setOnAction(this::onGameStatusClicked);
         buttonStatistics.setOnAction(this::onStatisticsClicked);
         buttonMine.setOnAction(this::onPlaceMineClicked);
+
+        //======Drag and drop functions setters=======//
+        buttonMine.setOnDragDone(this::mineOnDragDone);
+        buttonMine.setOnDragDetected(this::mineOnDragDetected);
+        buttonQuitMatch.setOnDragOver(this::myBoardCellOnDragOver);
+        buttonQuitMatch.setOnDragEntered(this::myBoardCellOnDragEntered);
+        buttonQuitMatch.setOnDragExited(this::myBoardCellOnDragExit);
+        buttonQuitMatch.setOnDragDropped(this::myBoardCellOnDragDropped);
+        //======Drag and drop functions setters=======//
+    }
+
+    private void mineOnDragDone(DragEvent event) {
+        //TODO: Some other effect.
+        if (event.getTransferMode() == TransferMode.MOVE) {
+            buttonMine.setText("");
+        }
+
+        event.consume();
+    }
+
+    private void myBoardCellOnDragDropped(DragEvent event) {
+        buttonQuitMatch.setText("Drop");
+        event.setDropCompleted(true);
+
+        event.consume();
+    }
+
+    private void myBoardCellOnDragExit(DragEvent event) {
+        //TODO: Some other effect.
+        if (!event.isDropCompleted()) {
+            buttonQuitMatch.setText("Exit");
+        }
+        event.consume();
+    }
+
+    private void myBoardCellOnDragEntered(DragEvent event) {
+        //TODO: Some other effect.
+        buttonQuitMatch.setText("Entered");
+
+        event.consume();
+    }
+
+    private void myBoardCellOnDragOver(DragEvent event) {
+        event.acceptTransferModes(TransferMode.MOVE);
+
+        event.consume();
+    }
+
+    private void mineOnDragDetected(MouseEvent event) {
+        Dragboard db = buttonMine.startDragAndDrop(TransferMode.ANY);
+        ClipboardContent content = new ClipboardContent();
+
+        //TODO: Not url.
+        Image image = new Image("http://www.spacedaily.com/images-lg/mine-lg.jpg");
+        content.putImage(image);
+        db.setContent(content);
+
+        event.consume();
     }
 
     private void onLoadXmlClicked(ActionEvent event) {
