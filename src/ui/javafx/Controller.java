@@ -3,13 +3,10 @@ package ui.javafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import logic.TheGame;
 import logic.enums.ErrorMessages;
@@ -40,8 +37,8 @@ public class Controller extends JPanel implements Initializable {
     private BoardButton[][] trackingBoard;
     private BoardButton[][] personalBoard;
     private GridPane grid;
-    private Pane personalPane;
-    private Pane trackingPane;
+    private GridPane personalPane;
+    private GridPane trackingPane;
 
     @FXML
     private TextArea textFieldMessage;
@@ -271,41 +268,52 @@ public class Controller extends JPanel implements Initializable {
     // **************************************************** //
     private void initBoardsComponents(int convenientBoardSize) {
         grid = new GridPane();
-        trackingPane = new Pane();
-        personalPane = new Pane();
+        trackingPane = new GridPane();
+        personalPane = new GridPane();
         trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
         personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
         initCells(trackingBoard, trackingPane, true);
         initCells(personalBoard, personalPane, false);
-        grid.add(trackingPane, 0, 0);
-        grid.add(personalPane, 2, 0);
+        Label lab = new Label("Tracking Board:");
+        lab.setAlignment(Pos.CENTER);
+
+
+        grid.setHgap(50); // Horizontal gap
+        grid.setVgap(10); // Vertical gap
+        //   grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.add(lab, 0, 0);
+        grid.add(trackingPane, 0, 1);
+        grid.add(new Label("Personal Board:"), 1, 0);
+        grid.add(personalPane, 1, 1);
         contentPane.getChildren().add(grid);
     }
 
     // **************************************************** //
     // Initiates boards components
     // **************************************************** //
-    private void initCells(BoardButton[][] boardComponent, Pane pane, boolean isClickable) {
-        int space = 40;
-        int rowSpace = 0;
-        int colSpace = 0;
+    private void initCells(BoardButton[][] boardComponent, GridPane pane, boolean isClickable) {
         for (int i = 1; i < boardComponent.length; i++) {
             for (int j = 1; j < boardComponent.length; j++) {
                 BoardButton button = new BoardButton(i, j);
-                button.setLayoutX(rowSpace);
-                button.setLayoutY(colSpace);
-                button.setText("~");
+                button.setPrefWidth(35);
                 if (isClickable) {
                     button.setOnAction(this::onPlayMoveClicked);
                 } else {
                     button.setDisable(true);
                 }
                 boardComponent[i][j] = button;
-                pane.getChildren().add(button);
-                rowSpace += space;
+                pane.add(button, j, i);
             }
-            rowSpace = 0;
-            colSpace += space;
+        }
+        // Column characters
+        char colVal = 'A';
+        for (int i = 1; i < boardComponent.length; i++) {
+            pane.add(new Label(String.valueOf(colVal)), i, 0);
+            colVal++;
+        }
+        // Row numbers
+        for (int i = 1; i < boardComponent.length; i++) {
+            pane.add(new Label(String.valueOf(i)), 0, i);
         }
     }
 
