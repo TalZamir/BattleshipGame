@@ -7,6 +7,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import logic.TheGame;
@@ -35,6 +37,10 @@ public class Controller extends JPanel implements Initializable {
     private final Alert confirmationMassage;
     private BoardButton[][] trackingBoard;
     private BoardButton[][] personalBoard;
+    private GridPane grid;
+    private Pane personalPane;
+    private Pane trackingPane;
+
     @FXML
     private TextArea textFieldMessage;
     @FXML
@@ -52,9 +58,8 @@ public class Controller extends JPanel implements Initializable {
     @FXML
     private Button buttonLoadXml;
     @FXML
-    private Pane trackingPane;
-    @FXML
-    private Pane personalPane;
+    private AnchorPane contentPane;
+
 
     public Controller() {
         theGame = new TheGame();
@@ -150,9 +155,11 @@ public class Controller extends JPanel implements Initializable {
         if (theGame.isGameOn()) {
             BoardButton boardButton = (BoardButton) event.getTarget();
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
-                                                            boardButton.getColumn());
+                    boardButton.getColumn());
             try {
-                theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId()));
+                theGame.playMove(userMoveInput, true);
+                // todo: What the hell is the second parameter???
+                // theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId()));
                 drawBoards();
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
@@ -233,11 +240,16 @@ public class Controller extends JPanel implements Initializable {
     // Initiates boards components
     // **************************************************** //
     private void initBoardsComponents(int convenientBoardSize) {
+        grid = new GridPane();
+        trackingPane = new Pane();
+        personalPane = new Pane();
         trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
         personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
-        setSize(500, 500);
         initCells(trackingBoard, trackingPane, true);
         initCells(personalBoard, personalPane, false);
+        grid.add(trackingPane, 0, 0);
+        grid.add(personalPane, 2, 0);
+        contentPane.getChildren().add(grid);
     }
 
     // **************************************************** //
