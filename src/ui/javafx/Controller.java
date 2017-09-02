@@ -38,18 +38,12 @@ public class Controller extends JPanel implements Initializable {
     private final Alert confirmationMassage;
     @FXML
     private TextField textFieldMessage;
-    //    @FXML
-    //    private TextField textFieldCurrentPlayer;
-    //    @FXML
-    //    private TextField textFieldOpponentPlayer;
     @FXML
     private Button buttonGameStatus;
     @FXML
     private Button buttonStatistics;
     @FXML
     private Button buttonMine;
-    @FXML
-    private Button buttonPlayMove;
     @FXML
     private Button buttonQuitMatch;
     @FXML
@@ -78,7 +72,6 @@ public class Controller extends JPanel implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         buttonLoadXml.setOnAction(this::onLoadXmlClicked);
         buttonExitGame.setOnAction(this::onExitClicked);
-        buttonPlayMove.setOnAction(this::onPlayMoveClicked);
         buttonQuitMatch.setOnAction(this::onQuitMatchClicked);
         buttonStartGame.setOnAction(this::onStartGameClicked);
         buttonGameStatus.setOnAction(this::onGameStatusClicked);
