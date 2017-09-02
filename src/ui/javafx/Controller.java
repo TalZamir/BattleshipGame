@@ -153,6 +153,7 @@ public class Controller extends JPanel implements Initializable {
                                                             boardButton.getColumn());
             try {
                 theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId()));
+                drawBoards();
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
             }
