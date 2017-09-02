@@ -5,7 +5,7 @@ import logic.TheGame;
 /**
  * Created by xozh4v on 8/10/2017.
  */
-public class Assistant {
+class Assistant {
 
     private static final String SPACE = "   ";
     private static final int SEPARATOR = 0;

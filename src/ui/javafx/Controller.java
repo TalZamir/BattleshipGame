@@ -30,12 +30,11 @@ import static java.lang.System.exit;
 public class Controller extends JPanel implements Initializable {
 
     private final TheGame theGame;
-    private BoardButton[][] trackingBoard;
-    private BoardButton[][] personalBoard;
-
     private final Alert errorAlert;
     private final Alert informationAlert;
     private final Alert confirmationMassage;
+    private BoardButton[][] trackingBoard;
+    private BoardButton[][] personalBoard;
     @FXML
     private TextField textFieldMessage;
     @FXML
@@ -152,20 +151,21 @@ public class Controller extends JPanel implements Initializable {
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
                                                             boardButton.getColumn());
             try {
-                theGame.playMove(userMoveInput, boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId()));
+                textFieldMessage.setText(theGame.playMove(userMoveInput,
+                                                          boardButton.getParent().getId().equalsIgnoreCase(trackingPane.getId())));
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
                 errorAlert.show();
             }
 
-            isPlayerWon();
+            checkIfPlayerWon();
         } else {
             errorAlert.setContentText("You must start a new game before performing a move.");
             errorAlert.show();
         }
     }
 
-    private void isPlayerWon() {
+    private void checkIfPlayerWon() {
         if (theGame.isPlayerWon()) {
             try {
                 finishMatch();
