@@ -343,6 +343,7 @@ public class TheGame {
 
     //TODO now we are creating only human users. Need to add computer user.
     private void initGameComponents() throws XmlContentException {
+
         BattleshipBuilder battleshipBuilder = new BattleshipBuilder(xmlContent.getShipTypes().getShipType());
         setBoards(Integer.parseInt(xmlContent.getBoardSize()), xmlContent.getBoards().getBoard(), battleshipBuilder);
     }
