@@ -3,6 +3,7 @@ package ui.javafx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -267,6 +268,7 @@ public class Controller extends JPanel implements Initializable {
     // Initiates boards components
     // **************************************************** //
     private void initBoardsComponents(int convenientBoardSize) {
+        contentPane.getChildren().clear();
         grid = new GridPane();
         trackingPane = new GridPane();
         personalPane = new GridPane();
@@ -292,6 +294,8 @@ public class Controller extends JPanel implements Initializable {
     // Initiates boards components
     // **************************************************** //
     private void initCells(BoardButton[][] boardComponent, GridPane pane, boolean isClickable) {
+        pane.setHgap(5); // Horizontal gap
+        pane.setVgap(5); // Vertical gap
         for (int i = 1; i < boardComponent.length; i++) {
             for (int j = 1; j < boardComponent.length; j++) {
                 BoardButton button = new BoardButton(i, j);
@@ -308,12 +312,16 @@ public class Controller extends JPanel implements Initializable {
         // Column characters
         char colVal = 'A';
         for (int i = 1; i < boardComponent.length; i++) {
-            pane.add(new Label(String.valueOf(colVal)), i, 0);
+            Label label = new Label(String.valueOf(colVal));
+            pane.add(label, i, 0);
+            pane.setHalignment(label, HPos.CENTER);
             colVal++;
         }
         // Row numbers
         for (int i = 1; i < boardComponent.length; i++) {
+            Label label = new Label(String.valueOf(i));
             pane.add(new Label(String.valueOf(i)), 0, i);
+            pane.setHalignment(label, HPos.CENTER);
         }
     }
 
@@ -335,4 +343,5 @@ public class Controller extends JPanel implements Initializable {
             }
         }
     }
+
 }
