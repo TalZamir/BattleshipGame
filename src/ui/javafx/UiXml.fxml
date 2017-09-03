@@ -36,7 +36,7 @@
                 prefWidth="157.0" text="Drag to put a mine" textAlignment="CENTER"/>
         <Button fx:id="buttonExitGame" layoutX="14.0" layoutY="458.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Exit Game"/>
-        <TextArea fx:id="textFieldMessage" editable="false" layoutX="236.0" layoutY="503.0" prefHeight="128.0"
+        <TextArea fx:id="textFieldMessage" editable="false" layoutX="218.0" layoutY="474.0" prefHeight="191.0"
                   prefWidth="615.0"/>
         <AnchorPane fx:id="contentPane" layoutX="218.0" layoutY="67.0" prefHeight="415.0" prefWidth="630.0"/>
     </AnchorPane>
