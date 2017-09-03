@@ -263,6 +263,8 @@ public class Controller extends JPanel implements Initializable {
             if (theGame.isPlayerWon()) {
                 try {
                     finishMatch();
+                    informationAlert.setContentText(theGame.playerWonMatchMessage());
+                    informationAlert.show();
                 } catch (XmlContentException e) {
                     errorAlert.setContentText(e.getMessage());
                     errorAlert.show();

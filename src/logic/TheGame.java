@@ -200,8 +200,18 @@ public class TheGame {
     public String quitMatch() {
         isGameOn = false;
         players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1); // Quiting counts as a turn
+        return getFinishGameString(" quit... ");
+    }
+
+    public String playerWonMatchMessage() {
+        isGameOn = false;
+        players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1); // Quiting counts as a turn
+        return getFinishGameString(" has lost... ");
+    }
+
+    private String getFinishGameString(String message) {
         return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
-                "~~~~ " + players[currentPlayerIndex].getName() + " quit... " + players[opponentPlayerIndex].getName() +
+                "~~~~ " + players[currentPlayerIndex].getName() + message + players[opponentPlayerIndex].getName() +
                 " WON THE GAME! ~~~~";
     }
 
