@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +31,8 @@ import ui.verifiers.XmlFileVerifier;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.SortedMap;
@@ -87,44 +90,30 @@ public class Controller extends JPanel implements Initializable {
         buttonGameStatus.setOnAction(this::onGameStatusClicked);
         buttonStatistics.setOnAction(this::onStatisticsClicked);
         buttonMine.setOnAction(this::onPlaceMineClicked);
-
-        //======Drag and drop functions setters=======//
-        buttonMine.setOnDragDone(this::mineOnDragDone);
         buttonMine.setOnDragDetected(this::mineOnDragDetected);
-        buttonQuitMatch.setOnDragOver(this::myBoardCellOnDragOver);
-        buttonQuitMatch.setOnDragEntered(this::myBoardCellOnDragEntered);
-        buttonQuitMatch.setOnDragExited(this::myBoardCellOnDragExit);
-        buttonQuitMatch.setOnDragDropped(this::myBoardCellOnDragDropped);
-        //======Drag and drop functions setters=======//
+        buttonMine.setOnDragDone(this::mineOnDragDone);
     }
 
     private void mineOnDragDone(DragEvent event) {
-        //TODO: Some other effect.
-        if (event.getTransferMode() == TransferMode.MOVE) {
-            buttonMine.setText("");
-        }
-
         event.consume();
     }
 
     private void myBoardCellOnDragDropped(DragEvent event) {
-        buttonQuitMatch.setText("Drop");
+        ActionEvent actionEvent = new ActionEvent(event.getSource(), event.getTarget());
+
+        onPlayMoveClicked(actionEvent);
         event.setDropCompleted(true);
 
         event.consume();
     }
 
     private void myBoardCellOnDragExit(DragEvent event) {
-        //TODO: Some other effect.
-        if (!event.isDropCompleted()) {
-            buttonQuitMatch.setText("Exit");
-        }
+        ((BoardButton) event.getSource()).setStyle("");
         event.consume();
     }
 
     private void myBoardCellOnDragEntered(DragEvent event) {
-        //TODO: Some other effect.
-        buttonQuitMatch.setText("Entered");
+        ((BoardButton) event.getSource()).setStyle("-fx-background-color: #e4c7c8;");
 
         event.consume();
     }
@@ -139,10 +128,14 @@ public class Controller extends JPanel implements Initializable {
         Dragboard db = buttonMine.startDragAndDrop(TransferMode.ANY);
         ClipboardContent content = new ClipboardContent();
 
-        //TODO: Not url.
-        Image image = new Image("http://www.spacedaily.com/images-lg/mine-lg.jpg");
+        Image image = null;
+        try {
+            image = new Image(new FileInputStream("src/res/mineImage.png"), 30, 30, false, false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         content.putImage(image);
-        db.setContent(content);
+        content.put(DataFormat.IMAGE, db.setContent(content));
 
         event.consume();
     }
@@ -193,6 +186,7 @@ public class Controller extends JPanel implements Initializable {
                 theGame.startGame();
                 initBoardsComponents(theGame.getBoardSize());
                 drawBoards();
+                setButtonMineText();
                 textFieldMessage.setText(getTurnMsg());
                 informationAlert.setContentText("The game has been started successfully!");
                 informationAlert.show();
@@ -249,17 +243,22 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void onPlayMoveClicked(ActionEvent event) {
+        StringBuilder turnMessage = new StringBuilder();
         if (theGame.isGameOn()) {
-            BoardButton boardButton = (BoardButton) event.getTarget();
+            BoardButton boardButton = (BoardButton) event.getSource();
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
                                                             boardButton.getColumn());
             try {
-                theGame.playMove(userMoveInput, true);
+                turnMessage.append(theGame.playMove(userMoveInput,
+                                                    boardButton.getParent().getId()
+                                                               .equalsIgnoreCase(trackingPane.getId())));
+                turnMessage.append(lineSeparator());
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
                 errorAlert.show();
             }
             drawBoards();
+            setButtonMineText();
 
             if (theGame.isPlayerWon()) {
                 try {
@@ -269,12 +268,39 @@ public class Controller extends JPanel implements Initializable {
                     errorAlert.show();
                 }
             } else {
-                textFieldMessage.setText(getTurnMsg()); // Indicates who's turn is it
+                turnMessage.append(getTurnMsg());
+                textFieldMessage.setText(turnMessage.toString()); // Indicates who's turn is it
             }
         } else {
             errorAlert.setContentText("You must start a new game before performing a move.");
             errorAlert.show();
         }
+    }
+
+    private void setButtonMineText() {
+        String[] playersStatistics = theGame.getStatistics().split(lineSeparator());
+        String numOfMines = "";
+        String buttonText = buttonMine.getText();
+        StringBuilder buttonMineText = new StringBuilder();
+        int i;
+
+        int begin = buttonText.indexOf("Drag");
+        int end = buttonText.indexOf("mine") + 4;
+        buttonMineText.append(buttonMine.getText().substring(begin, end));
+
+        for (i = 0; i < playersStatistics.length; i++) {
+            if (playersStatistics[i].contains(theGame.getCurrentPlayerName())) {
+                numOfMines = playersStatistics[i];
+            }
+        }
+
+        begin = numOfMines.indexOf("Mines");
+        end = numOfMines.indexOf("Average");
+        String mines = numOfMines.substring(begin, end - 2);
+
+        buttonMineText.append(lineSeparator());
+        buttonMineText.append(mines);
+        buttonMine.setText(buttonMineText.toString());
     }
 
     private void onStatisticsClicked(ActionEvent event) {
@@ -350,6 +376,8 @@ public class Controller extends JPanel implements Initializable {
         personalPane = new GridPane();
         trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
         personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
+        trackingPane.setId("trackingBoard");
+        personalPane.setId("personalBoard");
         initCells(trackingBoard, trackingPane, true);
         initCells(personalBoard, personalPane, false);
         Label lab = new Label("Tracking Board:");
@@ -357,7 +385,6 @@ public class Controller extends JPanel implements Initializable {
 
         grid.setHgap(50); // Horizontal gap
         grid.setVgap(10); // Vertical gap
-        //   grid.setPadding(new Insets(10, 10, 10, 10));
         grid.add(lab, 0, 0);
         grid.add(trackingPane, 0, 1);
         grid.add(new Label("Personal Board:"), 1, 0);
@@ -378,7 +405,11 @@ public class Controller extends JPanel implements Initializable {
                 if (isClickable) {
                     button.setOnAction(this::onPlayMoveClicked);
                 } else {
-                    button.setDisable(true);
+                    button.setOnAction(null);
+                    button.setOnDragOver(this::myBoardCellOnDragOver);
+                    button.setOnDragEntered(this::myBoardCellOnDragEntered);
+                    button.setOnDragExited(this::myBoardCellOnDragExit);
+                    button.setOnDragDropped(this::myBoardCellOnDragDropped);
                 }
                 boardComponent[i][j] = button;
                 pane.add(button, j, i);

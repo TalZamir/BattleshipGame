@@ -10,7 +10,7 @@
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0"
             prefWidth="1150.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ui.javafx.Controller">
-    <AnchorPane fx:id="mainParent" minHeight="0.0" minWidth="0.0" prefHeight="748.0" prefWidth="1148.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="748.0" prefWidth="1148.0">
         <MenuBar prefHeight="32.0" prefWidth="1150.0">
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" text="Close"/>
@@ -33,7 +33,7 @@
         <Button fx:id="buttonQuitMatch" layoutX="14.0" layoutY="328.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Quit Match"/>
         <Button fx:id="buttonMine" layoutX="14.0" layoutY="393.0" mnemonicParsing="false" prefHeight="45.0"
-                prefWidth="157.0" text="Place a Mine"/>
+                prefWidth="157.0" text="Drag to put a mine" textAlignment="CENTER"/>
         <Button fx:id="buttonExitGame" layoutX="14.0" layoutY="458.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Exit Game"/>
         <TextArea fx:id="textFieldMessage" editable="false" layoutX="236.0" layoutY="503.0" prefHeight="128.0"
