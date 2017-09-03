@@ -1,3 +1,4 @@
+
 package module;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -5,11 +6,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+
 /**
  * <p>Java class for shipType complex type.
- * <p>
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * 
  * <pre>
  * &lt;complexType name="shipType">
  *   &lt;complexContent>
@@ -23,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="position" type="{}coordinate"/>
+ *         &lt;element name="position" type="{}positionType"/>
  *         &lt;element name="direction">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -37,12 +39,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "shipType", propOrder = {
-        "shipTypeId",
-        "position",
-        "direction"
+    "shipTypeId",
+    "position",
+    "direction"
 })
 public class ShipType {
 
@@ -55,9 +59,11 @@ public class ShipType {
 
     /**
      * Gets the value of the shipTypeId property.
-     *
-     * @return possible object is
-     * {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getShipTypeId() {
         return shipTypeId;
@@ -65,9 +71,11 @@ public class ShipType {
 
     /**
      * Sets the value of the shipTypeId property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setShipTypeId(String value) {
         this.shipTypeId = value;
@@ -75,9 +83,11 @@ public class ShipType {
 
     /**
      * Gets the value of the position property.
-     *
-     * @return possible object is
-     * {@link PositionType }
+     * 
+     * @return
+     *     possible object is
+     *     {@link PositionType }
+     *     
      */
     public PositionType getPosition() {
         return position;
@@ -85,9 +95,11 @@ public class ShipType {
 
     /**
      * Sets the value of the position property.
-     *
-     * @param value allowed object is
-     *              {@link PositionType }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PositionType }
+     *     
      */
     public void setPosition(PositionType value) {
         this.position = value;
@@ -95,9 +107,11 @@ public class ShipType {
 
     /**
      * Gets the value of the direction property.
-     *
-     * @return possible object is
-     * {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getDirection() {
         return direction;
@@ -105,11 +119,14 @@ public class ShipType {
 
     /**
      * Sets the value of the direction property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setDirection(String value) {
         this.direction = value;
     }
+
 }

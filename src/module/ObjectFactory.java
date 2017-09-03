@@ -74,6 +74,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link MineType }
+     * 
+     */
+    public MineType createMineType() {
+        return new MineType();
+    }
+
+    /**
      * Create an instance of {@link ShipType }
      * 
      */

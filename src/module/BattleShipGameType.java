@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="GameType" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="boardSize" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="mine" type="{}mineType"/>
  *         &lt;element name="shipTypes" type="{}shipTypesType"/>
  *         &lt;element name="boards" type="{}boardsType"/>
  *       &lt;/sequence>
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "BattleShipGameType", propOrder = {
     "gameType",
     "boardSize",
+    "mine",
     "shipTypes",
     "boards"
 })
@@ -42,6 +44,8 @@ public class BattleShipGameType {
     protected String gameType;
     @XmlElement(required = true)
     protected String boardSize;
+    @XmlElement(required = true)
+    protected MineType mine;
     @XmlElement(required = true)
     protected ShipTypesType shipTypes;
     @XmlElement(required = true)
@@ -93,6 +97,30 @@ public class BattleShipGameType {
      */
     public void setBoardSize(String value) {
         this.boardSize = value;
+    }
+
+    /**
+     * Gets the value of the mine property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link MineType }
+     *     
+     */
+    public MineType getMine() {
+        return mine;
+    }
+
+    /**
+     * Sets the value of the mine property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link MineType }
+     *     
+     */
+    public void setMine(MineType value) {
+        this.mine = value;
     }
 
     /**
