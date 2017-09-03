@@ -80,8 +80,8 @@
     <xs:sequence>
       <xs:element type="xs:string" name="GameType"/>
       <xs:element type="xs:string" name="boardSize"/>
-      <xs:element type="mineType" name="mine"/>
       <xs:element type="shipTypesType" name="shipTypes"/>
+      <xs:element type="mineType" name="mine"/>
       <xs:element type="boardsType" name="boards"/>
     </xs:sequence>
   </xs:complexType>
