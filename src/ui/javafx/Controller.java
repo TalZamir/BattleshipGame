@@ -64,7 +64,7 @@ public class Controller extends JPanel implements Initializable {
     private final Alert errorAlert;
     private final Alert informationAlert;
     private final Alert confirmationMassage;
-    private final List<Button> buttonList;
+    private final List<Button> menuButtonList;
     public AnchorPane mainPane;
     private BoardButton[][] trackingBoard;
     private BoardButton[][] personalBoard;
@@ -98,7 +98,7 @@ public class Controller extends JPanel implements Initializable {
         errorAlert = new Alert(Alert.AlertType.ERROR);
         informationAlert = new Alert(Alert.AlertType.INFORMATION);
         confirmationMassage = new Alert(Alert.AlertType.CONFIRMATION);
-        buttonList = new ArrayList<>();
+        menuButtonList = new ArrayList<>();
     }
 
     @Override
@@ -113,13 +113,17 @@ public class Controller extends JPanel implements Initializable {
         buttonMine.setOnDragDetected(this::mineOnDragDetected);
         buttonMine.setOnDragDone(this::mineOnDragDone);
         initChoiceBox();
-        buttonList.add(buttonExitGame);
-        buttonList.add(buttonGameStatus);
-        buttonList.add(buttonLoadXml);
-        buttonList.add(buttonMine);
-        buttonList.add(buttonQuitMatch);
-        buttonList.add(buttonStartGame);
-        buttonList.add(buttonStatistics);
+        initMenuButtonsList();
+    }
+
+    private void initMenuButtonsList() {
+        menuButtonList.add(buttonExitGame);
+        menuButtonList.add(buttonGameStatus);
+        menuButtonList.add(buttonLoadXml);
+        menuButtonList.add(buttonMine);
+        menuButtonList.add(buttonQuitMatch);
+        menuButtonList.add(buttonStartGame);
+        menuButtonList.add(buttonStatistics);
     }
 
     private void initChoiceBox() {
@@ -147,15 +151,17 @@ public class Controller extends JPanel implements Initializable {
     private void setFirstSkin() {
 
         Background menuButtonsBackground = createMenuButtonsBackground(15, 0, 0.6039, 0.8353, 1);
+        Background boardButtonsBackground = createMenuButtonsBackground(100, 0, 0.6039, 0.8353, 1);
+        Background background = createMenuButtonsBackgroundWithImage("src/res/abstract_wavy_background_310468.jpg");
 
-        //        cornerRadii = new CornerRadii(100);
-        //        paint = new Color(0, 0.6039, 0.8353, 1);
-        //        insets = new Insets(0);
-        //        Background boardButtonsBackground = new Background(new BackgroundFill(paint, cornerRadii, insets));
+        mainPane.setBackground(background);
+        setSkin(background, boardButtonsBackground, menuButtonsBackground);
+    }
 
+    private Background createMenuButtonsBackgroundWithImage(String imageLocation) {
         Image image = null;
         try {
-            image = new Image(new FileInputStream("src/res/abstract_wavy_background_310468.jpg"),
+            image = new Image(new FileInputStream(imageLocation),
                               mainPane.getWidth(),
                               mainPane.getHeight(),
                               false,
@@ -163,12 +169,8 @@ public class Controller extends JPanel implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        Background background = new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat
+        return new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat
                 .REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
-
-        mainPane.setBackground(background);
-        //        setSkin(background, boardButtonsBackground, menuButtonsBackground);
     }
 
     private Background createMenuButtonsBackground(double cornerRadios,
@@ -196,7 +198,7 @@ public class Controller extends JPanel implements Initializable {
         mainPane.setBackground(background);
         setSkinToBoardsButtons(trackingBoard, boardButtonsBackground);
         setSkinToBoardsButtons(personalBoard, boardButtonsBackground);
-        buttonList.forEach(b -> b.setBackground(menuButtonsBackground));
+        menuButtonList.forEach(b -> b.setBackground(menuButtonsBackground));
     }
 
     private void setDefaultSkin() {
