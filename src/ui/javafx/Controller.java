@@ -7,28 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
@@ -92,6 +74,10 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonLoadXml;
     @FXML
     private AnchorPane contentPane;
+    @FXML
+    private Button buttonUndo;
+    @FXML
+    private Button buttonRedo;
 
     public Controller() {
         theGame = new TheGame();
@@ -112,6 +98,10 @@ public class Controller extends JPanel implements Initializable {
         buttonMine.setOnAction(this::onPlaceMineClicked);
         buttonMine.setOnDragDetected(this::mineOnDragDetected);
         buttonMine.setOnDragDone(this::mineOnDragDone);
+        buttonUndo.setOnAction(this::onUndoClicked);
+        buttonRedo.setOnAction(this::onRedoClicked);
+        buttonUndo.setDisable(true);
+        buttonRedo.setDisable(true);
         initChoiceBox();
         initMenuButtonsList();
     }
@@ -293,6 +283,8 @@ public class Controller extends JPanel implements Initializable {
         } else {
             // XML loaded and game is not began yet
             try {
+                buttonUndo.setDisable(true);
+                buttonRedo.setDisable(true);
                 theGame.startGame();
                 initBoardsComponents(theGame.getBoardSize());
                 drawBoards();
@@ -463,6 +455,7 @@ public class Controller extends JPanel implements Initializable {
         stringBuilder.append("-  The game will restart now...");
         textFieldMessage.setText(stringBuilder.toString());
         theGame.resetGame();
+        activateUndoRedo();
     }
 
     private void onExitClicked(ActionEvent event) {
@@ -544,6 +537,15 @@ public class Controller extends JPanel implements Initializable {
     }
 
     // **************************************************** //
+    // Activates Undo-Redo
+    // **************************************************** //
+    private void activateUndoRedo() {
+        buttonUndo.setDisable(false);
+        textFieldMessage.clear();
+        theGame.activateUbdoRedo();
+    }
+
+    // **************************************************** //
     // Draw boards
     // **************************************************** //
     private void drawBoards() {
@@ -561,4 +563,21 @@ public class Controller extends JPanel implements Initializable {
             }
         }
     }
+
+    private void onUndoClicked(ActionEvent event) {
+        textFieldMessage.setText(theGame.getPrevStep());
+        if (!theGame.hasPrevStep()) {
+            buttonUndo.setDisable(true);
+        }
+        buttonRedo.setDisable(false);
+    }
+
+    private void onRedoClicked(ActionEvent event) {
+        textFieldMessage.setText(theGame.getNextStep());
+        if (!theGame.hasNextStep()) {
+            buttonRedo.setDisable(true);
+        }
+        buttonUndo.setDisable(false);
+    }
+
 }

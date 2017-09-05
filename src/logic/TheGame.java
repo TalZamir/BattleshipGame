@@ -16,12 +16,13 @@ import ui.verifiers.ErrorCollector;
 import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-import static logic.enums.CellStatus.MINE_PLACED;
+import static logic.enums.CellStatus.*;
 
 public class TheGame {
 
@@ -36,6 +37,8 @@ public class TheGame {
     private int opponentPlayerIndex;
     private boolean isPlayerWon;
     private long startingTime;
+    private List<GameStep> gameSteps;
+    private int gameStepIndex;
 
     public TheGame() {
         isActive = true;
@@ -68,6 +71,7 @@ public class TheGame {
     public void startGame() throws XmlContentException {
         if (isFileLoaded) {
             isGameOn = true;
+            gameSteps = new ArrayList<GameStep>();
             startingTime = System.currentTimeMillis();
             for (Player player : players) {
                 player.setTurnStartTime(startingTime);
@@ -310,6 +314,10 @@ public class TheGame {
                 switchTurn();
                 break;
         }
+        // Document step
+        if (cellStatus != MISS && cellStatus != HIT) {
+            gameSteps.add(new GameStep(cellStatus, currentPlayerName, row, col));
+        }
 
         return messageToReturn;
     }
@@ -429,5 +437,42 @@ public class TheGame {
     private String getVictoryMsg(int winnerIndex) {
         return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
                 "~~~~~~~~~~~~~~ " + players[winnerIndex].getName() + " WON THE GAME! ~~~~~~~~~~~~~~";
+    }
+
+    // **************************************************** //
+    // Returns boards of next step
+    // **************************************************** //
+    public void activateUbdoRedo() {
+        gameStepIndex = gameSteps.size() - 1;
+    }
+
+    // **************************************************** //
+    // Returns boards of next step
+    // **************************************************** //
+    public String getNextStep() {
+        gameStepIndex++;
+        return gameSteps.get(gameStepIndex).toString();
+    }
+
+    // **************************************************** //
+    // Returns boards of previous step
+    // **************************************************** //
+    public String getPrevStep() {
+        gameStepIndex--;
+        return gameSteps.get(gameStepIndex).toString();
+    }
+
+    // **************************************************** //
+    // Returns if the current step has a previous one
+    // **************************************************** //
+    public boolean hasPrevStep() {
+        return (gameStepIndex != 0);
+    }
+
+    // **************************************************** //
+    // Returns if the current step has a next one
+    // **************************************************** //
+    public boolean hasNextStep() {
+        return (gameStepIndex < gameSteps.size() - 1);
     }
 }
