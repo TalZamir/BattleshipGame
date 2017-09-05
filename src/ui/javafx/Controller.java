@@ -7,12 +7,31 @@ import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import logic.TheGame;
 import logic.enums.ErrorMessages;
@@ -78,6 +97,8 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonUndo;
     @FXML
     private Button buttonRedo;
+    private Label trackingBoardLabel;
+    private Label personalBoardLabel;
 
     public Controller() {
         theGame = new TheGame();
@@ -139,13 +160,15 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void setFirstSkin() {
-
+        Font font = new Font("Impact", 18);
         Background menuButtonsBackground = createMenuButtonsBackground(15, 0, 0.6039, 0.8353, 1);
         Background boardButtonsBackground = createMenuButtonsBackground(100, 0, 0.6039, 0.8353, 1);
         Background background = createMenuButtonsBackgroundWithImage("src/res/abstract_wavy_background_310468.jpg");
 
-        mainPane.setBackground(background);
-        setSkin(background, boardButtonsBackground, menuButtonsBackground);
+        setSkin(background,
+                boardButtonsBackground,
+                menuButtonsBackground,
+                font);
     }
 
     private Background createMenuButtonsBackgroundWithImage(String imageLocation) {
@@ -159,6 +182,8 @@ public class Controller extends JPanel implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        assert image != null;
         return new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat
                 .REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
     }
@@ -174,21 +199,33 @@ public class Controller extends JPanel implements Initializable {
         return new Background(new BackgroundFill(paint, cornerRadii, insets));
     }
 
-    private void setSkinToBoardsButtons(BoardButton[][] board, Background imageBackground) {
+    private void setSkinToBoardsButtons(BoardButton[][] board, Background imageBackground, Font font) {
         if (board != null) {
             for (int i = 1; i < board.length; i++) {
                 for (int j = 1; j < board.length; j++) {
                     board[i][j].setBackground(imageBackground);
+                    board[i][j].setFont(font);
+                    board[i][j].setPrefSize(font.getSize() * 2, font.getSize() * 2);
                 }
             }
         }
     }
 
-    private void setSkin(Background background, Background boardButtonsBackground, Background menuButtonsBackground) {
+    private void setSkin(Background background, Background boardButtonsBackground, Background menuButtonsBackground, Font font) {
         mainPane.setBackground(background);
-        setSkinToBoardsButtons(trackingBoard, boardButtonsBackground);
-        setSkinToBoardsButtons(personalBoard, boardButtonsBackground);
-        menuButtonList.forEach(b -> b.setBackground(menuButtonsBackground));
+        setSkinToBoardsButtons(trackingBoard, boardButtonsBackground, font);
+        setSkinToBoardsButtons(personalBoard, boardButtonsBackground, font);
+        menuButtonList.forEach(b -> {
+            b.setBackground(menuButtonsBackground);
+            b.setFont(font);
+        });
+
+        buttonMine.setPrefHeight(buttonMine.getFont().getSize() * 5);
+        buttonExitGame.setLayoutY(buttonMine.getLayoutY() + buttonMine.getHeight() + 65);
+        if (personalBoardLabel != null) {
+            personalBoardLabel.setFont(font);
+            trackingBoardLabel.setFont(font);
+        }
     }
 
     private void setDefaultSkin() {
@@ -485,14 +522,15 @@ public class Controller extends JPanel implements Initializable {
         personalPane.setId("personalBoard");
         initCells(trackingBoard, trackingPane, true);
         initCells(personalBoard, personalPane, false);
-        Label lab = new Label("Tracking Board:");
-        lab.setAlignment(Pos.CENTER);
+        trackingBoardLabel = new Label("Tracking Board:");
+        trackingBoardLabel.setAlignment(Pos.CENTER);
 
         grid.setHgap(50); // Horizontal gap
         grid.setVgap(10); // Vertical gap
-        grid.add(lab, 0, 0);
+        grid.add(trackingBoardLabel, 0, 0);
         grid.add(trackingPane, 0, 1);
-        grid.add(new Label("Personal Board:"), 1, 0);
+        personalBoardLabel = new Label("Personal Board:");
+        grid.add(personalBoardLabel, 1, 0);
         grid.add(personalPane, 1, 1);
         contentPane.getChildren().add(grid);
     }
