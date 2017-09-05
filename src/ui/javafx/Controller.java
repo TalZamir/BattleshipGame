@@ -1,13 +1,16 @@
 package ui.javafx;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -18,13 +21,23 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import logic.TheGame;
 import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
 import ui.UserMoveInput;
 import ui.components.BoardButton;
+import ui.enums.SkinType;
 import ui.verifiers.ErrorCollector;
 import ui.verifiers.IInputVerifier;
 import ui.verifiers.XmlFileVerifier;
@@ -34,6 +47,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.SortedMap;
 
@@ -49,12 +64,16 @@ public class Controller extends JPanel implements Initializable {
     private final Alert errorAlert;
     private final Alert informationAlert;
     private final Alert confirmationMassage;
+    private final List<Button> buttonList;
+    public AnchorPane mainPane;
     private BoardButton[][] trackingBoard;
     private BoardButton[][] personalBoard;
     private GridPane grid;
     private GridPane personalPane;
     private GridPane trackingPane;
 
+    @FXML
+    private ChoiceBox<String> choiceBoxSkin;
     @FXML
     private TextArea textFieldMessage;
     @FXML
@@ -79,6 +98,7 @@ public class Controller extends JPanel implements Initializable {
         errorAlert = new Alert(Alert.AlertType.ERROR);
         informationAlert = new Alert(Alert.AlertType.INFORMATION);
         confirmationMassage = new Alert(Alert.AlertType.CONFIRMATION);
+        buttonList = new ArrayList<>();
     }
 
     @Override
@@ -92,6 +112,94 @@ public class Controller extends JPanel implements Initializable {
         buttonMine.setOnAction(this::onPlaceMineClicked);
         buttonMine.setOnDragDetected(this::mineOnDragDetected);
         buttonMine.setOnDragDone(this::mineOnDragDone);
+        initChoiceBox();
+        buttonList.add(buttonExitGame);
+        buttonList.add(buttonGameStatus);
+        buttonList.add(buttonLoadXml);
+        buttonList.add(buttonMine);
+        buttonList.add(buttonQuitMatch);
+        buttonList.add(buttonStartGame);
+        buttonList.add(buttonStatistics);
+    }
+
+    private void initChoiceBox() {
+        choiceBoxSkin.setItems(FXCollections.observableArrayList("Default", "First", "Second"));
+        choiceBoxSkin.getSelectionModel().selectFirst();
+        choiceBoxSkin.setOnAction(this::onChoiceBoxSkinItemSelected);
+    }
+
+    private void onChoiceBoxSkinItemSelected(ActionEvent event) {
+        String selectedItem = ((ChoiceBox<String>) event.getTarget()).getSelectionModel().getSelectedItem();
+
+        if (selectedItem.equalsIgnoreCase(SkinType.DEFAULT.getValue())) {
+            setDefaultSkin();
+        } else if (selectedItem.equalsIgnoreCase(SkinType.FIRST.getValue())) {
+            setFirstSkin();
+        } else {
+
+            setSecondSkin();
+        }
+    }
+
+    private void setSecondSkin() {
+    }
+
+    private void setFirstSkin() {
+
+        Background menuButtonsBackground = createMenuButtonsBackground(15, 0, 0.6039, 0.8353, 1);
+
+        //        cornerRadii = new CornerRadii(100);
+        //        paint = new Color(0, 0.6039, 0.8353, 1);
+        //        insets = new Insets(0);
+        //        Background boardButtonsBackground = new Background(new BackgroundFill(paint, cornerRadii, insets));
+
+        Image image = null;
+        try {
+            image = new Image(new FileInputStream("src/res/abstract_wavy_background_310468.jpg"),
+                              mainPane.getWidth(),
+                              mainPane.getHeight(),
+                              false,
+                              false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Background background = new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat
+                .REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
+
+        mainPane.setBackground(background);
+        //        setSkin(background, boardButtonsBackground, menuButtonsBackground);
+    }
+
+    private Background createMenuButtonsBackground(double cornerRadios,
+                                                   double red,
+                                                   double green,
+                                                   double blue,
+                                                   int opacity) {
+        CornerRadii cornerRadii = new CornerRadii(cornerRadios);
+        Paint paint = new Color(red, green, blue, opacity);
+        Insets insets = new Insets(0);
+        return new Background(new BackgroundFill(paint, cornerRadii, insets));
+    }
+
+    private void setSkinToBoardsButtons(BoardButton[][] board, Background imageBackground) {
+        if (board != null) {
+            for (int i = 1; i < board.length; i++) {
+                for (int j = 1; j < board.length; j++) {
+                    board[i][j].setBackground(imageBackground);
+                }
+            }
+        }
+    }
+
+    private void setSkin(Background background, Background boardButtonsBackground, Background menuButtonsBackground) {
+        mainPane.setBackground(background);
+        setSkinToBoardsButtons(trackingBoard, boardButtonsBackground);
+        setSkinToBoardsButtons(personalBoard, boardButtonsBackground);
+        buttonList.forEach(b -> b.setBackground(menuButtonsBackground));
+    }
+
+    private void setDefaultSkin() {
     }
 
     private void mineOnDragDone(DragEvent event) {
