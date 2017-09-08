@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -22,15 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import logic.TheGame;
@@ -99,6 +90,9 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonRedo;
     private Label trackingBoardLabel;
     private Label personalBoardLabel;
+    private SkinType currentSkinType = SkinType.DEFAULT;
+
+    private SkinBuilder skinBuilder;
 
     public Controller() {
         theGame = new TheGame();
@@ -145,90 +139,99 @@ public class Controller extends JPanel implements Initializable {
 
     private void onChoiceBoxSkinItemSelected(ActionEvent event) {
         String selectedItem = ((ChoiceBox<String>) event.getTarget()).getSelectionModel().getSelectedItem();
+        if (skinBuilder == null) {
+            skinBuilder = new SkinBuilder(buttonMine, mainPane.getWidth(), mainPane.getHeight());
+        }
 
-        if (selectedItem.equalsIgnoreCase(SkinType.DEFAULT.getValue())) {
+        if (selectedItem.equalsIgnoreCase(SkinType.DEFAULT.getValue()) && currentSkinType != SkinType.DEFAULT) {
+
+            currentSkinType = SkinType.DEFAULT;
             setDefaultSkin();
-        } else if (selectedItem.equalsIgnoreCase(SkinType.FIRST.getValue())) {
+        } else if (selectedItem.equalsIgnoreCase(SkinType.FIRST.getValue()) && currentSkinType != SkinType.FIRST) {
+            buttonMine.getSkin();
+            currentSkinType = SkinType.FIRST;
             setFirstSkin();
-        } else {
-
+        } else if (currentSkinType != SkinType.SECOND) {
+            currentSkinType = SkinType.SECOND;
             setSecondSkin();
         }
     }
 
     private void setSecondSkin() {
+
+        SkinCreator skinCreator = skinBuilder.withBackground("src/res/blue-blur-26927-2880x1800.jpg")
+                                             .withBoardsButtonsBackground(0, 0, 0, 0, 1)
+                                             .withMenuButtonsBackground(0, 0, 0, 0, 1)
+                                             .withFontColor("#c4d8de")
+                                             .withFontSize(12)
+                                             .withFontStyle("Cochin")
+                                             .build();
+        setSkin(skinCreator);
     }
 
     private void setFirstSkin() {
-        Font font = new Font("Impact", 18);
-        Background menuButtonsBackground = createMenuButtonsBackground(15, 0, 0.6039, 0.8353, 1);
-        Background boardButtonsBackground = createMenuButtonsBackground(100, 0, 0.6039, 0.8353, 1);
-        Background background = createMenuButtonsBackgroundWithImage("src/res/abstract_wavy_background_310468.jpg");
-
-        setSkin(background,
-                boardButtonsBackground,
-                menuButtonsBackground,
-                font);
+        SkinCreator skinCreator = skinBuilder.withBackground("src/res/abstract_wavy_background_310468.jpg")
+                                             .withBoardsButtonsBackground(15, 0, 0.6039, 0.8353, 1)
+                                             .withMenuButtonsBackground(15, 0, 0.6039, 0.8353, 1)
+                                             .withFontSize(18)
+                                             .withFontStyle("Impact")
+                                             .build();
+        setSkin(skinCreator);
     }
 
-    private Background createMenuButtonsBackgroundWithImage(String imageLocation) {
-        Image image = null;
-        try {
-            image = new Image(new FileInputStream(imageLocation),
-                              mainPane.getWidth(),
-                              mainPane.getHeight(),
-                              false,
-                              false);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        assert image != null;
-        return new Background(new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat
-                .REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT));
-    }
-
-    private Background createMenuButtonsBackground(double cornerRadios,
-                                                   double red,
-                                                   double green,
-                                                   double blue,
-                                                   int opacity) {
-        CornerRadii cornerRadii = new CornerRadii(cornerRadios);
-        Paint paint = new Color(red, green, blue, opacity);
-        Insets insets = new Insets(0);
-        return new Background(new BackgroundFill(paint, cornerRadii, insets));
-    }
-
-    private void setSkinToBoardsButtons(BoardButton[][] board, Background imageBackground, Font font) {
+    private void setSkinToBoardsButtons(BoardButton[][] board, Background imageBackground, Font font, String fontColor) {
         if (board != null) {
             for (int i = 1; i < board.length; i++) {
                 for (int j = 1; j < board.length; j++) {
                     board[i][j].setBackground(imageBackground);
                     board[i][j].setFont(font);
-                    board[i][j].setPrefSize(font.getSize() * 2, font.getSize() * 2);
+                    board[i][j].setPrefSize(font.getSize() * 2.2, font.getSize() * 2.2);
+                    board[i][j].setStyle(fontColor);
                 }
             }
         }
     }
 
-    private void setSkin(Background background, Background boardButtonsBackground, Background menuButtonsBackground, Font font) {
-        mainPane.setBackground(background);
-        setSkinToBoardsButtons(trackingBoard, boardButtonsBackground, font);
-        setSkinToBoardsButtons(personalBoard, boardButtonsBackground, font);
+    private void setSkin(SkinCreator skinCreator) {
+        mainPane.setBackground(skinCreator.getBackground());
+        setSkinToBoardsButtons(trackingBoard, skinCreator.getBoardsButtonsBackground(), skinCreator.getFont(), skinCreator.getFontColor());
+        setSkinToBoardsButtons(personalBoard, skinCreator.getBoardsButtonsBackground(), skinCreator.getFont(), skinCreator.getFontColor());
         menuButtonList.forEach(b -> {
-            b.setBackground(menuButtonsBackground);
-            b.setFont(font);
+            b.setBackground(skinCreator.getMenuButtonsBackground());
+            b.setFont(skinCreator.getFont());
+            b.setStyle(skinCreator.getFontColor());
         });
 
-        buttonMine.setPrefHeight(buttonMine.getFont().getSize() * 5);
-        buttonExitGame.setLayoutY(buttonMine.getLayoutY() + buttonMine.getHeight() + 65);
+        buttonMine.setWrapText(true);
+        buttonExitGame.setLayoutY(buttonMine.getLayoutY() + 65);
         if (personalBoardLabel != null) {
-            personalBoardLabel.setFont(font);
-            trackingBoardLabel.setFont(font);
+            personalBoardLabel.setFont(skinCreator.getFont());
+            trackingBoardLabel.setFont(skinCreator.getFont());
         }
     }
 
     private void setDefaultSkin() {
+        SkinCreator skinCreator = skinBuilder.buildDefaultValues();
+
+        mainPane.setBackground(skinCreator.getDefaultBackground());
+
+        setSkinToBoardsButtons(trackingBoard, skinCreator.getDefaultBackground(), skinCreator.getDefaultFont(),
+                               skinCreator.getFontColor());
+        setSkinToBoardsButtons(personalBoard, skinCreator.getDefaultBackground(), skinCreator.getDefaultFont(), skinCreator.getFontColor());
+
+        menuButtonList.forEach(b -> {
+            b.setBackground(skinCreator.getDefaultBackground());
+            b.setFont(skinCreator.getDefaultFont());
+            b.setStyle(skinCreator.getDefaultStyle());
+            b.setSkin(skinCreator.getDefaultSkin());
+        });
+
+        buttonMine.setWrapText(true);
+        buttonExitGame.setLayoutY(buttonMine.getLayoutY() + 65);
+        if (personalBoardLabel != null) {
+            personalBoardLabel.setFont(skinCreator.getDefaultFont());
+            trackingBoardLabel.setFont(skinCreator.getDefaultFont());
+        }
     }
 
     private void mineOnDragDone(DragEvent event) {
@@ -617,5 +620,4 @@ public class Controller extends JPanel implements Initializable {
         }
         buttonUndo.setDisable(false);
     }
-
 }
