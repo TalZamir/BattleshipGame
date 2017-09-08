@@ -5,14 +5,16 @@ import logic.enums.CellStatus;
 public class GameStep {
 
     private final CellStatus cellStatus;
+    private final int playerId;
     private final String playerName;
     private final int row;
     private final int col;
 
 
-    public GameStep(CellStatus cellStatus, String playerName, int row, int col) {
+    public GameStep(CellStatus cellStatus, int playerId, int row, int col) {
         this.cellStatus = cellStatus;
-        this.playerName = playerName;
+        this.playerId = playerId;
+        this.playerName = "Player" + (playerId + 1);
         this.row = row;
         this.col = col;
     }
@@ -42,5 +44,25 @@ public class GameStep {
                 break;
         }
         return result;
+    }
+
+    public CellStatus getCellStatus() {
+        return cellStatus;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 }

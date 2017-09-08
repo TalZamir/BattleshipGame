@@ -6,19 +6,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
@@ -537,16 +527,24 @@ public class Controller extends JPanel implements Initializable {
         }
     }
 
+    // **************************************************** //
+    // Undo button clicked
+    // **************************************************** //
     private void onUndoClicked(ActionEvent event) {
         textFieldMessage.setText(theGame.getPrevStep());
+        drawBoards();
         if (!theGame.hasPrevStep()) {
             buttonUndo.setDisable(true);
         }
         buttonRedo.setDisable(false);
     }
 
+    // **************************************************** //
+    // Redo button clicked
+    // **************************************************** //
     private void onRedoClicked(ActionEvent event) {
         textFieldMessage.setText(theGame.getNextStep());
+        drawBoards();
         if (!theGame.hasNextStep()) {
             buttonRedo.setDisable(true);
         }

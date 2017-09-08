@@ -77,6 +77,28 @@ public class Player implements IPlayer {
         this.score += amount;
     }
 
+    // **************************************************** //
+    // Redo methods
+    // **************************************************** //
+    void decreaseHit() {
+        hits--;
+    }
+
+    void decreaseMiss() {
+        misses--;
+    }
+
+    void recoverMine() {
+        mines++;
+    }
+
+    void decreaseScore(int amount) {
+        this.score -= amount;
+    }
+
+    // **************************************************** //
+    // Seters & Geters
+    // **************************************************** //
     Board getBoard() {
         return board;
     }

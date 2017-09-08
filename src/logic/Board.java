@@ -1,12 +1,7 @@
 package logic;
 
 import logic.bases.BattleshipBase;
-import logic.battleships.AdvancedBattleship;
-import logic.battleships.Battleship;
-import logic.battleships.BattleshipDownRight;
-import logic.battleships.BattleshipRightDown;
-import logic.battleships.BattleshipRightUp;
-import logic.battleships.BattleshipUpRight;
+import logic.battleships.*;
 import logic.enums.BattleshipDirectionType;
 import logic.enums.CellStatus;
 import logic.enums.ErrorMessages;
@@ -285,4 +280,34 @@ public class Board {
     public int getSize() {
         return board.length;
     }
+
+    // **************************************************** //
+    // Redo board
+    // **************************************************** //
+    public int redoMove(GameStep gameStep) {
+        int row = gameStep.getRow();
+        int col = gameStep.getCol();
+        int pointsLost = 0;
+
+        switch (gameStep.getCellStatus()) {
+            case SHIP_DOWN:
+                board[row][col].setCellStatus(CellStatus.SHIP);
+                pointsLost = board[row][col].getShipRef().getScore();
+                break;
+            case SHIP:
+                board[row][col].setCellStatus(CellStatus.SHIP);
+                break;
+            case REGULAR:
+                board[row][col].setCellStatus(CellStatus.REGULAR);
+                break;
+            case MINE_PLACED:
+                board[row][col].setCellStatus(CellStatus.REGULAR);
+                break;
+            case MINE:
+                board[row][col].setCellStatus(CellStatus.MINE);
+                break;
+        }
+        return pointsLost;
+    }
+
 }
