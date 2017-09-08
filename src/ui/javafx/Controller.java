@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -87,7 +88,7 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonRedo;
     private Label trackingBoardLabel;
     private Label personalBoardLabel;
-    private SkinType currentSkinType = SkinType.DEFAULT;
+    //    private SkinType currentSkinType = SkinType.DEFAULT;
     private TextArea textFieldMessage;
 
     private SkinBuilder skinBuilder;
@@ -142,16 +143,12 @@ public class Controller extends JPanel implements Initializable {
             skinBuilder = new SkinBuilder(buttonMine, mainPane.getWidth(), mainPane.getHeight());
         }
 
-        if (selectedItem.equalsIgnoreCase(SkinType.DEFAULT.getValue()) && currentSkinType != SkinType.DEFAULT) {
-
-            currentSkinType = SkinType.DEFAULT;
+        if (selectedItem.equalsIgnoreCase(SkinType.DEFAULT.getValue())) {
             setDefaultSkin();
-        } else if (selectedItem.equalsIgnoreCase(SkinType.LIGHT.getValue()) && currentSkinType != SkinType.LIGHT) {
+        } else if (selectedItem.equalsIgnoreCase(SkinType.LIGHT.getValue())) {
             buttonMine.getSkin();
-            currentSkinType = SkinType.LIGHT;
             setFirstSkin();
-        } else if (currentSkinType != SkinType.DARCULA) {
-            currentSkinType = SkinType.DARCULA;
+        } else {
             setSecondSkin();
         }
     }
@@ -564,6 +561,7 @@ public class Controller extends JPanel implements Initializable {
         grid = new GridPane(); // global grid
         GridPane gameGrid = new GridPane();
         GridPane textPane = new GridPane();
+        textPane.setPadding(new Insets(20, 0, 0, 0));
         trackingPane = new GridPane();
         personalPane = new GridPane();
         trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
