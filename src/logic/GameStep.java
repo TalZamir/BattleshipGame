@@ -9,14 +9,35 @@ public class GameStep {
     private final String playerName;
     private final int row;
     private final int col;
+    private final char[][] personalBoard;
+    private final char[][] traceBoard;
 
 
-    public GameStep(CellStatus cellStatus, int playerId, int row, int col) {
+    public GameStep(CellStatus cellStatus, int row, int col, Player player, Player opponent) {
         this.cellStatus = cellStatus;
-        this.playerId = playerId;
-        this.playerName = "Player" + (playerId + 1);
         this.row = row;
         this.col = col;
+
+        personalBoard = copyBoard(player.getBoard().getAllieMode());
+        traceBoard = copyBoard(opponent.getBoard().getAdversaryMode());
+
+        this.playerId = player.getUserId();
+        this.playerName = "Player" + (playerId + 1);
+    }
+
+    private char[][] copyBoard(char[][] boardToCopy) {
+        char[][] actualBoard = new char[boardToCopy.length][boardToCopy.length];
+        for (int i = 1; i < boardToCopy.length; i++) {
+            for (int j = 1; j < boardToCopy.length; j++) {
+                actualBoard[i][j] = boardToCopy[i][j];
+            }
+        }
+        return actualBoard;
+    }
+
+    public ReplayInfo getReplayInfo() {
+        System.out.println("bla");
+        return new ReplayInfo(personalBoard, traceBoard);
     }
 
     @Override
@@ -64,5 +85,13 @@ public class GameStep {
 
     public int getCol() {
         return col;
+    }
+
+    public char[][] getPersonalBoard() {
+        return personalBoard;
+    }
+
+    public char[][] getTraceBoard() {
+        return traceBoard;
     }
 }

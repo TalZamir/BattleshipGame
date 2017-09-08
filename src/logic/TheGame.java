@@ -321,7 +321,8 @@ public class TheGame {
         }
         // Document step
         if (cellStatus != MISS && cellStatus != HIT && isGameOn) {
-            gameSteps.add(new GameStep(cellStatus, playerHelper, row, col));
+            int opponentHelper = (playerHelper + 1) % 2;
+            gameSteps.add(new GameStep(cellStatus, row, col, players[playerHelper], players[opponentHelper]));
         }
 
         return messageToReturn;
@@ -463,28 +464,19 @@ public class TheGame {
     // **************************************************** //
     // Returns boards of next step
     // **************************************************** //
-    public String getNextStep() {
+    public ReplayInfo getNextStep() {
         gameStepIndex++;
-        GameStep stepToPlay = gameSteps.get(gameStepIndex);
-        replayArrangePlayers(stepToPlay);
-        boolean moveType = (stepToPlay.getCellStatus() != MINE_PLACED);
-        UserMoveInput input = new UserMoveInput(stepToPlay.getRow(), stepToPlay.getCol());
-        try {
-            playMove(input, moveType);
-        } catch (XmlContentException e) {
-            e.printStackTrace();
-        }
-        replayArrangePlayers(stepToPlay);
-        return gameSteps.get(gameStepIndex).toString();
+        GameStep stepToShow = gameSteps.get(gameStepIndex);
+        return stepToShow.getReplayInfo();
     }
 
     // **************************************************** //
     // Returns boards of previous step
     // **************************************************** //
-    public String getPrevStep() {
-        playPrevious();
+    public ReplayInfo getPrevStep() {
         gameStepIndex--;
-        return gameSteps.get(gameStepIndex).toString();
+        GameStep stepToShow = gameSteps.get(gameStepIndex);
+        return stepToShow.getReplayInfo();
     }
 
     // **************************************************** //
@@ -504,56 +496,60 @@ public class TheGame {
     // **************************************************** //
     // Performs board redo
     // **************************************************** //
-    private void playPrevious() {
-        int pointsToDecrease = 0;
-        GameStep stepToRedo = gameSteps.get(gameStepIndex);
-        replayArrangePlayers(stepToRedo);
-        if (stepToRedo.getCellStatus() == MINE_PLACED) {
-            players[currentPlayerIndex].getBoard().redoMove(stepToRedo); // Revert move on board
-        } else {
-            pointsToDecrease = players[opponentPlayerIndex].getBoard().redoMove(stepToRedo); // Revert move on board
-        }
-
-        switch (stepToRedo.getCellStatus()) {
-            case SHIP:
-                players[currentPlayerIndex].decreaseHit();
-                break;
-            case SHIP_DOWN:
-                players[currentPlayerIndex].decreaseHit();
-                players[opponentPlayerIndex].decreaseScore(pointsToDecrease);
-                break;
-            // Mines different cases handlers
-            case MINE_HIT_REGULAR:
-                players[currentPlayerIndex].getBoard().redoMove(new GameStep(REGULAR, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
-                players[currentPlayerIndex].decreaseHit();
-                break;
-            case MINE_HIT_SHIP:
-                players[currentPlayerIndex].getBoard().redoMove(new GameStep(SHIP, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
-                players[currentPlayerIndex].decreaseHit();
-                break;
-            case MINE_HIT_DESTROYED:
-                pointsToDecrease = players[opponentPlayerIndex].getBoard().redoMove(new GameStep(SHIP, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
-                players[currentPlayerIndex].decreaseScore(pointsToDecrease);
-                players[currentPlayerIndex].decreaseHit();
-                break;
-            case MINE_HIT_ALREADY:
-                players[currentPlayerIndex].decreaseHit();
-                break;
-            case MINE_HIT_MINE:
-                players[currentPlayerIndex].getBoard().redoMove(new GameStep(MINE, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
-                players[currentPlayerIndex].decreaseHit();
-                break;
-            // *** END of mines handlers
-            case MINE_PLACED:
-                break;
-            case REGULAR:
-                players[opponentPlayerIndex].decreaseMiss();
-                break;
-        }
-    }
-
-    private void replayArrangePlayers(GameStep gamestep) {
-        currentPlayerIndex = gamestep.getPlayerId();
-        opponentPlayerIndex = (gamestep.getPlayerId() + 1) % 2;
-    }
+//    private void playPrevious() {
+//        int pointsToDecrease = 0;
+//        GameStep stepToRedo = gameSteps.get(gameStepIndex);
+//        replayArrangePlayers(stepToRedo);
+//        if (stepToRedo.getCellStatus() == MINE_PLACED) {
+//            players[currentPlayerIndex].getBoard().redoMove(stepToRedo); // Revert move on board
+//        } else {
+//            pointsToDecrease = players[opponentPlayerIndex].getBoard().redoMove(stepToRedo); // Revert move on board
+//        }
+//
+//        switch (stepToRedo.getCellStatus()) {
+//            case SHIP:
+//                players[currentPlayerIndex].decreaseHit();
+//                break;
+//            case SHIP_DOWN:
+//                players[currentPlayerIndex].decreaseHit();
+//                players[opponentPlayerIndex].decreaseScore(pointsToDecrease);
+//                break;
+//            // Mines different cases handlers
+//            case MINE_HIT_REGULAR:
+//                players[currentPlayerIndex].getBoard().redoMove(new GameStep(REGULAR, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
+//                players[currentPlayerIndex].decreaseHit();
+//                break;
+//            case MINE_HIT_SHIP:
+//                players[currentPlayerIndex].getBoard().redoMove(new GameStep(SHIP, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
+//                players[currentPlayerIndex].decreaseHit();
+//                break;
+//            case MINE_HIT_DESTROYED:
+//                pointsToDecrease = players[opponentPlayerIndex].getBoard().redoMove(new GameStep(SHIP, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
+//                players[currentPlayerIndex].decreaseScore(pointsToDecrease);
+//                players[currentPlayerIndex].decreaseHit();
+//                break;
+//            case MINE_HIT_ALREADY:
+//                players[currentPlayerIndex].decreaseHit();
+//                break;
+//            case MINE_HIT_MINE:
+//                players[currentPlayerIndex].getBoard().redoMove(new GameStep(MINE, UNINITIALIZED, stepToRedo.getRow(), stepToRedo.getCol()));
+//                players[currentPlayerIndex].decreaseHit();
+//                break;
+//            // *** END of mines handlers
+//            case MINE_PLACED:
+//                break;
+//            case REGULAR:
+//                players[opponentPlayerIndex].decreaseMiss();
+//                break;
+//        }
+//    }
+//
+//    private void replayArrangePlayers(GameStep gamestep) {
+//        currentPlayerIndex = gamestep.getPlayerId();
+//        opponentPlayerIndex = (gamestep.getPlayerId() + 1) % 2;
+//    }
+//
+//    private void documentStep() {
+//
+//    }
 }

@@ -14,6 +14,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import logic.ReplayInfo;
 import logic.TheGame;
 import logic.enums.ErrorMessages;
 import logic.exceptions.XmlContentException;
@@ -197,27 +198,27 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void setDefaultSkin() {
-        SkinCreator skinCreator = skinBuilder.buildDefaultValues();
-
-        mainPane.setBackground(skinCreator.getDefaultBackground());
-
-        setSkinToBoardsButtons(trackingBoard, skinCreator.getDefaultBackground(), skinCreator.getDefaultFont(),
-                               skinCreator.getFontColor());
-        setSkinToBoardsButtons(personalBoard, skinCreator.getDefaultBackground(), skinCreator.getDefaultFont(), skinCreator.getFontColor());
-
-        menuButtonList.forEach(b -> {
-            b.setBackground(skinCreator.getDefaultBackground());
-            b.setFont(skinCreator.getDefaultFont());
-            b.setStyle(skinCreator.getDefaultStyle());
-            b.setSkin(skinCreator.getDefaultSkin());
-        });
-
-        buttonMine.setWrapText(true);
-        buttonExitGame.setLayoutY(buttonMine.getLayoutY() + 65);
-        if (personalBoardLabel != null) {
-            personalBoardLabel.setFont(skinCreator.getDefaultFont());
-            trackingBoardLabel.setFont(skinCreator.getDefaultFont());
-        }
+//        SkinCreator skinCreator = skinBuilder.buildDefaultValues();
+//
+//        mainPane.setBackground(skinCreator.getDefaultBackground());
+//
+//        setSkinToBoardsButtons(trackingBoard, skinCreator.getDefaultBackground(), skinCreator.getDefaultFont(),
+//                               skinCreator.getFontColor());
+//        setSkinToBoardsButtons(personalBoard, skinCreator.getDefaultBackground(), skinCreator.getDefaultFont(), skinCreator.getFontColor());
+//
+//        menuButtonList.forEach(b -> {
+//            b.setBackground(skinCreator.getDefaultBackground());
+//            b.setFont(skinCreator.getDefaultFont());
+//            b.setStyle(skinCreator.getDefaultStyle());
+//            b.setSkin(skinCreator.getDefaultSkin());
+//        });
+//
+//        buttonMine.setWrapText(true);
+//        buttonExitGame.setLayoutY(buttonMine.getLayoutY() + 65);
+//        if (personalBoardLabel != null) {
+//            personalBoardLabel.setFont(skinCreator.getDefaultFont());
+//            trackingBoardLabel.setFont(skinCreator.getDefaultFont());
+//        }
     }
 
     private void mineOnDragDone(DragEvent event) {
@@ -517,6 +518,14 @@ public class Controller extends JPanel implements Initializable {
     }
 
     // **************************************************** //
+    // Draw boards
+    // **************************************************** //
+    private void showReplayStep(ReplayInfo replayInfo) {
+        drawSpecificBoard(personalBoard, replayInfo.getPersonalBoard());
+        drawSpecificBoard(trackingBoard, replayInfo.getTraceBoard());
+    }
+
+    // **************************************************** //
     // Drawing a given UI board
     // **************************************************** //
     private void drawSpecificBoard(BoardButton[][] physicalboard, char[][] logicalBoard) {
@@ -531,8 +540,8 @@ public class Controller extends JPanel implements Initializable {
     // Undo button clicked
     // **************************************************** //
     private void onUndoClicked(ActionEvent event) {
-        textFieldMessage.setText(theGame.getPrevStep());
-        drawBoards();
+        ReplayInfo replayInfo = theGame.getPrevStep();
+        showReplayStep(replayInfo);
         if (!theGame.hasPrevStep()) {
             buttonUndo.setDisable(true);
         }
@@ -543,8 +552,8 @@ public class Controller extends JPanel implements Initializable {
     // Redo button clicked
     // **************************************************** //
     private void onRedoClicked(ActionEvent event) {
-        textFieldMessage.setText(theGame.getNextStep());
-        drawBoards();
+        ReplayInfo replayInfo = theGame.getNextStep();
+        showReplayStep(replayInfo);
         if (!theGame.hasNextStep()) {
             buttonRedo.setDisable(true);
         }

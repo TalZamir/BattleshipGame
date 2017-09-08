@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class Player implements IPlayer {
 
     private final int minesAmount;
-    private final Board board;
+    private Board board;
     private final String name;
     private int hits;
     private int misses;
@@ -125,6 +125,10 @@ public class Player implements IPlayer {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     private void updateTime() {
