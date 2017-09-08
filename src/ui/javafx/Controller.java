@@ -5,9 +5,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
@@ -121,13 +131,13 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void initChoiceBox() {
-        choiceBoxSkin.setItems(FXCollections.observableArrayList("Default", "First", "Second"));
+        choiceBoxSkin.setItems(FXCollections.observableArrayList("Default", "Light", "Darcula"));
         choiceBoxSkin.getSelectionModel().selectFirst();
         choiceBoxSkin.setOnAction(this::onChoiceBoxSkinItemSelected);
     }
 
     private void onChoiceBoxSkinItemSelected(ActionEvent event) {
-        String selectedItem = ((ChoiceBox<String>) event.getTarget()).getSelectionModel().getSelectedItem();
+        String selectedItem = ((ChoiceBox<String>) event.getSource()).getSelectionModel().getSelectedItem();
         if (skinBuilder == null) {
             skinBuilder = new SkinBuilder(buttonMine, mainPane.getWidth(), mainPane.getHeight());
         }
@@ -136,12 +146,12 @@ public class Controller extends JPanel implements Initializable {
 
             currentSkinType = SkinType.DEFAULT;
             setDefaultSkin();
-        } else if (selectedItem.equalsIgnoreCase(SkinType.FIRST.getValue()) && currentSkinType != SkinType.FIRST) {
+        } else if (selectedItem.equalsIgnoreCase(SkinType.LIGHT.getValue()) && currentSkinType != SkinType.LIGHT) {
             buttonMine.getSkin();
-            currentSkinType = SkinType.FIRST;
+            currentSkinType = SkinType.LIGHT;
             setFirstSkin();
-        } else if (currentSkinType != SkinType.SECOND) {
-            currentSkinType = SkinType.SECOND;
+        } else if (currentSkinType != SkinType.DARCULA) {
+            currentSkinType = SkinType.DARCULA;
             setSecondSkin();
         }
     }
@@ -270,7 +280,6 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void onLoadXmlClicked(ActionEvent event) {
-
         if (!theGame.isGameOn()) {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("XML Resource File");
@@ -316,6 +325,9 @@ public class Controller extends JPanel implements Initializable {
                 buttonRedo.setDisable(true);
                 theGame.startGame();
                 initBoardsComponents(theGame.getBoardSize());
+                ChoiceBox<String> choiceBox = new ChoiceBox<>();
+                choiceBox.setValue(choiceBoxSkin.getValue());
+                onChoiceBoxSkinItemSelected(new ActionEvent(choiceBox, null));
                 drawBoards();
                 setButtonMineText();
                 textFieldMessage.setText(getTurnMsg());

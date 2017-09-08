@@ -5,8 +5,8 @@ package ui.enums;
  */
 public enum SkinType {
     DEFAULT("Default"),
-    FIRST("First"),
-    SECOND("Second");
+    LIGHT("Light"),
+    DARCULA("Darcula");
 
     private final String value;
 
