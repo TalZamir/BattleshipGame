@@ -6,38 +6,26 @@
             prefWidth="1150.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ui.javafx.Controller">
     <AnchorPane fx:id="mainPane" minHeight="0.0" minWidth="0.0" prefHeight="748.0" prefWidth="1148.0">
-        <MenuBar prefHeight="32.0" prefWidth="1150.0">
-            <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" text="Close"/>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-                <MenuItem mnemonicParsing="false" text="Delete"/>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" text="About"/>
-            </Menu>
-        </MenuBar>
-        <Button fx:id="buttonLoadXml" layoutX="14.0" layoutY="67.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonLoadXml" layoutX="17.0" layoutY="22.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Load XML"/>
-        <Button fx:id="buttonStartGame" layoutX="14.0" layoutY="132.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonStartGame" layoutX="17.0" layoutY="79.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Start Game"/>
-        <Button fx:id="buttonGameStatus" layoutX="14.0" layoutY="197.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonGameStatus" layoutX="17.0" layoutY="135.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Game Status"/>
-        <Button fx:id="buttonStatistics" layoutX="14.0" layoutY="263.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonStatistics" layoutX="17.0" layoutY="191.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Statistics"/>
-        <Button fx:id="buttonQuitMatch" layoutX="14.0" layoutY="328.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonQuitMatch" layoutX="17.0" layoutY="311.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Quit Match"/>
-        <Button fx:id="buttonMine" layoutX="14.0" layoutY="393.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonMine" layoutX="17.0" layoutY="246.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Drag to put a mine" textAlignment="CENTER"/>
-        <Button fx:id="buttonExitGame" layoutX="14.0" layoutY="458.0" mnemonicParsing="false" prefHeight="45.0"
+        <Button fx:id="buttonExitGame" layoutX="17.0" layoutY="365.0" mnemonicParsing="false" prefHeight="45.0"
                 prefWidth="157.0" text="Exit Game"/>
-        <TextArea fx:id="textFieldMessage" editable="false" layoutX="218.0" layoutY="474.0" prefHeight="191.0"
-                  prefWidth="615.0"/>
-        <AnchorPane fx:id="contentPane" layoutX="218.0" layoutY="67.0" prefHeight="415.0" prefWidth="630.0"/>
-        <ChoiceBox fx:id="choiceBoxSkin" layoutX="218.0" layoutY="40.0" prefWidth="150.0"/>
-        <Button fx:id="buttonUndo" layoutX="966.0" layoutY="523.0" mnemonicParsing="false" prefHeight="35.0"
-                prefWidth="128.0" text="Undo"/>
-        <Button fx:id="buttonRedo" layoutX="966.0" layoutY="579.0" mnemonicParsing="false" prefHeight="35.0"
+        <AnchorPane fx:id="contentPane" layoutX="201.0" layoutY="22.0" prefHeight="727.0" prefWidth="950.0"/>
+        <ChoiceBox fx:id="choiceBoxSkin" layoutX="18.0" layoutY="429.0" prefHeight="31.0" prefWidth="156.0"/>
+        <Separator layoutX="185.0" layoutY="22.0" orientation="VERTICAL" prefHeight="713.0" prefWidth="9.0"/>
+        <Button fx:id="buttonRedo" layoutX="5.0" layoutY="487.0" mnemonicParsing="false" prefHeight="35.0"
                 prefWidth="128.0" text="Redo"/>
+        <Button fx:id="buttonUndo" layoutX="17.0" layoutY="535.0" mnemonicParsing="false" prefHeight="35.0"
+                prefWidth="128.0" text="Undo"/>
     </AnchorPane>
 </ScrollPane>

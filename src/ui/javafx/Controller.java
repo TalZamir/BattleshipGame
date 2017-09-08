@@ -5,20 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
@@ -67,8 +56,6 @@ public class Controller extends JPanel implements Initializable {
     @FXML
     private ChoiceBox<String> choiceBoxSkin;
     @FXML
-    private TextArea textFieldMessage;
-    @FXML
     private Button buttonGameStatus;
     @FXML
     private Button buttonStatistics;
@@ -91,6 +78,7 @@ public class Controller extends JPanel implements Initializable {
     private Label trackingBoardLabel;
     private Label personalBoardLabel;
     private SkinType currentSkinType = SkinType.DEFAULT;
+    private TextArea textFieldMessage;
 
     private SkinBuilder skinBuilder;
 
@@ -100,6 +88,7 @@ public class Controller extends JPanel implements Initializable {
         informationAlert = new Alert(Alert.AlertType.INFORMATION);
         confirmationMassage = new Alert(Alert.AlertType.CONFIRMATION);
         menuButtonList = new ArrayList<>();
+        textFieldMessage = new TextArea();
     }
 
     @Override
@@ -512,72 +501,6 @@ public class Controller extends JPanel implements Initializable {
     }
 
     // **************************************************** //
-    // Initiates boards components
-    // **************************************************** //
-    private void initBoardsComponents(int convenientBoardSize) {
-        contentPane.getChildren().clear();
-        grid = new GridPane();
-        trackingPane = new GridPane();
-        personalPane = new GridPane();
-        trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
-        personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
-        trackingPane.setId("trackingBoard");
-        personalPane.setId("personalBoard");
-        initCells(trackingBoard, trackingPane, true);
-        initCells(personalBoard, personalPane, false);
-        trackingBoardLabel = new Label("Tracking Board:");
-        trackingBoardLabel.setAlignment(Pos.CENTER);
-
-        grid.setHgap(50); // Horizontal gap
-        grid.setVgap(10); // Vertical gap
-        grid.add(trackingBoardLabel, 0, 0);
-        grid.add(trackingPane, 0, 1);
-        personalBoardLabel = new Label("Personal Board:");
-        grid.add(personalBoardLabel, 1, 0);
-        grid.add(personalPane, 1, 1);
-        contentPane.getChildren().add(grid);
-    }
-
-    // **************************************************** //
-    // Initiates boards components
-    // **************************************************** //
-    private void initCells(BoardButton[][] boardComponent, GridPane pane, boolean isClickable) {
-        pane.setHgap(5); // Horizontal gap
-        pane.setVgap(5); // Vertical gap
-        for (int i = 1; i < boardComponent.length; i++) {
-            for (int j = 1; j < boardComponent.length; j++) {
-                BoardButton button = new BoardButton(i, j);
-                button.setPrefWidth(35);
-                if (isClickable) {
-                    button.setOnAction(this::onPlayMoveClicked);
-                } else {
-                    button.setOnAction(null);
-                    button.setOnDragOver(this::myBoardCellOnDragOver);
-                    button.setOnDragEntered(this::myBoardCellOnDragEntered);
-                    button.setOnDragExited(this::myBoardCellOnDragExit);
-                    button.setOnDragDropped(this::myBoardCellOnDragDropped);
-                }
-                boardComponent[i][j] = button;
-                pane.add(button, j, i);
-            }
-        }
-        // Column characters
-        char colVal = 'A';
-        for (int i = 1; i < boardComponent.length; i++) {
-            Label label = new Label(String.valueOf(colVal));
-            pane.add(label, i, 0);
-            pane.setHalignment(label, HPos.CENTER);
-            colVal++;
-        }
-        // Row numbers
-        for (int i = 1; i < boardComponent.length; i++) {
-            Label label = new Label(String.valueOf(i));
-            pane.add(new Label(String.valueOf(i)), 0, i);
-            pane.setHalignment(label, HPos.CENTER);
-        }
-    }
-
-    // **************************************************** //
     // Activates Undo-Redo
     // **************************************************** //
     private void activateUndoRedo() {
@@ -619,5 +542,77 @@ public class Controller extends JPanel implements Initializable {
             buttonRedo.setDisable(true);
         }
         buttonUndo.setDisable(false);
+    }
+
+    // **************************************************** //
+    // Initiates boards components
+    // **************************************************** //
+    private void initBoardsComponents(int convenientBoardSize) {
+        contentPane.getChildren().clear();
+        grid = new GridPane(); // global grid
+        GridPane gameGrid = new GridPane();
+        GridPane textPane = new GridPane();
+        trackingPane = new GridPane();
+        personalPane = new GridPane();
+        trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
+        personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
+        trackingPane.setId("trackingBoard");
+        personalPane.setId("personalBoard");
+        initCells(trackingBoard, trackingPane, true);
+        initCells(personalBoard, personalPane, false);
+        trackingBoardLabel = new Label("Tracking Board:");
+        personalBoardLabel = new Label("Personal Board:");
+        textFieldMessage.autosize();
+
+        gameGrid.setHgap(50); // Horizontal gap
+        gameGrid.setVgap(10); // Vertical gap
+        gameGrid.add(trackingBoardLabel, 0, 1);
+        gameGrid.add(trackingPane, 0, 2);
+        textPane.add(textFieldMessage, 0, 3);
+        gameGrid.add(personalBoardLabel, 1, 1);
+        gameGrid.add(personalPane, 1, 2);
+
+        grid.add(gameGrid, 0, 0);
+        grid.add(textPane, 0, 1);
+        contentPane.getChildren().add(grid);
+    }
+
+    // **************************************************** //
+    // Initiates boards components
+    // **************************************************** //
+    private void initCells(BoardButton[][] boardComponent, GridPane pane, boolean isClickable) {
+        pane.setHgap(5); // Horizontal gap
+        pane.setVgap(5); // Vertical gap
+        for (int i = 1; i < boardComponent.length; i++) {
+            for (int j = 1; j < boardComponent.length; j++) {
+                BoardButton button = new BoardButton(i, j);
+                button.setPrefWidth(35);
+                if (isClickable) {
+                    button.setOnAction(this::onPlayMoveClicked);
+                } else {
+                    button.setOnAction(null);
+                    button.setOnDragOver(this::myBoardCellOnDragOver);
+                    button.setOnDragEntered(this::myBoardCellOnDragEntered);
+                    button.setOnDragExited(this::myBoardCellOnDragExit);
+                    button.setOnDragDropped(this::myBoardCellOnDragDropped);
+                }
+                boardComponent[i][j] = button;
+                pane.add(button, j, i);
+            }
+        }
+        // Column characters
+        char colVal = 'A';
+        for (int i = 1; i < boardComponent.length; i++) {
+            Label label = new Label(String.valueOf(colVal));
+            pane.add(label, i, 0);
+            pane.setHalignment(label, HPos.CENTER);
+            colVal++;
+        }
+        // Row numbers
+        for (int i = 1; i < boardComponent.length; i++) {
+            Label label = new Label(String.valueOf(i));
+            pane.add(new Label(String.valueOf(i)), 0, i);
+            pane.setHalignment(label, HPos.CENTER);
+        }
     }
 }
