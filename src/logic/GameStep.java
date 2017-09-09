@@ -3,6 +3,7 @@ package logic;
 import logic.enums.CellStatus;
 
 import static logic.enums.CellStatus.MINE_PLACED;
+import static logic.enums.CellStatus.QUIT_MATCH;
 
 public class GameStep {
 
@@ -46,10 +47,12 @@ public class GameStep {
         char letterCol = (char) ('A' + (col - 1));
         String cell = ("(" + row + "," + letterCol + ")");
         String stepResult;
-        if (cellStatus != MINE_PLACED) {
-            stepResult = ("Move: attacked " + cell + System.lineSeparator() + "Result: ");
-        } else {
+        if (cellStatus == MINE_PLACED) {
             stepResult = ("Move: placed a mine at " + cell + System.lineSeparator() + "Result: -");
+        } else if (cellStatus == QUIT_MATCH) {
+            stepResult = ("Move: quit from the match" + System.lineSeparator() + "Result: -");
+        } else {
+            stepResult = ("Move: attacked " + cell + System.lineSeparator() + "Result: ");
         }
 
         switch (cellStatus) {
@@ -90,7 +93,6 @@ public class GameStep {
                 "Score: " + score + System.lineSeparator() +
                 stepResult);
     }
-
 
 
     public CellStatus getCellStatus() {

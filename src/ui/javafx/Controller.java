@@ -539,7 +539,8 @@ public class Controller extends JPanel implements Initializable {
     // **************************************************** //
     private void activateUndoRedo() {
         buttonUndo.setDisable(false);
-        theGame.activateUbdoRedo();
+        showReplayStep(theGame.activateUndoRedo());
+        buttonUndo.setDisable(theGame.shouldDisableUndo());
     }
 
     // **************************************************** //

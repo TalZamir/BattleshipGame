@@ -207,6 +207,7 @@ public class TheGame {
     public String quitMatch() {
         isGameOn = false;
         players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1); // Quiting counts as a turn
+        gameSteps.add(new GameStep(QUIT_MATCH, UNINITIALIZED, UNINITIALIZED, players[currentPlayerIndex], players[opponentPlayerIndex]));
         return getFinishGameString(" quit... ");
     }
 
@@ -457,8 +458,17 @@ public class TheGame {
     // **************************************************** //
     // Returns boards of next step
     // **************************************************** //
-    public void activateUbdoRedo() {
+    public boolean shouldDisableUndo() {
+        return (gameSteps.size() == 1);
+    }
+
+    // **************************************************** //
+    // Returns boards of next step
+    // **************************************************** //
+    public ReplayInfo activateUndoRedo() {
         gameStepIndex = gameSteps.size() - 1;
+        GameStep stepToShow = gameSteps.get(gameStepIndex);
+        return stepToShow.getReplayInfo();
     }
 
     // **************************************************** //
