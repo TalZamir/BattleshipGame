@@ -523,6 +523,7 @@ public class Controller extends JPanel implements Initializable {
     private void showReplayStep(ReplayInfo replayInfo) {
         drawSpecificBoard(personalBoard, replayInfo.getPersonalBoard());
         drawSpecificBoard(trackingBoard, replayInfo.getTraceBoard());
+        textFieldMessage.setText(replayInfo.toString());
     }
 
     // **************************************************** //

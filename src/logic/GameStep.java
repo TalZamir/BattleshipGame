@@ -2,13 +2,16 @@ package logic;
 
 import logic.enums.CellStatus;
 
+import static logic.enums.CellStatus.MINE_PLACED;
+
 public class GameStep {
 
     private final CellStatus cellStatus;
-    private final int playerId;
-    private final String playerName;
     private final int row;
     private final int col;
+
+    private final String playerName;
+    private int score;
     private final char[][] personalBoard;
     private final char[][] traceBoard;
 
@@ -18,11 +21,10 @@ public class GameStep {
         this.row = row;
         this.col = col;
 
+        this.playerName = player.getName();
+        this.score = player.getScore();
         personalBoard = copyBoard(player.getBoard().getAllieMode());
         traceBoard = copyBoard(opponent.getBoard().getAdversaryMode());
-
-        this.playerId = player.getUserId();
-        this.playerName = "Player" + (playerId + 1);
     }
 
     private char[][] copyBoard(char[][] boardToCopy) {
@@ -37,42 +39,62 @@ public class GameStep {
 
     public ReplayInfo getReplayInfo() {
         System.out.println("bla");
-        return new ReplayInfo(personalBoard, traceBoard);
+        return new ReplayInfo(personalBoard, traceBoard, this.toString());
+    }
+
+    private String toStringHelper() {
+        char letterCol = (char) ('A' + (col - 1));
+        String cell = ("(" + row + "," + letterCol + ")");
+        String stepResult;
+        if (cellStatus != MINE_PLACED) {
+            stepResult = ("Move: attacked " + cell + System.lineSeparator() + "Result: ");
+        } else {
+            stepResult = ("Move: placed a mine at " + cell + System.lineSeparator() + "Result: -");
+        }
+
+        switch (cellStatus) {
+            case REGULAR:
+                stepResult += "miss";
+                break;
+            case SHIP:
+                stepResult += "hit a battleship";
+                break;
+            case SHIP_DOWN:
+                stepResult += "destroyed a battleship";
+                break;
+            case MINE_HIT_ALREADY:
+                stepResult += "hit a mine - the parallel cell was already attacked";
+                break;
+            case MINE_HIT_REGULAR:
+                stepResult += "hit a mine - the parallel cell was empty";
+                break;
+            case MINE_HIT_SHIP:
+                stepResult += "hit a mine - a battleship got hit";
+                break;
+            case MINE_HIT_DESTROYED:
+                stepResult += "hit a mine - a battleship got destroyed";
+                break;
+            case MINE_HIT_MINE:
+                stepResult += "hit a mine - a mine got hit too";
+                break;
+            case MINE_PLACED:
+                break;
+        }
+        return stepResult;
     }
 
     @Override
     public String toString() {
-        String cell = ("(" + row + "," + col + ")");
-        String result = (playerName + " attacked " + cell + " and ");
-        switch (cellStatus) {
-            case REGULAR:
-                result += "miss.";
-                break;
-            case SHIP:
-                result += "hit a battleship.";
-                break;
-            case SHIP_DOWN:
-                result += "destroyed a battleship.";
-                break;
-            case MINE:
-                result += "hit a mine.";
-                break;
-            case MINE_PLACED:
-                result = (playerName + " placed a mine at " + cell);
-                break;
-            default:
-                result += "blaaaaa";
-                break;
-        }
-        return result;
+        String stepResult = toStringHelper();
+        return ("Player: " + playerName + System.lineSeparator() +
+                "Score: " + score + System.lineSeparator() +
+                stepResult);
     }
+
+
 
     public CellStatus getCellStatus() {
         return cellStatus;
-    }
-
-    public int getPlayerId() {
-        return playerId;
     }
 
     public String getPlayerName() {
