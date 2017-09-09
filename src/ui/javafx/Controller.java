@@ -68,15 +68,13 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonExitGame = new Button("Exit Game");
     private Button buttonStartGame = new Button("Start Game");
     private Button buttonLoadXml = new Button("Load XML");
+    private Button buttonUndo = new Button("<");
+    private Button buttonRedo = new Button(">");
 
     @FXML
     ScrollPane scrollPane;
     @FXML
     private AnchorPane contentPane;
-    @FXML
-    private Button buttonUndo;
-    @FXML
-    private Button buttonRedo;
     private Label trackingBoardLabel;
     private Label personalBoardLabel;
     //    private SkinType currentSkinType = SkinType.DEFAULT;
@@ -121,7 +119,7 @@ public class Controller extends JPanel implements Initializable {
         // Setups the main grid
         grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(30); // Horizontal gap
+        grid.setHgap(10); // Horizontal gap
         grid.setVgap(10); // Vertical gap
         // Buttons grid
         GridPane buttonsGrid = new GridPane();
@@ -143,8 +141,8 @@ public class Controller extends JPanel implements Initializable {
         buttonsGrid.add(buttonQuitMatch, 0, 5);
         buttonsGrid.add(buttonExitGame, 0, 6);
 
-        grid.add(buttonsGrid, 0, 0);
-        grid.add(createSeperator(), 1, 0);
+        grid.add(buttonsGrid, 1, 1);
+        grid.add(createSeperator(), 2, 1);
 
         contentPane.getChildren().add(grid);
     }
@@ -356,6 +354,7 @@ public class Controller extends JPanel implements Initializable {
                 drawBoards();
                 setButtonMineText();
                 textFieldMessage.setText(getTurnMsg());
+                replayFieldText.setText("");
                 informationAlert.setContentText("The game has been started successfully!");
                 informationAlert.show();
             } catch (XmlContentException e) {
@@ -540,7 +539,6 @@ public class Controller extends JPanel implements Initializable {
     // **************************************************** //
     private void activateUndoRedo() {
         buttonUndo.setDisable(false);
-        textFieldMessage.setText("");
         theGame.activateUbdoRedo();
     }
 
@@ -600,6 +598,9 @@ public class Controller extends JPanel implements Initializable {
     // Initiates boards components
     // **************************************************** //
     private void initBoardsComponents(int convenientBoardSize) {
+        contentPane = new AnchorPane();
+        grid = new GridPane();
+        initMenu();
         // Boards grids
         GridPane gameGrid = new GridPane();
         trackingPane = new GridPane();
@@ -613,7 +614,7 @@ public class Controller extends JPanel implements Initializable {
         trackingBoardLabel = new Label("Tracking Board:");
         personalBoardLabel = new Label("Personal Board:");
         textFieldMessage.autosize();
-        gameGrid.setHgap(50); // Horizontal gap
+        gameGrid.setHgap(30); // Horizontal gap
         gameGrid.setVgap(10); // Vertical gap
         gameGrid.add(trackingBoardLabel, 0, 1);
         gameGrid.add(trackingPane, 0, 2);
@@ -621,15 +622,29 @@ public class Controller extends JPanel implements Initializable {
         gameGrid.add(personalPane, 1, 2);
         // Text grid
         GridPane textGrid = new GridPane();
-        textGrid.add(textFieldMessage, 0, 0);
-        textGrid.add(replayFieldText, 1, 0);
-        // Builds main grid
-        grid.add(createSeperator(), 1, 0);
-        grid.add(gameGrid, 2, 0);
-        grid.add(createSeperator(), 3, 0);
-        grid.add(textGrid, 4, 0);
+        Label gameDetails = new Label("Game Details:");
+        gameDetails.setFont(new Font(30));
+        Label replay = new Label("Replay:");
+        replay.setFont(new Font(30));
+        GridPane replayButtonsGrid = new GridPane();
+        replayButtonsGrid.setHgap(10); // Horizontal gap
+        replayButtonsGrid.setVgap(10); // Vertical gap
+        replayButtonsGrid.add(buttonUndo, 0, 0);
+        replayButtonsGrid.add(buttonRedo, 1, 0);
 
-        scrollPane.setContent(grid);
+        textGrid.setHgap(10); // Horizontal gap
+        textGrid.setVgap(10); // Vertical gap
+        textGrid.add(gameDetails, 0, 0);
+        textGrid.add(textFieldMessage, 0, 1);
+        textGrid.add(replay, 0, 2);
+        textGrid.add(replayButtonsGrid, 0, 3);
+        textGrid.add(replayFieldText, 0, 4);
+        // Builds main grid
+        grid.add(gameGrid, 4, 1);
+        grid.add(createSeperator(), 5, 1);
+        grid.add(textGrid, 6, 1);
+
+        scrollPane.setContent(contentPane);
     }
 
     private Separator createSeperator() {
