@@ -18,7 +18,7 @@ public class JavaFxClass extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ScrollPane root = FXMLLoader.load(getClass().getResource("UiXml.fxml"));
-        primaryStage.setScene(new Scene(root, 1100, 700));
+        primaryStage.setScene(new Scene(root, 1300, 650));
         primaryStage.show();
     }
 }

@@ -5,7 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
@@ -54,23 +55,22 @@ public class Controller extends JPanel implements Initializable {
     private GridPane grid;
     private GridPane personalPane;
     private GridPane trackingPane;
+    private Label textFieldMessage;
+    private Label replayFieldText;
 
     @FXML
     private ChoiceBox<String> choiceBoxSkin;
+
+    private Button buttonGameStatus = new Button("Game Status");
+    private Button buttonStatistics = new Button("Statistics");
+    private Button buttonMine = new Button("Drag mine");
+    private Button buttonQuitMatch = new Button("Quit Match");
+    private Button buttonExitGame = new Button("Exit Game");
+    private Button buttonStartGame = new Button("Start Game");
+    private Button buttonLoadXml = new Button("Load XML");
+
     @FXML
-    private Button buttonGameStatus;
-    @FXML
-    private Button buttonStatistics;
-    @FXML
-    private Button buttonMine;
-    @FXML
-    private Button buttonQuitMatch;
-    @FXML
-    private Button buttonExitGame;
-    @FXML
-    private Button buttonStartGame;
-    @FXML
-    private Button buttonLoadXml;
+    ScrollPane scrollPane;
     @FXML
     private AnchorPane contentPane;
     @FXML
@@ -80,7 +80,7 @@ public class Controller extends JPanel implements Initializable {
     private Label trackingBoardLabel;
     private Label personalBoardLabel;
     //    private SkinType currentSkinType = SkinType.DEFAULT;
-    private TextArea textFieldMessage;
+
 
     private SkinBuilder skinBuilder;
 
@@ -90,7 +90,8 @@ public class Controller extends JPanel implements Initializable {
         informationAlert = new Alert(Alert.AlertType.INFORMATION);
         confirmationMassage = new Alert(Alert.AlertType.CONFIRMATION);
         menuButtonList = new ArrayList<>();
-        textFieldMessage = new TextArea();
+        textFieldMessage = new Label();
+        replayFieldText = new Label();
     }
 
     @Override
@@ -108,8 +109,44 @@ public class Controller extends JPanel implements Initializable {
         buttonRedo.setOnAction(this::onRedoClicked);
         buttonUndo.setDisable(true);
         buttonRedo.setDisable(true);
+        initMenu();
         initChoiceBox();
         initMenuButtonsList();
+    }
+
+    // **************************************************** //
+    // Initialize menu buttons
+    // **************************************************** //
+    private void initMenu() {
+        // Setups the main grid
+        grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(30); // Horizontal gap
+        grid.setVgap(10); // Vertical gap
+        // Buttons grid
+        GridPane buttonsGrid = new GridPane();
+        buttonsGrid.setVgap(15); // Vertical gap
+
+        buttonLoadXml.setMinSize(130, 40);
+        buttonStartGame.setMinSize(130, 40);
+        buttonGameStatus.setMinSize(130, 40);
+        buttonStatistics.setMinSize(130, 40);
+        buttonMine.setMinSize(130, 40);
+        buttonQuitMatch.setMinSize(130, 40);
+        buttonExitGame.setMinSize(130, 40);
+
+        buttonsGrid.add(buttonLoadXml, 0, 0);
+        buttonsGrid.add(buttonStartGame, 0, 1);
+        buttonsGrid.add(buttonGameStatus, 0, 2);
+        buttonsGrid.add(buttonStatistics, 0, 3);
+        buttonsGrid.add(buttonMine, 0, 4);
+        buttonsGrid.add(buttonQuitMatch, 0, 5);
+        buttonsGrid.add(buttonExitGame, 0, 6);
+
+        grid.add(buttonsGrid, 0, 0);
+        grid.add(createSeperator(), 1, 0);
+
+        contentPane.getChildren().add(grid);
     }
 
     private void initMenuButtonsList() {
@@ -354,9 +391,7 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void appendBattleships(StringBuilder stringBuilder) {
-        SortedMap<Integer, Integer> shipsType = theGame.getCurrentPlayerShipsTypesAndAmount();
-        appendBattleshipsList(stringBuilder, shipsType, "Your remain battleships:");
-        shipsType = theGame.getOpponentPLayerShipsTypesAndAmount();
+        SortedMap<Integer, Integer> shipsType = theGame.getOpponentPLayerShipsTypesAndAmount();
         appendBattleshipsList(stringBuilder, shipsType, "Opponent remain battleships:");
     }
 
@@ -505,7 +540,7 @@ public class Controller extends JPanel implements Initializable {
     // **************************************************** //
     private void activateUndoRedo() {
         buttonUndo.setDisable(false);
-        textFieldMessage.clear();
+        textFieldMessage.setText("");
         theGame.activateUbdoRedo();
     }
 
@@ -523,7 +558,7 @@ public class Controller extends JPanel implements Initializable {
     private void showReplayStep(ReplayInfo replayInfo) {
         drawSpecificBoard(personalBoard, replayInfo.getPersonalBoard());
         drawSpecificBoard(trackingBoard, replayInfo.getTraceBoard());
-        textFieldMessage.setText(replayInfo.toString());
+        replayFieldText.setText(replayInfo.toString());
     }
 
     // **************************************************** //
@@ -565,34 +600,42 @@ public class Controller extends JPanel implements Initializable {
     // Initiates boards components
     // **************************************************** //
     private void initBoardsComponents(int convenientBoardSize) {
-        contentPane.getChildren().clear();
-        grid = new GridPane(); // global grid
+        // Boards grids
         GridPane gameGrid = new GridPane();
-        GridPane textPane = new GridPane();
-        textPane.setPadding(new Insets(20, 0, 0, 0));
         trackingPane = new GridPane();
+        trackingPane.setId("trackingPane");
         personalPane = new GridPane();
+        trackingPane.setId("personalPane");
         trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
         personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
-        trackingPane.setId("trackingBoard");
-        personalPane.setId("personalBoard");
         initCells(trackingBoard, trackingPane, true);
         initCells(personalBoard, personalPane, false);
         trackingBoardLabel = new Label("Tracking Board:");
         personalBoardLabel = new Label("Personal Board:");
         textFieldMessage.autosize();
-
         gameGrid.setHgap(50); // Horizontal gap
         gameGrid.setVgap(10); // Vertical gap
         gameGrid.add(trackingBoardLabel, 0, 1);
         gameGrid.add(trackingPane, 0, 2);
-        textPane.add(textFieldMessage, 0, 3);
         gameGrid.add(personalBoardLabel, 1, 1);
         gameGrid.add(personalPane, 1, 2);
+        // Text grid
+        GridPane textGrid = new GridPane();
+        textGrid.add(textFieldMessage, 0, 0);
+        textGrid.add(replayFieldText, 1, 0);
+        // Builds main grid
+        grid.add(createSeperator(), 1, 0);
+        grid.add(gameGrid, 2, 0);
+        grid.add(createSeperator(), 3, 0);
+        grid.add(textGrid, 4, 0);
 
-        grid.add(gameGrid, 0, 0);
-        grid.add(textPane, 0, 1);
-        contentPane.getChildren().add(grid);
+        scrollPane.setContent(grid);
+    }
+
+    private Separator createSeperator() {
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.VERTICAL);
+        return separator;
     }
 
     // **************************************************** //
