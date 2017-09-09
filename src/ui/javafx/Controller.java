@@ -57,8 +57,6 @@ public class Controller extends JPanel implements Initializable {
     private GridPane trackingPane;
     private Label textFieldMessage;
     private Label replayFieldText;
-
-    @FXML
     private ChoiceBox<String> choiceBoxSkin;
 
     private Button buttonGameStatus = new Button("Game Status");
@@ -88,6 +86,7 @@ public class Controller extends JPanel implements Initializable {
         informationAlert = new Alert(Alert.AlertType.INFORMATION);
         confirmationMassage = new Alert(Alert.AlertType.CONFIRMATION);
         menuButtonList = new ArrayList<>();
+        choiceBoxSkin = new ChoiceBox<String>();
         textFieldMessage = new Label();
         replayFieldText = new Label();
     }
@@ -100,7 +99,6 @@ public class Controller extends JPanel implements Initializable {
         buttonStartGame.setOnAction(this::onStartGameClicked);
         buttonGameStatus.setOnAction(this::onGameStatusClicked);
         buttonStatistics.setOnAction(this::onStatisticsClicked);
-        buttonMine.setOnAction(this::onPlaceMineClicked);
         buttonMine.setOnDragDetected(this::mineOnDragDetected);
         buttonMine.setOnDragDone(this::mineOnDragDone);
         buttonUndo.setOnAction(this::onUndoClicked);
@@ -132,6 +130,7 @@ public class Controller extends JPanel implements Initializable {
         buttonMine.setMinSize(130, 40);
         buttonQuitMatch.setMinSize(130, 40);
         buttonExitGame.setMinSize(130, 40);
+        choiceBoxSkin.setMinSize(130, 30);
 
         buttonsGrid.add(buttonLoadXml, 0, 0);
         buttonsGrid.add(buttonStartGame, 0, 1);
@@ -140,6 +139,8 @@ public class Controller extends JPanel implements Initializable {
         buttonsGrid.add(buttonMine, 0, 4);
         buttonsGrid.add(buttonQuitMatch, 0, 5);
         buttonsGrid.add(buttonExitGame, 0, 6);
+        buttonsGrid.add(new Label("Choose Skin:"), 0, 7);
+        buttonsGrid.add(choiceBoxSkin, 0, 8);
 
         grid.add(buttonsGrid, 1, 1);
         grid.add(createSeperator(), 2, 1);
@@ -479,18 +480,18 @@ public class Controller extends JPanel implements Initializable {
         }
     }
 
-    private void onPlaceMineClicked(ActionEvent event) {
-        if (theGame.isGameOn()) {
-            if (theGame.hasMines()) {
-                onPlayMoveClicked(event);
-            } else {
-                textFieldMessage.setText("You ran out of mines!");
-            }
-        } else {
-            errorAlert.setContentText("You must start a game before placing a mine.");
-            errorAlert.show();
-        }
-    }
+//    private void onPlaceMineClicked(ActionEvent event) {
+//        if (theGame.isGameOn()) {
+//            if (theGame.hasMines()) {
+//                onPlayMoveClicked(event);
+//            } else {
+//                textFieldMessage.setText("You ran out of mines!");
+//            }
+//        } else {
+//            errorAlert.setContentText("You must start a game before placing a mine.");
+//            errorAlert.show();
+//        }
+//    }
 
     private void onQuitMatchClicked(ActionEvent event) {
         if (theGame.isGameOn()) {

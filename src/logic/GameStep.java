@@ -39,7 +39,6 @@ public class GameStep {
     }
 
     public ReplayInfo getReplayInfo() {
-        System.out.println("bla");
         return new ReplayInfo(personalBoard, traceBoard, this.toString());
     }
 
