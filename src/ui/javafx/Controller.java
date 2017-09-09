@@ -134,8 +134,6 @@ public class Controller extends JPanel implements Initializable {
 
         buttonsGrid.add(buttonLoadXml, 0, 0);
         buttonsGrid.add(buttonStartGame, 0, 1);
-        buttonsGrid.add(buttonGameStatus, 0, 2);
-        buttonsGrid.add(buttonStatistics, 0, 3);
         buttonsGrid.add(buttonMine, 0, 4);
         buttonsGrid.add(buttonQuitMatch, 0, 5);
         buttonsGrid.add(buttonExitGame, 0, 6);
@@ -216,7 +214,7 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void setSkin(SkinCreator skinCreator) {
-        mainPane.setBackground(skinCreator.getBackground());
+        contentPane.setBackground(skinCreator.getBackground());
         setSkinToBoardsButtons(trackingBoard, skinCreator.getBoardsButtonsBackground(), skinCreator.getFont(), skinCreator.getFontColor());
         setSkinToBoardsButtons(personalBoard, skinCreator.getBoardsButtonsBackground(), skinCreator.getFont(), skinCreator.getFontColor());
         menuButtonList.forEach(b -> {
@@ -376,23 +374,24 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private String getTurnMsg() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("~~~~  ")
-                     .append(theGame.getCurrentPlayerName())
-                     .append(" Turn (Score: ")
-                     .append(theGame.getCurrentPlayerScore())
-                     .append(")  ~~~~~")
-                     .append(lineSeparator())
-                     .append(theGame.getStatistics())
-                     .append(lineSeparator());
+        String result;
+        StringBuilder remainShips = new StringBuilder();
+        appendBattleships(remainShips);
+        result = theGame.getGeneralStatistics() + System.lineSeparator() + System.lineSeparator() +
+                theGame.getStatistics() + System.lineSeparator() +
+                remainShips;
 
-        appendBattleships(stringBuilder);
-        return stringBuilder.toString();
+        return result;
+        // appendBattleships(stringBuilder);
+        //  return stringBuilder.toString();
     }
 
     private void appendBattleships(StringBuilder stringBuilder) {
-        SortedMap<Integer, Integer> shipsType = theGame.getOpponentPLayerShipsTypesAndAmount();
-        appendBattleshipsList(stringBuilder, shipsType, "Opponent remain battleships:");
+        SortedMap<Integer, Integer> shipsType = theGame.getCurrentPlayerShipsTypesAndAmount();
+        appendBattleshipsList(stringBuilder, shipsType, ":: Your remain battleships ::");
+
+        shipsType = theGame.getOpponentPLayerShipsTypesAndAmount();
+        appendBattleshipsList(stringBuilder, shipsType, ":: Opponent remain battleships ::");
     }
 
     private void appendBattleshipsList(StringBuilder stringBuilder,
@@ -400,11 +399,10 @@ public class Controller extends JPanel implements Initializable {
                                        String battleshipsPlayerMessage) {
         stringBuilder.append(battleshipsPlayerMessage);
         stringBuilder.append(lineSeparator());
-        shipsType.forEach((k, v) -> stringBuilder.append("From ship type ")
+        shipsType.forEach((k, v) -> stringBuilder.append("From length type ")
                                                  .append(k)
                                                  .append(" left ")
                                                  .append(v)
-                                                 .append(" ships")
                                                  .append(lineSeparator()));
     }
 
@@ -446,7 +444,7 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void setButtonMineText() {
-        String[] playersStatistics = theGame.getStatistics().split(lineSeparator());
+//        String[] playersStatistics = theGame.getStatistics().split(lineSeparator());
         String numOfMines = "";
         String buttonText = buttonMine.getText();
         StringBuilder buttonMineText = new StringBuilder();
@@ -456,18 +454,14 @@ public class Controller extends JPanel implements Initializable {
         int end = buttonText.indexOf("mine") + 4;
         buttonMineText.append(buttonMine.getText().substring(begin, end));
 
-        for (i = 0; i < playersStatistics.length; i++) {
-            if (playersStatistics[i].contains(theGame.getCurrentPlayerName())) {
-                numOfMines = playersStatistics[i];
-            }
-        }
-
-        begin = numOfMines.indexOf("Mines");
-        end = numOfMines.indexOf("Average");
-        String mines = numOfMines.substring(begin, end - 2);
+//        for (i = 0; i < playersStatistics.length; i++) {
+//            if (playersStatistics[i].contains(theGame.getCurrentPlayerName())) {
+//                numOfMines = playersStatistics[i];
+//            }
+//        }
 
         buttonMineText.append(lineSeparator());
-        buttonMineText.append(mines);
+        buttonMineText.append(theGame.getCurrentPlayerNumberOfMines());
         buttonMine.setText(buttonMineText.toString());
     }
 
@@ -514,9 +508,7 @@ public class Controller extends JPanel implements Initializable {
 
     private void finishMatch() throws XmlContentException {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(theGame.getStatistics());
-        stringBuilder.append(lineSeparator());
-        stringBuilder.append("-  The game will restart now...");
+        stringBuilder.append(theGame.getSumUp());
         textFieldMessage.setText(stringBuilder.toString());
         theGame.resetGame();
         activateUndoRedo();
@@ -608,7 +600,7 @@ public class Controller extends JPanel implements Initializable {
         trackingPane = new GridPane();
         trackingPane.setId("trackingPane");
         personalPane = new GridPane();
-        trackingPane.setId("personalPane");
+        personalPane.setId("personalPane");
         trackingBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
         personalBoard = new BoardButton[convenientBoardSize][convenientBoardSize];
         initCells(trackingBoard, trackingPane, true);

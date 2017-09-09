@@ -42,8 +42,28 @@ public class Player implements IPlayer {
 
     @Override
     public String toString() {
-        return name + "  -  Score: " + score + "  Turns: " + turns + "  Hits: " + hits + "  Misses: " + misses +
-                "  Mines: " + (minesAmount - mines) + "/" + minesAmount + "  Average move time: " + averageTime();
+        return "Score: " + score + System.lineSeparator() +
+                "Turns: " + turns + System.lineSeparator() +
+                "Hits: " + hits + System.lineSeparator() +
+                "Misses: " + misses + System.lineSeparator() +
+                "Mines: " + (minesAmount - mines) + "/" + minesAmount + System.lineSeparator() +
+                "Average move time: " + averageTime();
+    }
+
+    public String toStringPartial() {
+        return "Score: " + score + System.lineSeparator() +
+                "Turns: " + turns + System.lineSeparator() +
+                "Hits: " + hits + System.lineSeparator() +
+                "Misses: " + misses + System.lineSeparator() +
+                "Mines: " + (minesAmount - mines) + "/" + minesAmount + System.lineSeparator() +
+                "Average move time: " + averageTime();
+    }
+
+    public String sumUp() {
+        return "~~~ " + this.name + " (Score: " + score + ") ~~~" + System.lineSeparator() +
+                "Turns: " + turns + System.lineSeparator() +
+                "Hits: " + hits + "  |  Misses: " + misses + "  |  Mines: " + (minesAmount - mines) + "/" + minesAmount + System.lineSeparator() +
+                "Average move time: " + averageTime();
     }
 
     // **************************************************** //

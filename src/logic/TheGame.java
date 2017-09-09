@@ -176,16 +176,21 @@ public class TheGame {
     // **************************************************** //
     // Returns game statistics
     // **************************************************** //
-    public String getStatistics() {
+    public String getGeneralStatistics() {
         long millis = System.currentTimeMillis() - startingTime;
         String time = String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis),
                 TimeUnit.MILLISECONDS.toSeconds(millis) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
         );
-        return "Total Played Turns: " + (players[0].getTurns() + players[1].getTurns()) + System.lineSeparator() +
-                "Total Time: " + time + System.lineSeparator() +
-                players[0] + System.lineSeparator() + players[1];
+        int turns = players[0].getTurns() + players[1].getTurns();
+
+        return ("Played Turns: " + turns + System.lineSeparator() +
+                "Total Time: " + time);
+    }
+
+    public String getStatistics() {
+        return players[currentPlayerIndex].sumUp();
     }
 
     public boolean isPlayerWon() {
@@ -213,14 +218,19 @@ public class TheGame {
 
     public String playerWonMatchMessage() {
         isGameOn = false;
-        players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1); // Quiting counts as a turn
-        return getFinishGameString(" has lost... ");
+        players[currentPlayerIndex].setTurns(players[currentPlayerIndex].getTurns() + 1);
+        return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
+                getCurrentPlayerName() + " has WON the game!" + System.lineSeparator();
     }
 
     private String getFinishGameString(String message) {
         return "-------------------- GAME OVER --------------------" + System.lineSeparator() +
                 "~~~~ " + players[currentPlayerIndex].getName() + message + players[opponentPlayerIndex].getName() +
                 " WON THE GAME! ~~~~";
+    }
+
+    public String getSumUp() {
+        return players[0].sumUp() + System.lineSeparator() + players[1].sumUp();
     }
 
     // **************************************************** //
@@ -501,6 +511,13 @@ public class TheGame {
     // **************************************************** //
     public boolean hasNextStep() {
         return (gameStepIndex < gameSteps.size() - 1);
+    }
+
+    // **************************************************** //
+    // Returns current player number of mines
+    // **************************************************** //
+    public int getCurrentPlayerNumberOfMines() {
+        return players[currentPlayerIndex].getMines();
     }
 
     // **************************************************** //

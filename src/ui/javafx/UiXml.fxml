@@ -6,6 +6,10 @@
             prefHeight="600.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8.0.111"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.javafx.Controller">
     <AnchorPane fx:id="mainPane" minHeight="0.0" minWidth="0.0" prefHeight="597.0" prefWidth="1296.0">
-        <AnchorPane fx:id="contentPane" prefHeight="574.0" prefWidth="1242.0"/>
+        <AnchorPane fx:id="contentPane" prefHeight="600.0" prefWidth="1400.0">
+            <children>
+                <AnchorPane layoutX="50.0" layoutY="25.0" prefHeight="200.0" prefWidth="200.0"/>
+            </children>
+        </AnchorPane>
     </AnchorPane>
 </ScrollPane>
