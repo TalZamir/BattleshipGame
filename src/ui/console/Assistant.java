@@ -15,33 +15,35 @@ class Assistant {
     // **************************************************** //
     // Prints game boards
     // **************************************************** //
-    public void printBoard(char[][] board) {
+    public String printBoard(char[][] board) {
+        String result = "";
         // Columns row
-        printRowIndex(SEPARATOR);
+        result += printRowIndex(SEPARATOR);
         for (int i = 1; i < board.length; i++) {
-            printWithSpace(i);
+            result += printWithSpace(i);
         }
 
-        System.out.print(System.getProperty("line.separator"));
+        result += (System.getProperty("line.separator"));
         // Actual board
         for (int row = 1; row < board.length; row++) {
-            printRowIndex(row);
+            result += printRowIndex(row);
             for (int col = 1; col < board.length; col++) {
-                printWithSpace(board[row][col]);
+                result += printWithSpace(board[row][col]);
             }
-            System.out.print(System.getProperty("line.separator"));
+            result += (System.getProperty("line.separator"));
         }
-        printNewLine();
+        result += (System.getProperty("line.separator"));
+        return result;
     }
 
     void printPlayMoveMassage(int boardSize) {
         System.out.print(String.format("Enter row and column index.\n" +
-                                               "Row should be an integer type between %d to %d\n" +
-                                               "and column should be an character type between %s to %s\n\n",
-                                       1,
-                                       boardSize - 1,
-                                       "A",
-                                       (char) (boardSize - 2 + 'A')));
+                        "Row should be an integer type between %d to %d\n" +
+                        "and column should be an character type between %s to %s\n\n",
+                1,
+                boardSize - 1,
+                "A",
+                (char) (boardSize - 2 + 'A')));
     }
 
     // **************************************************** //
@@ -101,22 +103,22 @@ class Assistant {
     // **************************************************** //
     // Prints sign with space
     // **************************************************** //
-    private void printWithSpace(Object sign) {
-        System.out.print(sign + SPACE);
+    private String printWithSpace(Object sign) {
+        return (sign + SPACE);
     }
 
     // **************************************************** //
     // Prints row index with proper alignment
     // **************************************************** //
-    private void printRowIndex(int row) {
+    private String printRowIndex(int row) {
         String space = SPACE;
         if (row < 10) {
             space += " ";
         }
         if (row != SEPARATOR) {
-            System.out.print(row + space);
+            return (row + space);
         } else {
-            System.out.print('-' + space);
+            return ('-' + space);
         }
     }
 

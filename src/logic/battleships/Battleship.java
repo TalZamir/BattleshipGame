@@ -11,11 +11,14 @@ import module.ShipTypeType;
 
 public class Battleship extends BattleshipBase {
 
-    private final String id;
-    private final int length;
-    private final BattleshipDirectionType direction;
-    private final Coordinate position;
-    private final ShipCategoryType category;
+    private String id;
+    private int length;
+    private BattleshipDirectionType direction;
+    private Coordinate position;
+    private ShipCategoryType category;
+
+    public Battleship() {
+    }
 
     public Battleship(ShipTypeType shipTypeType, ShipType shipType) throws XmlContentException {
 

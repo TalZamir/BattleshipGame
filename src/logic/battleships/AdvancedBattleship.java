@@ -1,12 +1,11 @@
 package logic.battleships;
 
-import logic.bases.BattleshipBase;
 import logic.enums.BattleshipDirectionType;
 
 /**
  * Created by barakm on 29/08/2017
  */
-public abstract class AdvancedBattleship extends BattleshipBase {
+public abstract class AdvancedBattleship extends Battleship {
 
     private final Battleship battleship;
     protected BattleshipDirectionType currentDirection;
@@ -37,5 +36,10 @@ public abstract class AdvancedBattleship extends BattleshipBase {
         } else {
             currentDirection = BattleshipDirectionType.COLUMN;
         }
+    }
+
+    @Override
+    public int getScore() {
+        return battleship.getScore();
     }
 }

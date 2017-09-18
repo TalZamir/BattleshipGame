@@ -74,6 +74,7 @@ public class TheGame {
     public void startGame() throws XmlContentException {
         if (isFileLoaded) {
             init();
+            currentPlayerIndex = 0;
             isGameOn = true;
             gameSteps = new ArrayList<GameStep>();
             startingTime = System.currentTimeMillis();
@@ -185,8 +186,12 @@ public class TheGame {
         );
         int turns = players[0].getTurns() + players[1].getTurns();
 
-        return ("Played Turns: " + turns + System.lineSeparator() +
+        String result = ("Played Turns: " + turns + System.lineSeparator() +
                 "Total Time: " + time);
+        if (isPlayerWon) {
+            result += System.lineSeparator() + "The Winner: " + players[currentPlayerIndex].getName();
+        }
+        return result;
     }
 
     public String getStatistics() {
@@ -253,6 +258,11 @@ public class TheGame {
     public int getCurrentPlayerScore() {
         return players[currentPlayerIndex].getScore();
     }
+
+    public int getOpponentScore() {
+        return players[opponentPlayerIndex].getScore();
+    }
+
 
     public char[][] getBoardById(int id) {
         char[][] result = null; // In order to prevent bugs.
@@ -518,6 +528,10 @@ public class TheGame {
     // **************************************************** //
     public int getCurrentPlayerNumberOfMines() {
         return players[currentPlayerIndex].getMines();
+    }
+
+    public char[][] getBoardByIndex(int index) {
+        return players[index].getBoard().getAllieMode();
     }
 
     // **************************************************** //

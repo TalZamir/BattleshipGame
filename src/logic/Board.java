@@ -9,6 +9,7 @@ import logic.enums.ShipCategoryType;
 import logic.exceptions.XmlContentException;
 import logic.interfaces.IBuildShipDetails;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -145,7 +146,8 @@ public class Board {
     // **************************************************** //
     private void buildBoard() throws XmlContentException {
         initBoard();
-        IBuildShipDetails buildShipDetails;
+        Battleship buildShipDetails;
+        List<Battleship> newBattleshipsList = new ArrayList<>();
         for (Battleship currentBattleship : battleships) {
             if (currentBattleship.getCategory() == ShipCategoryType.L_SHIP) {
                 if (currentBattleship.getDirection() == BattleshipDirectionType.DOWN_RIGHT) {
@@ -161,12 +163,15 @@ public class Board {
                 buildRegularShip(buildShipDetails);
                 ((AdvancedBattleship) buildShipDetails).switchDirection();
                 buildRegularShip(buildShipDetails);
+                currentBattleship = buildShipDetails;
+
             } else {
                 buildRegularShip(currentBattleship);
             }
-
+            newBattleshipsList.add(currentBattleship);
             changeTempSigns();
         }
+        battleships = newBattleshipsList;
     }
 
     private void buildRegularShip(IBuildShipDetails currentBattleship) throws XmlContentException {

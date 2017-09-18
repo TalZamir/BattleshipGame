@@ -44,11 +44,14 @@ import static java.lang.System.lineSeparator;
  */
 public class Controller extends JPanel implements Initializable {
 
+    private static final String SPACE = "   ";
+    private static final int SEPARATOR = 0;
+
     private final TheGame theGame;
     private final Alert errorAlert;
     private final Alert informationAlert;
     private final Alert confirmationMassage;
-    private final List<Button> menuButtonList;
+    private final List<Labeled> menuButtonList;
     public AnchorPane mainPane;
     private BoardButton[][] trackingBoard;
     private BoardButton[][] personalBoard;
@@ -58,6 +61,7 @@ public class Controller extends JPanel implements Initializable {
     private Label textFieldMessage;
     private Label replayFieldText;
     private ChoiceBox<String> choiceBoxSkin;
+    private boolean firstStartSkin = true;
 
     private Button buttonGameStatus = new Button("Game Status");
     private Button buttonStatistics = new Button("Statistics");
@@ -68,6 +72,9 @@ public class Controller extends JPanel implements Initializable {
     private Button buttonLoadXml = new Button("Load XML");
     private Button buttonUndo = new Button("<");
     private Button buttonRedo = new Button(">");
+    private Label fp1;
+    private Label fp2;
+
 
     @FXML
     ScrollPane scrollPane;
@@ -75,6 +82,11 @@ public class Controller extends JPanel implements Initializable {
     private AnchorPane contentPane;
     private Label trackingBoardLabel;
     private Label personalBoardLabel;
+    private GridPane finalBoardsP1;
+    private GridPane finalBoardsP2;
+    private BoardButton[][] finalP1Board;
+    private BoardButton[][] finalP2Board;
+
     //    private SkinType currentSkinType = SkinType.DEFAULT;
 
 
@@ -89,6 +101,8 @@ public class Controller extends JPanel implements Initializable {
         choiceBoxSkin = new ChoiceBox<String>();
         textFieldMessage = new Label();
         replayFieldText = new Label();
+        fp1 = new Label();
+        fp2 = new Label();
     }
 
     @Override
@@ -154,6 +168,9 @@ public class Controller extends JPanel implements Initializable {
         menuButtonList.add(buttonQuitMatch);
         menuButtonList.add(buttonStartGame);
         menuButtonList.add(buttonStatistics);
+        menuButtonList.add(textFieldMessage);
+        menuButtonList.add(replayFieldText);
+
     }
 
     private void initChoiceBox() {
@@ -169,11 +186,17 @@ public class Controller extends JPanel implements Initializable {
         }
 
         if (selectedItem.equalsIgnoreCase(SkinType.DEFAULT.getValue())) {
-            setDefaultSkin();
+            if (firstStartSkin) {
+                firstStartSkin = false;
+            } else {
+                setDefaultSkin();
+            }
         } else if (selectedItem.equalsIgnoreCase(SkinType.LIGHT.getValue())) {
+            firstStartSkin = false;
             buttonMine.getSkin();
             setFirstSkin();
         } else {
+            firstStartSkin = false;
             setSecondSkin();
         }
     }
@@ -181,22 +204,22 @@ public class Controller extends JPanel implements Initializable {
     private void setSecondSkin() {
 
         SkinCreator skinCreator = skinBuilder.withBackground("src/res/blue-blur-26927-2880x1800.jpg")
-                                             .withBoardsButtonsBackground(0, 0, 0, 0, 1)
-                                             .withMenuButtonsBackground(0, 0, 0, 0, 1)
-                                             .withFontColor("#c4d8de")
-                                             .withFontSize(12)
-                                             .withFontStyle("Cochin")
-                                             .build();
+                .withBoardsButtonsBackground(0, 0, 0, 0, 1)
+                .withMenuButtonsBackground(0, 0, 0, 0, 1)
+                .withFontColor("#ffffff")
+                .withFontSize(14)
+                .withFontStyle("Cochin")
+                .build();
         setSkin(skinCreator);
     }
 
     private void setFirstSkin() {
         SkinCreator skinCreator = skinBuilder.withBackground("src/res/abstract_wavy_background_310468.jpg")
-                                             .withBoardsButtonsBackground(15, 0, 0.6039, 0.8353, 1)
-                                             .withMenuButtonsBackground(15, 0, 0.6039, 0.8353, 1)
-                                             .withFontSize(18)
-                                             .withFontStyle("Impact")
-                                             .build();
+                .withBoardsButtonsBackground(15, 0, 0.6039, 0.8353, 1)
+                .withMenuButtonsBackground(15, 0, 0.6039, 0.8353, 1)
+                .withFontSize(18)
+                .withFontStyle("Impact")
+                .build();
         setSkin(skinCreator);
     }
 
@@ -232,6 +255,16 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void setDefaultSkin() {
+
+        SkinCreator skinCreator = skinBuilder.withBackground("src/res/default.jpg")
+                .withBoardsButtonsBackground(5, 0.9, 0.9, 0.9, 1)
+                .withMenuButtonsBackground(5, 0.9, 0.9, 0.9, 1)
+                .withFontColor("#323232")
+                .withFontSize(16)
+                .withFontStyle("Tahoma")
+                .build();
+        setSkin(skinCreator);
+
 //        SkinCreator skinCreator = skinBuilder.buildDefaultValues();
 //
 //        mainPane.setBackground(skinCreator.getDefaultBackground());
@@ -379,7 +412,8 @@ public class Controller extends JPanel implements Initializable {
         appendBattleships(remainShips);
         result = theGame.getGeneralStatistics() + System.lineSeparator() + System.lineSeparator() +
                 theGame.getStatistics() + System.lineSeparator() +
-                remainShips;
+                remainShips + System.lineSeparator() +
+                "~ Opponent Score: " + theGame.getOpponentScore() + " ~";
 
         return result;
         // appendBattleships(stringBuilder);
@@ -400,10 +434,10 @@ public class Controller extends JPanel implements Initializable {
         stringBuilder.append(battleshipsPlayerMessage);
         stringBuilder.append(lineSeparator());
         shipsType.forEach((k, v) -> stringBuilder.append("From length type ")
-                                                 .append(k)
-                                                 .append(" left ")
-                                                 .append(v)
-                                                 .append(lineSeparator()));
+                .append(k)
+                .append(" left ")
+                .append(v)
+                .append(lineSeparator()));
     }
 
     private void onPlayMoveClicked(ActionEvent event) {
@@ -411,11 +445,11 @@ public class Controller extends JPanel implements Initializable {
         if (theGame.isGameOn()) {
             BoardButton boardButton = (BoardButton) event.getSource();
             UserMoveInput userMoveInput = new UserMoveInput(boardButton.getRow(),
-                                                            boardButton.getColumn());
+                    boardButton.getColumn());
             try {
                 turnMessage.append(theGame.playMove(userMoveInput,
-                                                    boardButton.getParent().getId()
-                                                               .equalsIgnoreCase(trackingPane.getId())));
+                        boardButton.getParent().getId()
+                                .equalsIgnoreCase(trackingPane.getId())));
                 turnMessage.append(lineSeparator());
             } catch (XmlContentException e) {
                 errorAlert.setContentText(e.getMessage());
@@ -426,6 +460,7 @@ public class Controller extends JPanel implements Initializable {
 
             if (theGame.isPlayerWon()) {
                 try {
+                    firstStartSkin = true;
                     finishMatch();
                     informationAlert.setContentText(theGame.playerWonMatchMessage());
                     informationAlert.show();
@@ -494,6 +529,7 @@ public class Controller extends JPanel implements Initializable {
                 informationAlert.setContentText(theGame.quitMatch());
                 informationAlert.showAndWait();
                 try {
+                    firstStartSkin = true;
                     finishMatch();
                 } catch (XmlContentException e) {
                     errorAlert.setContentText(e.getMessage());
@@ -507,7 +543,15 @@ public class Controller extends JPanel implements Initializable {
     }
 
     private void finishMatch() throws XmlContentException {
+        fp1.setText("Player1 Final Board:");
+        fp2.setText("Player2 Final Board:");
+        initCells(finalP1Board, finalBoardsP1, false);
+        drawSpecificBoard(finalP1Board, theGame.getBoardByIndex(0));
+        initCells(finalP2Board, finalBoardsP2, false);
+        drawSpecificBoard(finalP2Board, theGame.getBoardByIndex(1));
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(theGame.getGeneralStatistics());
+        stringBuilder.append(System.lineSeparator() + System.lineSeparator());
         stringBuilder.append(theGame.getSumUp());
         textFieldMessage.setText(stringBuilder.toString());
         theGame.resetGame();
@@ -594,6 +638,14 @@ public class Controller extends JPanel implements Initializable {
     private void initBoardsComponents(int convenientBoardSize) {
         contentPane = new AnchorPane();
         grid = new GridPane();
+        fp1.setText("");
+        fp2.setText("");
+        finalBoardsP1 = new GridPane();
+        finalBoardsP1.setId("finalBoardsP1");
+        finalBoardsP2 = new GridPane();
+        finalBoardsP2.setId("finalBoardsP2");
+        finalP1Board = new BoardButton[convenientBoardSize][convenientBoardSize];
+        finalP2Board = new BoardButton[convenientBoardSize][convenientBoardSize];
         initMenu();
         // Boards grids
         GridPane gameGrid = new GridPane();
@@ -614,6 +666,10 @@ public class Controller extends JPanel implements Initializable {
         gameGrid.add(trackingPane, 0, 2);
         gameGrid.add(personalBoardLabel, 1, 1);
         gameGrid.add(personalPane, 1, 2);
+        gameGrid.add(finalBoardsP1, 0, 5);
+        gameGrid.add(finalBoardsP2, 1, 5);
+        gameGrid.add(fp1, 0, 4);
+        gameGrid.add(fp2, 1, 4);
         // Text grid
         GridPane textGrid = new GridPane();
         Label gameDetails = new Label("Game Details:");
@@ -659,6 +715,8 @@ public class Controller extends JPanel implements Initializable {
                 button.setPrefWidth(35);
                 if (isClickable) {
                     button.setOnAction(this::onPlayMoveClicked);
+                } else if (pane == finalBoardsP1 || pane == finalBoardsP2) {
+                    button.setDisable(true);
                 } else {
                     button.setOnAction(null);
                     button.setOnDragOver(this::myBoardCellOnDragOver);
@@ -670,19 +728,83 @@ public class Controller extends JPanel implements Initializable {
                 pane.add(button, j, i);
             }
         }
+
         // Column characters
         char colVal = 'A';
-        for (int i = 1; i < boardComponent.length; i++) {
+        for (
+                int i = 1;
+                i < boardComponent.length; i++)
+
+        {
             Label label = new Label(String.valueOf(colVal));
             pane.add(label, i, 0);
             pane.setHalignment(label, HPos.CENTER);
             colVal++;
         }
         // Row numbers
-        for (int i = 1; i < boardComponent.length; i++) {
+        for (
+                int i = 1;
+                i < boardComponent.length; i++)
+
+        {
             Label label = new Label(String.valueOf(i));
             pane.add(new Label(String.valueOf(i)), 0, i);
             pane.setHalignment(label, HPos.CENTER);
         }
+
+    }
+
+
+    // **************************************************** //
+    // Prints game boards
+    // **************************************************** //
+    public String printBoard(char[][] board) {
+        String result = "";
+        // Columns row
+        result += printRowIndex(SEPARATOR);
+        for (int i = 1; i < board.length; i++) {
+            char colSign = (char) (('A' + i - 1));
+            result += colSign + SPACE;
+        }
+
+        result += (System.getProperty("line.separator"));
+        // Actual board
+        for (int row = 1; row < board.length; row++) {
+            result += printRowIndex(row);
+            for (int col = 1; col < board.length; col++) {
+                result += printWithSpace(board[row][col]);
+            }
+            result += (System.getProperty("line.separator"));
+        }
+        result += (System.getProperty("line.separator"));
+        return result;
+    }
+
+    // **************************************************** //
+    // Prints sign with space
+    // **************************************************** //
+    private String printWithSpace(Object sign) {
+        return (sign + SPACE);
+    }
+
+    // **************************************************** //
+    // Prints row index with proper alignment
+    // **************************************************** //
+    private String printRowIndex(int row) {
+        String space = SPACE;
+        if (row < 10) {
+            space += " ";
+        }
+        if (row != SEPARATOR) {
+            return (row + space);
+        } else {
+            return ('-' + space);
+        }
+    }
+
+    private String getFinalBoardsToPrint(int player) {
+        String result = "Player" + player + " Final Board:" + System.lineSeparator();
+        result += printBoard(theGame.getBoardByIndex(player - 1));
+        return result;
     }
 }
