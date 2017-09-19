@@ -75,6 +75,7 @@ public class TheGame {
         if (isFileLoaded) {
             init();
             currentPlayerIndex = 0;
+            opponentPlayerIndex = 1;
             isGameOn = true;
             gameSteps = new ArrayList<GameStep>();
             startingTime = System.currentTimeMillis();
